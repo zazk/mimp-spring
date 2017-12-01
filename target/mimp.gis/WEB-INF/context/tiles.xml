@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+
+	<definition name="defaultTemplate" template="/WEB-INF/views/layout/template.jsp"> 
+	</definition>       
+
+	<definition name="usuarios/panel" extends="defaultTemplate">
+		<put-attribute name="body" value="/WEB-INF/views/usuarios/panel.jsp" />
+	</definition>
+        
+	<definition name="usuarios/listado" extends="defaultTemplate">
+		<put-attribute name="body" value="/WEB-INF/views/usuarios/listado.jsp" />
+	</definition>
+        
+	<definition name="usuarios/agregar" extends="defaultTemplate">
+		<put-attribute name="body" value="/WEB-INF/views/usuarios/agregar.jsp" />
+	</definition>
+        
+        <definition name="usuarios/editar" extends="defaultTemplate">
+		<put-attribute name="body" value="/WEB-INF/views/usuarios/editar.jsp" />
+	</definition>
+        
+        <definition name="usuarios/login" template="/WEB-INF/views/layout/login.jsp">
+            <put-attribute name="body" value="/WEB-INF/views/usuarios/login.jsp"/> 
+        </definition>
+
+        
+        <definition name="usuarios/enviar" extends="defaultTemplate">
+            <put-attribute name="body" value="/WEB-INF/views/usuarios/enviar.jsp"/> 
+        </definition>
+        
+        <definition name="usuarios/historico_editar" extends="defaultTemplate">
+            <put-attribute name="body" value="/WEB-INF/views/usuarios/historico_editar.jsp"/> 
+        </definition>
+        
+        <definition name="usuarios/historico" extends="defaultTemplate">
+            <put-attribute name="body" value="/WEB-INF/views/usuarios/historico.jsp"/> 
+        </definition>
+        
+        <definition name="usuarios/nuevo_mensaje" extends="defaultTemplate">
+            <put-attribute name="body" value="/WEB-INF/views/usuarios/nuevo_mensaje.jsp"/> 
+        </definition>
+        
+        <definition name="usuarios/mensajes" extends="defaultTemplate">
+            <put-attribute name="body" value="/WEB-INF/views/usuarios/mensajes.jsp"/> 
+        </definition>
+        
+        <definition name="usuarios/mensaje" extends="defaultTemplate">
+            <put-attribute name="body" value="/WEB-INF/views/usuarios/mensaje.jsp"/> 
+        </definition>
+        
+        <definition name="usuarios/notificaciones" extends="defaultTemplate">
+            <put-attribute name="body" value="/WEB-INF/views/usuarios/notificaciones.jsp"/> 
+        </definition>
+        
+        <definition name="centrosatencion/listado" extends="defaultTemplate">
+            <put-attribute name="body" value="/WEB-INF/views/centrosatencion/listado.jsp"/> 
+        </definition>
+        
+        <definition name="centrosatencion/editar" extends="defaultTemplate">
+            <put-attribute name="body" value="/WEB-INF/views/centrosatencion/editar.jsp"/> 
+        </definition>
+                
+	<!-- Visor -->
+        <definition name="home/index" template="/WEB-INF/views/home/index.jsp"> 
+        </definition>
+</tiles-definitions>

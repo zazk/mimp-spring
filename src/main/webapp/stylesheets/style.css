@@ -1,0 +1,50 @@
+.nav { list-style: none; font-size: 13px; }
+.nav li { display:block;float:left; }
+.nav li a{float:none;padding:10px 10px 11px;line-height:19px;font-weight: bold;}
+.nav li a:hover{background-color:transparent;text-decoration:none;}
+.nav .active a, .nav .active a:hover{
+    background-color:#74ac37;
+    color: #fff;
+    font-weight:bold;
+    display: block;
+    float: left;
+    height: 26px;
+    padding:5px 10px 0 10px;  
+    text-decoration: none;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    margin-top: 6px;
+}
+
+.rounded {
+    background-color:#fff; 
+    border:1px solid #dbdbdb;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow:0px 0px 10px 1px rgba(0,0,0,0.05); 
+    -moz-box-shadow:0px 0px 10px 1px rgba(0,0,0,0.05); 
+    box-shadow:0px 0px 10px 1px rgba(0,0,0,0.05); 
+    padding-bottom: 1em;
+    margin-top: 10px;
+}
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+.justify {
+    text-align: justify;
+}
+
+.dashed-right {
+    border-right: 1px dashed #049cdb;
+}
+
+.clear {
+    clear:both;
+}

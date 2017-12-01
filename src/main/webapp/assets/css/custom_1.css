@@ -1,0 +1,81 @@
+/* -----------------------------------------
+   Custom.css - put your own changes here 
+----------------------------------------- */
+body
+{
+	letter-spacing: 1px;
+}
+
+
+a:hover, a:focus 
+{
+    color: #00325E;
+    text-decoration: none;
+}
+
+a:active
+{
+    text-decoration: none;
+}
+
+.inline
+{
+    display: inline;
+}
+
+.inline-b
+{
+    display: inline-block;
+}
+
+.pointer
+{
+    cursor: pointer;
+}
+
+form input[type=text]
+{
+	height: 45px;
+}
+
+.form-control
+{
+	border-radius: 4px;
+}
+
+
+	
+#content .content-wrapper
+{
+	padding: 20px 30px;
+}
+
+
+
+@media all and (max-width: 767px) {
+    #content .content-wrapper {
+        padding: 20px 0;
+    }  
+}
+@media all and (max-width: 512px) {
+
+    #content .content-wrapper .content-inner {
+        padding: 15px;
+    }    
+}
+
+h4.header
+{
+	padding-top: 20px;
+	color: #C5C5C5;
+}
+
+.panel.plain.panel-default .panel-heading
+{
+    border-top: none;
+}
+
+div.tagsinput span.tag
+{
+    background: #3869A8;
+}
