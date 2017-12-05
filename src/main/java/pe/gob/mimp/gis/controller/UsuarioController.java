@@ -515,7 +515,7 @@ public class UsuarioController {
                     Date dPeriodo2 = dfCompleto.parse(sPeriodo2);
                     
                     if(dPeriodo1.before(dPeriodo2) || dPeriodo1.equals(dPeriodo2)){
-                        //Mismo periodo, solo comparo si hoy han pasado disez dias desde el ultimo dia del periodo seÃ±alado
+                        //Mismo periodo, solo comparo si hoy han pasado disez dias desde el ultimo dia del periodo señalado
                         String sPeriodo = "01-" + periodo_2 + "-" + anio;
                         Date dPeriodo = dfCompleto.parse(sPeriodo);
                         
@@ -1044,13 +1044,16 @@ public class UsuarioController {
             + "( idusuario, asunto, contenido, fec_men, cod_entidad ) VALUES (?,?,?,TO_DATE(?, 'yyyy/mm/dd hh24:mi:ss'),?)", 
                 idusuario, asunto, contenido, fec_men, cod_entidad);
         
-        mailSender.send(new MimeMessagePreparator() {
+        System.out.println("No se cae aquí 1");
+        mailSender.send(new MimeMessagePreparator() {            
             public void prepare(MimeMessage mimeMessage) throws MessagingException {
+                System.out.println("No se cae aquí 2");
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
                 message.setFrom("info@mimp.gob.pe");
                 message.setTo(locations.getPostmaster());
-                message.addBcc("juandedioz@gmail.com");
-                message.addBcc("ljbustamante@gmail.com");
+                //message.addBcc("juandedioz@gmail.com");
+                //message.addBcc("ljbustamante@gmail.com");
+                message.addBcc("gianmarcocv30@gmail.com");
                 message.setSubject("Solicitud de acceso al sistema");
                 message.setText("<h1>Solicitud de acceso al sistema</h1><br />Nombres: " + nombres + " <br />Apellidos: " + apellidos + " <br />Email: " + email + " <br />Telefono: " + telefono + "<br />", true);
             }
@@ -1073,6 +1076,41 @@ public class UsuarioController {
         log.info("resultado = " + usuarioService.buscarPorNombre(criterio.getNoUsuario()).size());
         mav.getModel().put("resultado",usuarioService.buscarPorNombre(criterio.getNoUsuario()));
         return mav;
+    }
+
+    //Prueba gian marco       
+    @RequestMapping(value = "/usuarios/loginprueba", method=RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> loginprueba (HttpServletRequest request)
+    {        
+        String email = request.getParameter("email");
+        String clave = request.getParameter("clave");
+                                
+        List<Map<String,Object>> usuarios = new ArrayList<Map<String, Object>>(); 
+        String sql = "SELECT * FROM usuario WHERE rownum = 1 and login = '{0}' and clave = '{1}'";
+        sql = sql.replace("{0}", email);
+        sql = sql.replace("{1}", clave);
+        
+        System.out.println("---------------------------------- Consulta SQL: " + sql);
+        
+        usuarios = gisService.consulta(sql);
+        if(usuarios.size() <= 0)
+        {
+            Map error = new HashMap();
+            error.put("error", true);
+            error.put("NOMBRE", "Datos Incorrectos");
+            error.put("mensaje", "Datos Incorrectos");
+            
+            usuarios.add(error);
+        }        
+        
+        return usuarios;
+    }
+    
+    @RequestMapping(value = "/usuarios/logoutprueba", method=RequestMethod.POST)
+    public @ResponseBody String logoutprueba (HttpServletRequest request)
+    {     
+        request.getSession().invalidate();
+        return "Sesión terminada";
     }
     
 }

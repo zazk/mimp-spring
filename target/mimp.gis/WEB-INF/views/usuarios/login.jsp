@@ -1,116 +1,118 @@
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
  
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
-            <div class="login-wrapper">
-                <ul id="myTab" class="nav nav-tabs nav-justified bn">
-                    <li>
-                        <a href="#log-in" data-toggle="tab">Ingresar</a>
-                    </li>
-                    <li class="">
-                        <a href="#register" data-toggle="tab">Solicitar</a>
-                    </li>
-                </ul>
-                <div id="myTabContent" class="tab-content bn">
-                    <div class="tab-pane fade active in" id="log-in">
-                        <c:if test="${sessionScope.login_incorrecto == true}">
-                        <div class="alert alert-danger alert-dismissible" role="alert">
-                          <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                          <strong>Error!</strong> El usuario o contraseña son incorrectos
-                        </div>
-                        <%  
-                            request.getSession().removeAttribute("login_incorrecto");
-                        %>
-                        </c:if>
-                        <c:if test="${sessionScope.solicitud_correcta == true}">
-                        <div class="alert alert-success alert-dismissible" role="alert">
-                          <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                          <strong>Correcto!</strong> Su solicitud ha sido enviada correctamente, nuestros especialistas se pondrán en contacto con usted.
-                        </div>
-                        <%  
-                            request.getSession().removeAttribute("solicitud_correcta");
-                        %>
-                        </c:if>
-                        <div class="social-buttons text-center mt25"> 
-                        </div> 
-                        
-                        <form:form action="autenticar" method="post" commandName="credential"
-                                   cssClass="form-horizontal mt0" id="login-form" role="form">
-                            <div class="form-group">
-                                <div class="col-lg-12">
-                                    <input type="text" name="email" id="email" class="form-control left-icon" value="" placeholder="Su correo electrónico">
-                                    <i class="im-user s16 left-input-icon"></i>
-                                </div>
-                            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Geomimp</title>
+	<link rel="stylesheet" href="<c:url value='/assetsvisor/css/bootstrap.css'/>">
+	
+</head>
+<body class="container">
+    <div class="row">
+        <div class="col-md-12">            
+            <h1>Prueba POST</h1>
+            
+            <button id="loginn" type="button" class="btn btn-success">Login</button>
+            <button id="logout" type="button" class="btn btn-success">Logout</button>
+
+            
+            <p id="respuesta"></p>
+        </div>    
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label>Email</label>
+            <input id="idemail">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label>Clave</label>
+            <input id="idclave">
+        </div>
+    </div>
+</div>
+
+	<script type="text/javascript" src="<c:url value='/assetsvisor/js/jquery-1.11.1.min.js'/>"></script>
+        <script type="text/javascript" src="<c:url value='/assetsvisor/js/jquery-ui.min.js'/>"></script>
+        <script type="text/javascript" src="<c:url value='/assetsvisor/js/perfect-scrollbar.min.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/assetsvisor/js/bootstrap.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/assetsvisor/js/highcharts.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/assetsvisor/js/modules/exporting.js'/>"></script>
+        <script type="text/javascript" src="<c:url value='/assetsvisor/js/highcharts-3d.js'/>"></script>
+	<script type="text/javascript" src="<c:url value='/assetsvisor/js/core.js'/>"></script>
+        <script type="text/javascript" src="<c:url value='http://highcharts.com/js/testing-exporting.js'/>"></script>
+        <script  src="<c:url value='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false'/>"></script>
+        <script type="text/javascript">
+            $(document).ready(function()
+            {
+                $('#respuesta').html('Ready');
+                var login = $('#loginn');
+                var logout = $('#logout');
+                var _email = $('#idemail');
+                var _clave = $('#idclave');
+               
+               login.click(function()
+               {
+                   $('#respuesta').html('Cargando..');
+                   
+                   var data = {
+                                email: _email.val(),
+                                clave: _clave.val()
+                              };                   
+                   $.ajax({
+			type: 'POST',			
+			url: 'loginprueba', 
+                        data: data,
+			success: function(resultado)
+                        {
+                            console.log(resultado);
                             
-                            <div class="form-group">
-                                <div class="col-lg-12">
-                                    <input type="password" name="clave" id="clave" class="form-control left-icon" value="" placeholder="Su Contraseña">
-                                    <i class="im-lock s16 left-input-icon"></i>
-                                    <!--<span class="help-block"><a href="#"><small>Se olvidó su contraseña ?</small></a></span> -->
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-8">
-                                    <!-- col-lg-12 start here -->
-                                    <label class="checkbox">
-                                        <input type="checkbox" name="remember" id="remember" value="option">Recordarme?
-                                    </label>
-                                </div>
-                                <!-- col-lg-12 end here -->
-                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-4 mb25">
-                                    <!-- col-lg-12 start here -->
-                                    <button class="btn btn-default pull-right" type="submit">Ingresar</button>
-                                </div>
-                                <!-- col-lg-12 end here -->
-                            </div> 
-                        </form:form>  
-                    </div>
-                    <div class="tab-pane fade" id="register">
-                        <form role="form" action="<c:url value='/pages/usuarios/solicitar_ingreso'/>" class="form-horizontal mt0" id="register-form" method="post">
-                            <div class="form-group">
-                                <div class="col-lg-12">
-                                    <!-- col-lg-12 start here -->
-                                    <input id="email1" name="email" type="email" class="form-control left-icon" placeholder="Escriba su correo">
-                                    <i class="fa fa-envelope s16 left-input-icon"></i> 
-                                </div>
-                                <!-- col-lg-12 end here -->
-                            </div>
-                            <div class="form-group">
-                                <div class="col-lg-12">
-                                    <!-- col-lg-12 start here -->
-                                    <input id="nombres" name="nombres" type="text" class="form-control left-icon" placeholder="Escriba sus nombres">
-                                    <i class="fa fa-envelope s16 left-input-icon"></i> 
-                                </div>
-                                <!-- col-lg-12 end here -->
-                            </div>
-                            <div class="form-group">
-                                <div class="col-lg-12">
-                                    <!-- col-lg-12 start here -->
-                                    <input id="apellidos" name="apellidos" type="text" class="form-control left-icon" placeholder="Escriba sus apellidos">
-                                    <i class="fa fa-envelope s16 left-input-icon"></i> 
-                                </div>
-                                <!-- col-lg-12 end here -->
-                            </div>
-                            <div class="form-group">
-                                <div class="col-lg-12">
-                                    <!-- col-lg-12 start here -->
-                                    <input id="telefono" name="telefono" type="text" class="form-control left-icon" placeholder="Escriba su telefono">
-                                    <i class="fa fa-envelope s16 left-input-icon"></i> 
-                                </div>
-                                <!-- col-lg-12 end here -->
-                            </div>
-                            <div class="form-group mb25">
-                                <div class="col-lg-12">
-                                    <!-- col-lg-12 start here -->
-                                    <button class="btn btn-default btn-block">Solicite Ingreso</button>
-                                </div>
-                                <!-- col-lg-12 end here -->
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
- 
+                            $('#respuesta').html(
+                                'Usuario: ' + resultado.map(function(e)
+                                {
+                                    return e.NOMBRE;
+                                }).join(', ')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });
+               
+               logout.click(function()
+               {
+                   $('#respuesta').html('Cargando..');
+                   
+                   var data = {
+                                email: _email.val(),
+                                clave: _clave.val()
+                              };                   
+                   $.ajax({
+			type: 'POST',			
+			url: 'logoutprueba',
+                        data: data,
+			success: function(resultado)
+                        {
+                            console.log(resultado);                            
+                            $('#respuesta').html(resultado);
+			},
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });
+
+
+            });//Jquery
+
+        </script>
+</body>
+</html>

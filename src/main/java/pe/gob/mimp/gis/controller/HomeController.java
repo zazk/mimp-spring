@@ -94,11 +94,120 @@ public class HomeController {
     }
 
     @RequestMapping(value = "/home/new", method = RequestMethod.POST)
-    public String createUsuario(@ModelAttribute("usuario")Usuario usuario, SessionStatus status) {    
-  
-
-        return "redirect:/home/new";
+    public String createUsuario(@ModelAttribute("usuario")Usuario usuario, SessionStatus status)
+    {            
+        return "redirect:/home/index";        
+    }
+    
+    @RequestMapping(value = "/home/buscar", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> buscaUsuario(Usuario obj)
+    {
+        String sql = "select * from usuario Where COUSUARIO = " + obj.getCoUsuario();
+        
+        System.out.println("SQL: " + sql);
+        
+        List<Map<String,Object>> objects = gisService.consulta(sql);
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;
+    }
+        
+    @RequestMapping(value = "/home/usuarios")
+    public @ResponseBody List<Map<String,Object>> usuarios()
+    {   
+        String sql = "select * from usuario";
+        List<Map<String, Object>> objects = gisService.consulta(sql);
+        
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        /*
+                */ 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;
         
     }
-     
-}
+    
+    //CRUD   
+    @RequestMapping(value = "/home/create", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> create(Usuario obj)
+    {        
+        String sql;
+
+        if(obj.getCoUsuario() != null)
+        {
+            int codigo = obj.getCoUsuario();
+            sql = "insert into usuario values("+codigo+", 0"+codigo+", 'gian marco" + codigo +"', 'gian"+ codigo +"@hotmail.com', 0, 'carrasco', 0, 'usuario')";
+            gisService.update(sql);
+        }
+                            
+        sql = "select * from usuario";
+                
+        List<Map<String,Object>> objects = gisService.consulta(sql);
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;
+    }
+    
+    @RequestMapping(value = "/home/read")
+    public @ResponseBody List<Map<String,Object>> read()
+    {   
+        String sql = "select * from usuario";
+        List<Map<String, Object>> objects = gisService.consulta(sql);
+        
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        /*
+                */ 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;
+        
+    }
+    
+    @RequestMapping(value = "/home/update", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> update(Usuario obj)
+    {
+        String sql;
+        
+        if(obj.getCoUsuario() != null)
+        {        
+            int codigo = obj.getCoUsuario();
+        
+            sql = "update usuario set NOMBRE = 'GianMarco"+codigo+" Modificado' Where COUSUARIO = " + codigo;
+            System.out.println("En update - sql: " + sql);
+            gisService.update(sql);
+        }
+        
+        sql = "select * from usuario";
+                
+        List<Map<String,Object>> objects = gisService.consulta(sql);
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;
+    }
+    
+    @RequestMapping(value = "/home/delete", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> delete(Usuario obj)
+    {
+        String sql;
+        
+        if(obj.getCoUsuario() != null)
+        {              
+            int codigo = obj.getCoUsuario();
+        
+            sql = "delete usuario Where COUSUARIO = " + codigo;
+            System.out.println("En delete - sql: " + sql);
+            gisService.update(sql);
+        }
+        
+        sql = "select * from usuario";
+                
+        List<Map<String,Object>> objects = gisService.consulta(sql);
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;
+    }
+}     
