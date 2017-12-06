@@ -1,10 +1,13 @@
 package pe.gob.mimp.gis.controller;
  
+import java.util.ArrayList;
+import java.util.HashMap;
 import pe.gob.mimp.gis.entity.Usuario;
 import pe.gob.mimp.gis.entity.Entidad;
 import pe.gob.mimp.gis.service.EntidadService;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired; 
@@ -128,32 +131,107 @@ public class HomeController {
         
     }
     
-    //CRUD   
-    @RequestMapping(value = "/home/create", method = RequestMethod.POST)
-    public @ResponseBody List<Map<String,Object>> create(Usuario obj)
-    {        
-        String sql;
-
-        if(obj.getCoUsuario() != null)
+    //Gian Marco (SSP)
+    @RequestMapping(value = "/home/logininterno", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> logininterno(HttpServletRequest request)
+    {                        
+        String usuario = request.getParameter("usuario");
+        String password = request.getParameter("password");
+        
+        List<Map<String,Object>> empleados = new ArrayList<Map<String, Object>>();
+        Map error = new HashMap();
+        
+        if(!hayCamposVacios(usuario, password))
         {
-            int codigo = obj.getCoUsuario();
-            sql = "insert into usuario values("+codigo+", 0"+codigo+", 'gian marco" + codigo +"', 'gian"+ codigo +"@hotmail.com', 0, 'carrasco', 0, 'usuario')";
-            gisService.update(sql);
+            String sql;
+            
+            sql = "SELECT * FROM USUARIOS WHERE USUARIO = '{0}' AND PASSWORD = '{1}' AND ROWNUM = 1";
+            sql = sql.replace("{0}", usuario);
+            sql = sql.replace("{1}", password.toString());
+            
+            System.out.println("------------------ Consulta sql: " + sql);
+            empleados = gisService.consulta(sql);
+            System.out.println("------------------ Tamaño de lista: " + empleados.size());
+            if(empleados.size() > 0)
+            {
+                Map<String,Object> empleado = empleados.get(0);
+                request.getSession().setAttribute("empleado", empleado);
+
+                empleados = new ArrayList<Map<String, Object>>();
+                error.put("error", false);
+                error.put("mensaje", "Acceso autorizado");
+                empleados.add(error);
+            }
+            else
+            {
+                error.put("error", false);
+                error.put("mensaje", "Usuario y/o contraseña incorrectos");
+                empleados.add(error);
+            }            
         }
-                            
-        sql = "select * from usuario";
-                
-        List<Map<String,Object>> objects = gisService.consulta(sql);
-        System.err.println("+++++++++++++++++++++++++++++++++"); 
-        System.err.println(objects); 
-        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        else
+        {
+            error.put("error", true);
+            error.put("mensaje", "Datos incompletos");
+            empleados.add(error);
+        }        
+        return empleados;
+    }
+    
+    @RequestMapping(value = "/home/create", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> create(HttpServletRequest request)
+    {                        
+        String nombre = request.getParameter("nombre");
+        String apellidos = request.getParameter("apellidos");
+        String correo = request.getParameter("correo");
+        String clave = request.getParameter("clave");
+        String rol = request.getParameter("rol");
+        String idDependencia = request.getParameter("idDependencia");
+        String idDocumento = request.getParameter("idDocumento");
+        String num_documento = request.getParameter("num_documento");
+        String estado = request.getParameter("estado");
+        
+        List<Map<String,Object>> objects = new ArrayList<Map<String, Object>>();
+        Map error = new HashMap();
+        
+        if(!hayCamposVacios(nombre, apellidos, correo, clave, rol, idDependencia, idDocumento, num_documento, estado))
+        {
+            String sql;
+            int _rol = Integer.parseInt(rol);
+            int _idDependencia = Integer.parseInt(idDependencia);
+            int _idDocumento = Integer.parseInt(idDocumento);
+            
+            sql = "INSERT INTO usuario VALUES (usuario_seq.NEXTVAL,?,?,?,?,?,?,?,?,?)";            
+            
+            int rpta = gisService.update(sql, nombre, apellidos, correo, clave, _rol, _idDependencia, _idDocumento, num_documento, estado);
+                        
+            error.put("error", false);
+            error.put("mensaje", "Se creó " + rpta + " registro(s).");       
+            objects.add(error);
+        }
+        else
+        {
+            error.put("error", true);
+            error.put("mensaje", "Datos incompletos");
+            objects.add(error);
+        }        
         return objects;
     }
     
     @RequestMapping(value = "/home/read")
     public @ResponseBody List<Map<String,Object>> read()
     {   
-        String sql = "select * from usuario";
+        String sql =    "SELECT " +
+                            "u.IDUSUARIOS as IDUSUARIO, " +
+                            "e.IDEMPLEADO, e.NOMBRE || ', ' || e.APELLIDO_P || ' ' || e.APELLIDO_M AS EMPLEADO, " +
+                            "r.DESCRIPCION AS ROL, " +
+                            "u.USUARIO, " +
+                            "u.PASSWORD, " +
+                            "est.ESTADONOMBRE AS ESTADO " +
+                            "FROM USUARIOS u " +
+                            "INNER JOIN EMPLEADO e ON u.idEmpleado = e.idEmpleado " +
+                            "INNER JOIN ROLUSER r ON u.idRoluser = r.idRol INNER JOIN ESTADO est ON u.ESTADO = est.IDESTADO";
+        
         List<Map<String, Object>> objects = gisService.consulta(sql);
         
         System.err.println("+++++++++++++++++++++++++++++++++"); 
@@ -166,48 +244,85 @@ public class HomeController {
     }
     
     @RequestMapping(value = "/home/update", method = RequestMethod.POST)
-    public @ResponseBody List<Map<String,Object>> update(Usuario obj)
+    public @ResponseBody List<Map<String,Object>> update(HttpServletRequest request)
     {
-        String sql;
+        String idUsuario = request.getParameter("idUsuario");
+        String nombre = request.getParameter("nombre");
+        String apellidos = request.getParameter("apellidos");
+        String correo = request.getParameter("correo");
+        String clave = request.getParameter("clave");
+        String rol = request.getParameter("rol");
+        String idDependencia = request.getParameter("idDependencia");
+        String idDocumento = request.getParameter("idDocumento");
+        String num_documento = request.getParameter("num_documento");
+        String estado = request.getParameter("estado");
         
-        if(obj.getCoUsuario() != null)
-        {        
-            int codigo = obj.getCoUsuario();
+        List<Map<String,Object>> objects = new ArrayList<Map<String, Object>>();
+        Map error = new HashMap();
         
-            sql = "update usuario set NOMBRE = 'GianMarco"+codigo+" Modificado' Where COUSUARIO = " + codigo;
-            System.out.println("En update - sql: " + sql);
-            gisService.update(sql);
+        if(!hayCamposVacios(idUsuario, nombre, apellidos, correo, clave, rol, idDependencia, idDocumento, num_documento, estado))
+        {
+            String sql;
+            int _idUsuario = Integer.parseInt(idUsuario);
+            int _rol = Integer.parseInt(rol);
+            int _idDependencia = Integer.parseInt(idDependencia);
+            int _idDocumento = Integer.parseInt(idDocumento);
+            
+            sql = "UPDATE USUARIO "
+                    + "SET nombre = ?, apellidos = ?, correo = ?, clave = ?, rol = ?, idDependencia = ?, idDocumento = ?, num_documento = ?, estado = ? "
+                    + "WHERE idUsuario = ?";
+                                    
+            int rpta = gisService.update(sql, nombre, apellidos, correo, clave, _rol, _idDependencia, _idDocumento, num_documento, estado, _idUsuario);
+                        
+            error.put("error", false);
+            error.put("mensaje", "Se actualizó " + rpta + " registro(s).");
+            objects.add(error);
         }
-        
-        sql = "select * from usuario";
-                
-        List<Map<String,Object>> objects = gisService.consulta(sql);
-        System.err.println("+++++++++++++++++++++++++++++++++"); 
-        System.err.println(objects); 
-        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        else
+        {
+            error.put("error", true);
+            error.put("mensaje", "Datos incompletos");
+            objects.add(error);
+        }        
         return objects;
     }
     
     @RequestMapping(value = "/home/delete", method = RequestMethod.POST)
-    public @ResponseBody List<Map<String,Object>> delete(Usuario obj)
+    public @ResponseBody List<Map<String,Object>> delete(HttpServletRequest request)
     {
-        String sql;
+        String idUsuario = request.getParameter("idUsuario");
         
-        if(obj.getCoUsuario() != null)
-        {              
-            int codigo = obj.getCoUsuario();
+        List<Map<String,Object>> objects = new ArrayList<Map<String, Object>>();
+        Map error = new HashMap();
         
-            sql = "delete usuario Where COUSUARIO = " + codigo;
-            System.out.println("En delete - sql: " + sql);
-            gisService.update(sql);
+        if(!hayCamposVacios(idUsuario))
+        {
+            String sql;
+            int _idUsuario = Integer.parseInt(idUsuario);
+            
+            sql = "DELETE usuario WHERE idUsuario = ?";
+                                    
+            int rpta = gisService.update(sql, _idUsuario);
+                        
+            error.put("error", false);
+            error.put("mensaje", "Se eliminó " + rpta + " registro(s).");      
+            objects.add(error);
         }
-        
-        sql = "select * from usuario";
-                
-        List<Map<String,Object>> objects = gisService.consulta(sql);
-        System.err.println("+++++++++++++++++++++++++++++++++"); 
-        System.err.println(objects); 
-        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        else
+        {
+            error.put("error", true);
+            error.put("mensaje", "Datos incompletos");
+            objects.add(error);
+        }        
         return objects;
+    }
+
+    boolean hayCamposVacios(String... campos)
+    {
+        for(String x:campos)
+            if(x.isEmpty())
+                return true;
+        
+        return false;
     }
 }     

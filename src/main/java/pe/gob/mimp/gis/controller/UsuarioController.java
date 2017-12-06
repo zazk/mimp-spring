@@ -515,7 +515,7 @@ public class UsuarioController {
                     Date dPeriodo2 = dfCompleto.parse(sPeriodo2);
                     
                     if(dPeriodo1.before(dPeriodo2) || dPeriodo1.equals(dPeriodo2)){
-                        //Mismo periodo, solo comparo si hoy han pasado disez dias desde el ultimo dia del periodo señalado
+                        //Mismo periodo, solo comparo si hoy han pasado disez dias desde el ultimo dia del periodo seï¿½alado
                         String sPeriodo = "01-" + periodo_2 + "-" + anio;
                         Date dPeriodo = dfCompleto.parse(sPeriodo);
                         
@@ -594,7 +594,6 @@ public class UsuarioController {
         System.out.println("Redireccion ");
         return "redirect:/pages/usuarios/historico";
     }
-    
     
     @RequestMapping("/usuarios/agregar")
     public ModelAndView agregar(HttpServletRequest request) {
@@ -1044,10 +1043,10 @@ public class UsuarioController {
             + "( idusuario, asunto, contenido, fec_men, cod_entidad ) VALUES (?,?,?,TO_DATE(?, 'yyyy/mm/dd hh24:mi:ss'),?)", 
                 idusuario, asunto, contenido, fec_men, cod_entidad);
         
-        System.out.println("No se cae aquí 1");
+        System.out.println("No se cae aquï¿½ 1");
         mailSender.send(new MimeMessagePreparator() {            
             public void prepare(MimeMessage mimeMessage) throws MessagingException {
-                System.out.println("No se cae aquí 2");
+                System.out.println("No se cae aquï¿½ 2");
                 MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, "UTF-8");
                 message.setFrom("info@mimp.gob.pe");
                 message.setTo(locations.getPostmaster());
@@ -1078,7 +1077,7 @@ public class UsuarioController {
         return mav;
     }
 
-    //Prueba gian marco       
+    //Gian Marco (SSP)
     @RequestMapping(value = "/usuarios/loginprueba", method=RequestMethod.POST)
     public @ResponseBody List<Map<String,Object>> loginprueba (HttpServletRequest request)
     {        
@@ -1093,6 +1092,7 @@ public class UsuarioController {
         System.out.println("---------------------------------- Consulta SQL: " + sql);
         
         usuarios = gisService.consulta(sql);
+        
         if(usuarios.size() <= 0)
         {
             Map error = new HashMap();
@@ -1110,7 +1110,34 @@ public class UsuarioController {
     public @ResponseBody String logoutprueba (HttpServletRequest request)
     {     
         request.getSession().invalidate();
-        return "Sesión terminada";
+        return "SesiÃ³n terminada";
+    }
+    
+    @RequestMapping(value = "/usuarios/login/interno", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> interno(HttpServletRequest request)
+    {
+        String email = request.getParameter("email");
+        String clave = request.getParameter("clave");
+                                
+        List<Map<String,Object>> usuarios = new ArrayList<Map<String, Object>>();        
+        String sql = "SELECT * FROM usuario WHERE rownum = 1 and correo = '{0}' and clave = '{1}'";
+        sql = sql.replace("{0}", email);
+        sql = sql.replace("{1}", clave);
+        
+        System.out.println("---------------------------------- Consulta SQL: " + sql);        
+        usuarios = gisService.consulta(sql);
+        System.out.println("---------------------------------- Usuarios.size(): " + usuarios.size());
+        if(usuarios.size() <= 0)
+        {
+            Map error = new HashMap();
+            error.put("error", true);
+            error.put("NOMBRE", "Datos Incorrectos");
+            error.put("mensaje", "Datos Incorrectos");
+            
+            usuarios.add(error);
+        }        
+        
+        return usuarios;
     }
     
 }

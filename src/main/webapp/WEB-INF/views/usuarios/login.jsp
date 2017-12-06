@@ -68,13 +68,13 @@
                               };                   
                    $.ajax({
 			type: 'POST',			
-			url: 'loginprueba', 
+			url: 'login/interno', 
                         data: data,
 			success: function(resultado)
                         {
                             console.log(resultado);
                             
-                            $('#respuesta').html(
+                            $('#respuesta').html(                                    
                                 'Usuario: ' + resultado.map(function(e)
                                 {
                                     return e.NOMBRE;
