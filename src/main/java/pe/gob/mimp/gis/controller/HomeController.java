@@ -41,7 +41,6 @@ public class HomeController {
         ModelAndView mav = new ModelAndView("home/index");  
         return mav;
     }
-     
     
     @RequestMapping(value = "/home/info" )
     public @ResponseBody List<Map<String,Object>> consulta( @RequestParam(value = "q") String q) { 
@@ -181,29 +180,25 @@ public class HomeController {
     @RequestMapping(value = "/home/create", method = RequestMethod.POST)
     public @ResponseBody List<Map<String,Object>> create(HttpServletRequest request)
     {                        
-        String nombre = request.getParameter("nombre");
-        String apellidos = request.getParameter("apellidos");
-        String correo = request.getParameter("correo");
-        String clave = request.getParameter("clave");
-        String rol = request.getParameter("rol");
-        String idDependencia = request.getParameter("idDependencia");
-        String idDocumento = request.getParameter("idDocumento");
-        String num_documento = request.getParameter("num_documento");
+        String idEmpleado = request.getParameter("idEmpleado");
+        String idRolUser = request.getParameter("idRolUser");
+        String usuario = request.getParameter("usuario");
+        String password = request.getParameter("password");
         String estado = request.getParameter("estado");
         
         List<Map<String,Object>> objects = new ArrayList<Map<String, Object>>();
         Map error = new HashMap();
         
-        if(!hayCamposVacios(nombre, apellidos, correo, clave, rol, idDependencia, idDocumento, num_documento, estado))
+        if(!hayCamposVacios(idEmpleado, idRolUser, usuario, password, estado))
         {
             String sql;
-            int _rol = Integer.parseInt(rol);
-            int _idDependencia = Integer.parseInt(idDependencia);
-            int _idDocumento = Integer.parseInt(idDocumento);
+            int _idEmpleado = Integer.parseInt(idEmpleado);
+            int _idRolUser = Integer.parseInt(idRolUser);
+            int _estado = Integer.parseInt(estado);
             
-            sql = "INSERT INTO usuario VALUES (usuario_seq.NEXTVAL,?,?,?,?,?,?,?,?,?)";            
+            sql = "INSERT INTO usuarios VALUES (usuarios_seq.NEXTVAL,?,?,?,?,?)";
             
-            int rpta = gisService.update(sql, nombre, apellidos, correo, clave, _rol, _idDependencia, _idDocumento, num_documento, estado);
+            int rpta = gisService.update(sql, _idEmpleado, _idRolUser, usuario, password, _estado);
                         
             error.put("error", false);
             error.put("mensaje", "Se creó " + rpta + " registro(s).");       
@@ -222,7 +217,7 @@ public class HomeController {
     public @ResponseBody List<Map<String,Object>> read()
     {   
         String sql =    "SELECT " +
-                            "u.IDUSUARIOS as IDUSUARIO, " +
+                            "u.IDUSUARIOS as IDUSUARIOS, " +
                             "e.IDEMPLEADO, e.NOMBRE || ', ' || e.APELLIDO_P || ' ' || e.APELLIDO_M AS EMPLEADO, " +
                             "r.DESCRIPCION AS ROL, " +
                             "u.USUARIO, " +
@@ -246,33 +241,33 @@ public class HomeController {
     @RequestMapping(value = "/home/update", method = RequestMethod.POST)
     public @ResponseBody List<Map<String,Object>> update(HttpServletRequest request)
     {
-        String idUsuario = request.getParameter("idUsuario");
-        String nombre = request.getParameter("nombre");
-        String apellidos = request.getParameter("apellidos");
-        String correo = request.getParameter("correo");
-        String clave = request.getParameter("clave");
-        String rol = request.getParameter("rol");
-        String idDependencia = request.getParameter("idDependencia");
-        String idDocumento = request.getParameter("idDocumento");
-        String num_documento = request.getParameter("num_documento");
+        String idUsuarios = request.getParameter("idUsuarios");
+        String idEmpleado = request.getParameter("idEmpleado");
+        String idRolUser = request.getParameter("idRolUser");
+        String usuario = request.getParameter("usuario");
+        String password = request.getParameter("password");
         String estado = request.getParameter("estado");
         
         List<Map<String,Object>> objects = new ArrayList<Map<String, Object>>();
         Map error = new HashMap();
         
-        if(!hayCamposVacios(idUsuario, nombre, apellidos, correo, clave, rol, idDependencia, idDocumento, num_documento, estado))
+        if(!hayCamposVacios(idUsuarios, idEmpleado, idRolUser, usuario, password, estado))
         {
             String sql;
-            int _idUsuario = Integer.parseInt(idUsuario);
-            int _rol = Integer.parseInt(rol);
-            int _idDependencia = Integer.parseInt(idDependencia);
-            int _idDocumento = Integer.parseInt(idDocumento);
+            int _idUsuarios = Integer.parseInt(idUsuarios);
+            int _idEmpleado = Integer.parseInt(idEmpleado);
+            int _idRolUser = Integer.parseInt(idRolUser);
+            int _estado = Integer.parseInt(estado);
             
-            sql = "UPDATE USUARIO "
-                    + "SET nombre = ?, apellidos = ?, correo = ?, clave = ?, rol = ?, idDependencia = ?, idDocumento = ?, num_documento = ?, estado = ? "
-                    + "WHERE idUsuario = ?";
+            sql =   "UPDATE USUARIOS " +                    
+                        "SET IDEMPLEADO = ?, " +
+                             "IDROLUSER = ?, " +
+                             "USUARIO = ?, " +
+                             "PASSWORD = ?, " +
+                             "ESTADO = ?" +
+                    "WHERE IDUSUARIOS = ?";
                                     
-            int rpta = gisService.update(sql, nombre, apellidos, correo, clave, _rol, _idDependencia, _idDocumento, num_documento, estado, _idUsuario);
+            int rpta = gisService.update(sql, _idEmpleado, _idRolUser, usuario, password, _estado, _idUsuarios);
                         
             error.put("error", false);
             error.put("mensaje", "Se actualizó " + rpta + " registro(s).");
@@ -290,19 +285,19 @@ public class HomeController {
     @RequestMapping(value = "/home/delete", method = RequestMethod.POST)
     public @ResponseBody List<Map<String,Object>> delete(HttpServletRequest request)
     {
-        String idUsuario = request.getParameter("idUsuario");
+        String idUsuarios = request.getParameter("idUsuarios");
         
         List<Map<String,Object>> objects = new ArrayList<Map<String, Object>>();
         Map error = new HashMap();
         
-        if(!hayCamposVacios(idUsuario))
+        if(!hayCamposVacios(idUsuarios))
         {
             String sql;
-            int _idUsuario = Integer.parseInt(idUsuario);
+            int _idUsuarios = Integer.parseInt(idUsuarios);
             
-            sql = "DELETE usuario WHERE idUsuario = ?";
+            sql = "DELETE usuarios WHERE idUsuarios = ?";
                                     
-            int rpta = gisService.update(sql, _idUsuario);
+            int rpta = gisService.update(sql, _idUsuarios);
                         
             error.put("error", false);
             error.put("mensaje", "Se eliminó " + rpta + " registro(s).");      

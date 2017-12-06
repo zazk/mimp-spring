@@ -33,45 +33,25 @@
     </div>
     
     <!-- idUsuario, nombre, apellidos, correo, clave, rol, idDependencia,idDocumento, num_documento, estado -->
-    <div class="row">                
+    <div class="row">                    
         <div class="col-md-12 form-group ">
-            <label>Usuario</label>
-            <input id="usuario">
+            <label>idUsuarios</label>
+            <input id="idUsuarios" type="number">
             
-            <label>Contraseña</label>
-            <input id="password">
-        </div>
-        
-        <div class="col-md-12 form-group ">
-            <label>idUsuario</label>
-            <input id="idUsuario">
+            <label>Empleado</label>
+            <input id="idEmpleado" type="number">
             
-            <label>Nombre</label>
-            <input id="nombre">
-            
-            <label>Apellidos</label>
-            <input id="apellidos">
-            
-            <label>Correo</label>
-            <input id="correo">
-            
-            <label>Clave</label>
-            <input id="clave">
-
             <label>Rol</label>
-            <input id="rol">
-        
-            <label>Dependencia</label>
-            <input id="idDependencia">
+            <input id="idRolUser" type="number">
             
-            <label>Documento</label>
-            <input id="idDocumento">
-        
-            <label>Nº Documento</label>
-            <input id="num_documento">
-        
+            <label>Usuario</label>
+            <input id="usuario" type="email">
+            
+            <label>Password</label>
+            <input id="password" type="password">
+
             <label>Estado</label>
-            <input id="estado">
+            <input id="estado" type="number">        
         </div>
     </div>
 </div>
@@ -96,26 +76,21 @@
                 var update = $('#update');
                 var eliminar = $('#eliminar');
                 
+                var idUsuarios = $('#idUsuarios');
+                var idEmpleado = $('#idEmpleado');
+                var idRolUser = $('#idRolUser');
                 var usuario = $('#usuario');
                 var password = $('#password');
-                
-                var idUsuario = $('#idUsuario');
-                var nombre = $('#nombre');
-                var apellidos = $('#apellidos');
-                var correo = $('#correo');
-                var clave = $('#clave');
-                var rol = $('#rol');
-                var idDependencia = $('#idDependencia');
-                var idDocumento = $('#idDocumento');
-                var num_documento = $('#num_documento');            
                 var estado = $('#estado');
+                
                
                logininterno.click(function()
-               {             
+               {
+                   $('#respuesta').html('Cargando...');
                    var data = {
                                 usuario: usuario.val(),
                                 password: password.val()
-                              }
+                              };
                    
                    console.log('Data: ' + data);
                    $.ajax({
@@ -143,16 +118,13 @@
                               
                create.click(function()
                {
+                   $('#respuesta').html('Cargando...');
                    var data =
                            {
-                            nombre: nombre.val(),
-                            apellidos: apellidos.val(),
-                            correo: correo.val(),
-                            clave: clave.val(),
-                            rol: rol.val(),
-                            idDependencia: idDependencia.val(),
-                            idDocumento: idDocumento.val(),
-                            num_documento: num_documento.val(),
+                            idEmpleado: idEmpleado.val(),
+                            idRolUser: idRolUser.val(),
+                            usuario: usuario.val(),
+                            password: password.val(),
                             estado: estado.val()
                           }
                    
@@ -182,6 +154,7 @@
                
                read.click(function()
                {
+                   $('#respuesta').html('Cargando...');
                    var data={};
                    
                    $.ajax({
@@ -195,7 +168,7 @@
                             $('#respuesta').html(
                                 resultado.map(function(e)
                                 {
-                                    return 'ID: ' + e.IDEMPLEADO + ' - ' + e.EMPLEADO + ' - DEPENDENCIA: FALTA COORDINAR CON FREDDY' +
+                                    return 'ID: ' + e.IDUSUARIOS + ' - ' + e.EMPLEADO + ' - DEPENDENCIA: FALTA COORDINAR CON FREDDY' +
                                      '<BR>ROL: '+ e.ROL + ' - USUARIO: ' + e.USUARIO + ' - ESTADO: ' + e.ESTADO;
                                 }).join('<br>')
                             );
@@ -207,19 +180,16 @@
                });//Read
                
                update.click(function()
-               {             
+               {
+                   $('#respuesta').html('Cargando...');
                    var data = {
-                            idUsuario: idUsuario.val(),
-                            nombre: nombre.val(),
-                            apellidos: apellidos.val(),
-                            correo: correo.val(),
-                            clave: clave.val(),
-                            rol: rol.val(),
-                            idDependencia: idDependencia.val(),
-                            idDocumento: idDocumento.val(),
-                            num_documento: num_documento.val(),
-                            estado: estado.val()
-                          }
+                                idUsuarios: idUsuarios.val(),
+                                idEmpleado: idEmpleado.val(),
+                                idRolUser: idRolUser.val(),
+                                usuario: usuario.val(),
+                                password: password.val(),
+                                estado: estado.val()
+                              };
                    
                    console.log('Data: ' + data);
                    $.ajax({
@@ -247,18 +217,10 @@
                
                eliminar.click(function()
                {
+                   $('#respuesta').html('Cargando...');
                    var data = {
-                            idUsuario: idUsuario.val(),
-                            nombre: nombre.val(),
-                            apellidos: apellidos.val(),
-                            correo: correo.val(),
-                            clave: clave.val(),
-                            rol: rol.val(),
-                            idDependencia: idDependencia.val(),
-                            idDocumento: idDocumento.val(),
-                            num_documento: num_documento.val(),
-                            estado: estado.val()
-                          }
+                                idUsuarios: idUsuarios.val(),
+                              };
                    
                    console.log('Data: ' + data);
                    $.ajax({
