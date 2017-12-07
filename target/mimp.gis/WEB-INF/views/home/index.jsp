@@ -9,7 +9,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Geomimp</title>
+	<title>Datos Personales</title>
 	<link rel="stylesheet" href="<c:url value='/assetsvisor/css/bootstrap.css'/>">
 	<link rel="stylesheet" href="<c:url value='/assetsvisor/css/font-awesome.css'/>">
 	<link rel="stylesheet" href="<c:url value='/assetsvisor/css/geomimp.css'/>">
@@ -21,37 +21,36 @@
             <h1>Pruebas GET/POST</h1>
             
             <h5>Usuarios</h5>
-            <button id="logininterno" type="button" class="btn btn-success">Login Interno</button>
-            <button id="create" type="button" class="btn btn-success">Create</button>
-            <button id="read" type="button" class="btn btn-success">Read</button>
-            <button id="update" type="button" class="btn btn-success">Update</button>
-            <button id="eliminar" type="button" class="btn btn-success">Delete</button>
+            <button id="buscar" type="button" class="btn btn-success">Cargar Candidato</button>
+            <button id="actualizarcandidato" type="button" class="btn btn-success">Actualizar Candidato</button>
 
             <br><br>
             <p id="respuesta"></p>
         </div>    
     </div>
     
-    <!-- idUsuario, nombre, apellidos, correo, clave, rol, idDependencia,idDocumento, num_documento, estado -->
     <div class="row">                    
-        <div class="col-md-12 form-group ">
-            <label>idUsuarios</label>
-            <input id="idUsuarios" type="number">
+        <div class=""col-md-12 form-group">
+            <label>ID</label>
+            <input id="idCandidato" type="number">             
+                          
+            <label>Tipo Identidad</label>
+            <input id="idTipoIdentidad" type="number">
             
-            <label>Empleado</label>
-            <input id="idEmpleado" type="number">
+            <label>Nro Identidad</label>
+            <input id="nroIdentidad" type="number">
             
-            <label>Rol</label>
-            <input id="idRolUser" type="number">
+            <label>Nombres</label>
+            <input id="nombres" type="text">
             
-            <label>Usuario</label>
-            <input id="usuario" type="email">
+            <label>Apellidos</label>
+            <input id="apellidos" type="text">
             
-            <label>Password</label>
-            <input id="password" type="password">
+            <label>Correo</label>
+            <input id="correo_usuario" type="email">
 
-            <label>Estado</label>
-            <input id="estado" type="number">        
+            <label>Clave</label>
+            <input id="clave_usuario" type="password">        
         </div>
     </div>
 </div>
@@ -70,96 +69,27 @@
             $(document).ready(function()
             {
                 $('#respuesta').html('Ready');
-                var logininterno = $('#logininterno');
-                var create = $('#create');
-                var read = $('#read');
-                var update = $('#update');
-                var eliminar = $('#eliminar');
+                var buscar = $('#buscar');
+                var actualizarcandidato = $('#actualizarcandidato');
                 
-                var idUsuarios = $('#idUsuarios');
-                var idEmpleado = $('#idEmpleado');
-                var idRolUser = $('#idRolUser');
-                var usuario = $('#usuario');
-                var password = $('#password');
-                var estado = $('#estado');
-                
-               
-               logininterno.click(function()
+                var idCandidato = $('#idCandidato');
+                var idTipoIdentidad = $('#idTipoIdentidad');
+                var nroIdentidad = $('#nroIdentidad');
+                var nombres = $('#nombres');
+                var apellidos = $('#apellidos');
+                var correo_usuario = $('#correo_usuario');
+                var clave_usuario = $('#clave_usuario');                
+
+               buscar.click(function()
                {
                    $('#respuesta').html('Cargando...');
                    var data = {
-                                usuario: usuario.val(),
-                                password: password.val()
+                                idCandidato: idCandidato.val()
                               };
-                   
-                   console.log('Data: ' + data);
-                   $.ajax({
-			type: 'POST',			
-			url: 'logininterno',
-                        data: data,
-			success: function(resultado)
-                        {                                                        
-                            $('#respuesta').html(
-                                'Mensaje: ' + resultado.map(function(e)
-                                {
-                                    return e.mensaje;
-                                }).join(', ') + '<br>Error: ' + resultado.map(function(e)
-                                {
-                                    return e.error;
-                                }).join(', ')
-                            );
-			},
-                        error: function (jqXHR, textStatus, errorThrown)
-                        {
-                            $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
-                        }
-                    });
-               });//Login Interno
-                              
-               create.click(function()
-               {
-                   $('#respuesta').html('Cargando...');
-                   var data =
-                           {
-                            idEmpleado: idEmpleado.val(),
-                            idRolUser: idRolUser.val(),
-                            usuario: usuario.val(),
-                            password: password.val(),
-                            estado: estado.val()
-                          }
-                   
-                   console.log('Data: ' + data);
-                   $.ajax({
-			type: 'POST',			
-			url: 'create',
-                        data: data,
-			success: function(resultado)
-                        {                                                        
-                            $('#respuesta').html(
-                                'Mensaje: ' + resultado.map(function(e)
-                                {
-                                    return e.mensaje;
-                                }).join(', ') + '<br>Error: ' + resultado.map(function(e)
-                                {
-                                    return e.error;
-                                }).join(', ')
-                            );
-			},
-                        error: function (jqXHR, textStatus, errorThrown)
-                        {
-                            $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
-                        }
-                    });
-               });//Create
-               
-               read.click(function()
-               {
-                   $('#respuesta').html('Cargando...');
-                   var data={};
                    
                    $.ajax({
 			type: 'GET',			
-			url: 'read',
+			url: 'buscarcandidato',
                         data: data,
 			success: function(resultado)
                         {
@@ -168,8 +98,7 @@
                             $('#respuesta').html(
                                 resultado.map(function(e)
                                 {
-                                    return 'ID: ' + e.IDUSUARIOS + ' - ' + e.EMPLEADO + ' - DEPENDENCIA: FALTA COORDINAR CON FREDDY' +
-                                     '<BR>ROL: '+ e.ROL + ' - USUARIO: ' + e.USUARIO + ' - ESTADO: ' + e.ESTADO;
+                                    return 'Error: '+ e.error + '<br>Mensaje: ' + e.mensaje;
                                 }).join('<br>')
                             );
 			},
@@ -179,22 +108,16 @@
                     });
                });//Read
                
-               update.click(function()
+               actualizarcandidato.click(function()
                {
                    $('#respuesta').html('Cargando...');
                    var data = {
-                                idUsuarios: idUsuarios.val(),
-                                idEmpleado: idEmpleado.val(),
-                                idRolUser: idRolUser.val(),
-                                usuario: usuario.val(),
-                                password: password.val(),
-                                estado: estado.val()
                               };
                    
                    console.log('Data: ' + data);
                    $.ajax({
 			type: 'POST',			
-			url: 'update',
+			url: 'actualizarcandidato',
                         data: data,
 			success: function(resultado)
                         {                                                        
@@ -214,38 +137,6 @@
                         }
                     });
                });//Update
-               
-               eliminar.click(function()
-               {
-                   $('#respuesta').html('Cargando...');
-                   var data = {
-                                idUsuarios: idUsuarios.val(),
-                              };
-                   
-                   console.log('Data: ' + data);
-                   $.ajax({
-			type: 'POST',			
-			url: 'delete',
-                        data: data,
-			success: function(resultado)
-                        {                                                        
-                            $('#respuesta').html(
-                                'Mensaje: ' + resultado.map(function(e)
-                                {
-                                    return e.mensaje;
-                                }).join(', ') + '<br>Error: ' + resultado.map(function(e)
-                                {
-                                    return e.error;
-                                }).join(', ')
-                            );
-			},
-                        error: function (jqXHR, textStatus, errorThrown)
-                        {
-                            $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
-                        }
-                    });
-               });//Delete <- es una palabra reservada del sistema por eso se puso Eliminar
-               
             });//Jquery
 
         </script>
