@@ -10,10 +10,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Datos Personales</title>
-	<link rel="stylesheet" href="<c:url value='/assetsvisor/css/bootstrap.css'/>">
-	<link rel="stylesheet" href="<c:url value='/assetsvisor/css/font-awesome.css'/>">
-	<link rel="stylesheet" href="<c:url value='/assetsvisor/css/geomimp.css'/>">
-        <link rel="stylesheet" href="<c:url value='/assetsvisor/css/perfect-scrollbar.min.css'/>">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 </head>
 <body class="container">
     <div class="row">
@@ -30,41 +27,174 @@
     </div>
     
     <div class="row">                    
-        <div class=""col-md-12 form-group">
-            <label>ID</label>
-            <input id="idCandidato" type="number">             
-                          
-            <label>Tipo Identidad</label>
-            <input id="idTipoIdentidad" type="number">
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">ID</label>
+                 <input class="form-control" id="idCandidato" type="number">             
+            </div>              
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Documento</label>
+                 <input class="form-control" id="idTipoIndentidad" type="number">
+             </div>
+        </div>
             
-            <label>Nro Identidad</label>
-            <input id="nroIdentidad" type="number">
-            
-            <label>Nombres</label>
-            <input id="nombres" type="text">
-            
-            <label>Apellidos</label>
-            <input id="apellidos" type="text">
-            
-            <label>Correo</label>
-            <input id="correo_usuario" type="email">
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Nro Doc.</label>
+                 <input class="form-control" id="nroIdentiidad" type="number">
+             </div>
+        </div>
 
-            <label>Clave</label>
-            <input id="clave_usuario" type="password">        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+            <label class="input-group-addon col-md-5">Ap. Paterno</label>
+             <input class="form-control" id="ap_paterno" type="text">
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+            <label class="input-group-addon col-md-5">Ap. Materno</label>
+             <input class="form-control" id="ap_materno" type="text">
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Nombres</label>
+                 <input class="form-control" id="nombres" type="text">
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Estado Civil</label>
+                 <input class="form-control" id="idEstadoCivil" type="number">
+             </div>
+        </div> 
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Sexo</label>
+                 <input class="form-control" id="sexo" type="text">
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Fec nac</label>
+                 <input class="form-control" id="fe_nacimiento" type="date">
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Dir ca</label>
+                 <input class="form-control" id="direccion_ca" type="text">
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Dir nro</label>
+                 <input class="form-control" id="direccion_nro" type="number">
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Distrito</label>
+                 <input class="form-control" id="idDistrito" type="number">
+             </div>
+        </div> 
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Ruc</label>
+                 <input class="form-control" id="ruc" type="number">
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Nº Brevete</label>
+                 <input class="form-control" id="brevete_nro" type="number">
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Cat Brevete</label>
+                 <input class="form-control" id="brevete_cat" type="text">
+             </div>
+        </div>      
+            
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+            <label class="input-group-addon col-md-5">Correo</label>
+             <input class="form-control" id="correo_usuario" type="email">
+             </div>
+        </div>
+
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Clave</label>
+                 <input class="form-control" id="clave_usuario" type="password">        
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Tel Fijo</label>
+                 <input class="form-control" id="tel_fijo" type="number">        
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Tel Celu</label>
+                 <input class="form-control" id="tel_celu" type="number">        
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Lic. FFAA</label>
+                 <input class="form-control" id="lic_FFAA" type="text">        
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Discapac</label>
+                 <input class="form-control" id="discapac" type="text">        
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Nacionalidad</label>
+                 <input class="form-control" id="idNacionalidad" type="number">        
+             </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">fotoRuta</label>
+                 <input class="form-control" id="fotoRuta" type="text">        
+             </div>
         </div>
     </div>
 </div>
 
-	<script type="text/javascript" src="<c:url value='/assetsvisor/js/jquery-1.11.1.min.js'/>"></script>
+        <script type="text/javascript" src="<c:url value='/assetsvisor/js/jquery-1.11.1.min.js'/>"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
         <script type="text/javascript" src="<c:url value='/assetsvisor/js/jquery-ui.min.js'/>"></script>
-        <script type="text/javascript" src="<c:url value='/assetsvisor/js/perfect-scrollbar.min.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/assetsvisor/js/bootstrap.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/assetsvisor/js/highcharts.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/assetsvisor/js/modules/exporting.js'/>"></script>
-        <script type="text/javascript" src="<c:url value='/assetsvisor/js/highcharts-3d.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/assetsvisor/js/core.js'/>"></script>
-        <script type="text/javascript" src="<c:url value='http://highcharts.com/js/testing-exporting.js'/>"></script>
-        <script  src="<c:url value='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false'/>"></script>
         <script type="text/javascript">
             $(document).ready(function()
             {
@@ -73,12 +203,28 @@
                 var actualizarcandidato = $('#actualizarcandidato');
                 
                 var idCandidato = $('#idCandidato');
-                var idTipoIdentidad = $('#idTipoIdentidad');
-                var nroIdentidad = $('#nroIdentidad');
+                var idTipoIndentidad = $('#idTipoIndentidad');
+                var nroIdentiidad = $('#nroIdentiidad');
+                var ap_paterno = $('#ap_paterno');
+                var ap_materno = $('#ap_materno');
                 var nombres = $('#nombres');
-                var apellidos = $('#apellidos');
+                var idEstadoCivil = $('#idEstadoCivil');
+                var sexo = $('#sexo');
+                var fe_nacimiento = $('#fe_nacimiento');
+                var direccion_ca = $('#direccion_ca');
+                var direccion_nro = $('#direccion_nro');
+                var idDistrito = $('#idDistrito');
+                var ruc = $('#ruc');
+                var brevete_nro = $('#brevete_nro');
+                var brevete_cat = $('#brevete_cat');
                 var correo_usuario = $('#correo_usuario');
-                var clave_usuario = $('#clave_usuario');                
+                var clave_usuario = $('#clave_usuario');
+                var tel_fijo = $('#tel_fijo');
+                var tel_celu = $('#tel_celu');
+                var lic_FFAA = $('#lic_FFAA');
+                var discapac = $('#discapac');
+                var idNacionalidad = $('#idNacionalidad');
+                var fotoRuta = $('#fotoRuta');              
 
                buscar.click(function()
                {
@@ -112,6 +258,29 @@
                {
                    $('#respuesta').html('Cargando...');
                    var data = {
+                                idCandidato: idCandidato.val(),
+                                idTipoIndentidad: idTipoIndentidad.val(),
+                                nroIdentiidad: nroIdentiidad.val(),
+                                ap_paterno: ap_paterno.val(),
+                                ap_materno: ap_materno.val(),
+                                nombres: nombres.val(),
+                                idEstadoCivil: idEstadoCivil.val(),
+                                sexo: sexo.val(),
+                                fe_nacimiento: fe_nacimiento.val(),
+                                direccion_ca: direccion_ca.val(),
+                                direccion_nro: direccion_nro.val(),
+                                idDistrito: idDistrito.val(),
+                                ruc: ruc.val(),
+                                brevete_nro: brevete_nro.val(),
+                                brevete_cat: brevete_cat.val(),
+                                correo_usuario: correo_usuario.val(),
+                                clave_usuario: clave_usuario.val(),
+                                tel_fijo: tel_fijo.val(),
+                                tel_celu: tel_celu.val(),
+                                lic_FFAA: lic_FFAA.val(),
+                                discapac: discapac.val(),
+                                idNacionalidad: idNacionalidad.val(),
+                                fotoRuta: fotoRuta.val()
                               };
                    
                    console.log('Data: ' + data);
@@ -136,7 +305,7 @@
                             $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
                         }
                     });
-               });//Update
+               });//Actualizar Candidato
             });//Jquery
 
         </script>

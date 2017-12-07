@@ -1,5 +1,7 @@
 package pe.gob.mimp.gis.controller;
  
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import pe.gob.mimp.gis.entity.Usuario;
@@ -199,10 +201,19 @@ public class HomeController {
             sql = "INSERT INTO usuarios VALUES (usuarios_seq.NEXTVAL,?,?,?,?,?)";
             
             int rpta = gisService.update(sql, _idEmpleado, _idRolUser, usuario, password, _estado);
-                        
-            error.put("error", false);
-            error.put("mensaje", "Se creó " + rpta + " registro(s).");       
-            objects.add(error);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se creó " + rpta + " registro(s).");       
+                objects.add(error);
+            }   
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se crearon registros.");       
+                objects.add(error);
+            }
         }
     
         return objects;
@@ -271,9 +282,18 @@ public class HomeController {
                                     
             int rpta = gisService.update(sql, _idEmpleado, _idRolUser, usuario, password, _estado, _idUsuarios);
                         
-            error.put("error", false);
-            error.put("mensaje", "Se actualizó " + rpta + " registro(s).");
-            objects.add(error);
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se actualizó " + rpta + " registro(s).");
+                objects.add(error);
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "El _idUsuario "+ _idUsuarios +" no existe. No se actualizaron registros.");
+                objects.add(error);
+            }
         }
 
         return objects;
@@ -298,9 +318,18 @@ public class HomeController {
                                     
             int rpta = gisService.update(sql, _idUsuarios);
                         
-            error.put("error", false);
-            error.put("mensaje", "Se eliminó " + rpta + " registro(s).");      
-            objects.add(error);
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se eliminó " + rpta + " registro(s).");      
+                objects.add(error);
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "El idUsuario "+ idUsuarios +" no existe. No se eliminaron registros.");
+                objects.add(error);
+            }            
         }
   
         return objects;
@@ -441,49 +470,97 @@ public class HomeController {
     
     @RequestMapping(value = "/home/actualizarcandidato")
     public @ResponseBody List<Map<String,Object>> actualizarcandidato(HttpServletRequest request)
-    {   
-        String idCandidato = request.getParameter("idCandidato");    
+    {           
+        String idCandidato = request.getParameter("idCandidato");
+        String idTipoIndentidad = request.getParameter("idTipoIndentidad");
+        String nroIdentiidad = request.getParameter("nroIdentiidad");
+        String ap_paterno = request.getParameter("ap_paterno");
+        String ap_materno = request.getParameter("ap_materno");
+        String nombres = request.getParameter("nombres");
+        String idEstadoCivil = request.getParameter("idEstadoCivil");
+        String sexo = request.getParameter("sexo");
+        String fe_nacimiento = request.getParameter("fe_nacimiento");
+        String direccion_ca = request.getParameter("direccion_ca");
+        String direccion_nro = request.getParameter("direccion_nro");
+        String idDistrito = request.getParameter("idDistrito");
+        String ruc = request.getParameter("ruc");
+        String brevete_nro = request.getParameter("brevete_nro");
+        String brevete_cat = request.getParameter("brevete_cat");
+        String correo_usuario = request.getParameter("correo_usuario");
+        String clave_usuario = request.getParameter("clave_usuario");
+        String tel_fijo = request.getParameter("tel_fijo");
+        String tel_celu = request.getParameter("tel_celu");
+        String lic_FFAA = request.getParameter("lic_FFAA");
+        String discapac = request.getParameter("discapac");
+        String idNacionalidad = request.getParameter("idNacionalidad");
+        String fotoRuta = request.getParameter("fotoRuta");
         
-        String [] campos = {"idCandidato"};    
+        String [] campos = {"idCandidato","idTipoIndentidad","nroIdentiidad","ap_paterno","ap_materno","nombres","idEstadoCivil",
+                            "sexo","fe_nacimiento","direccion_ca","direccion_nro","idDistrito","ruc","brevete_nro","brevete_cat",
+                            "correo_usuario","clave_usuario","tel_fijo","tel_celu","lic_FFAA","discapac","idNacionalidad",
+                            "fotoRuta"};
         
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
         
         if(candidatos.isEmpty())
         {
-            String sql =    "SELECT " +
-                                "c.*, " +
-                                "t.DESCRIPCION, " +
-                                "e.NOMBRE as ESTADOCIVIL " +
-                            "FROM candidato c " +
-                            "LEFT JOIN tipoidentidad t ON c.IDTIPOInDENTIDAD = t.IDTIPOIDENTIDAD " +
-                            "LEFT JOIN estadocivil e ON c.idEstadoCivil = e.idEstadoCivil " +
-                            "WHERE c.idCandidato = {0} and rownum = 1";
+            String fecha[] = fe_nacimiento.split("-");
+            fe_nacimiento = fecha[2] + "-" + fecha[1] + "-" + fecha[0];
+            
+            String sql;
+       
+            sql =   "UPDATE candidato " +            
+                     "SET    idTipoIndentidad = {0}, nroIdentiidad = {1}, ap_paterno = '{2}', ap_materno = '{3}', "+
+                            "nombres = '{4}', idEstadoCivil = {5}, sexo = '{6}', fe_nacimiento = '{7}', "+
+                            "direccion_ca = '{8}', direccion_nro = '{9}', idDistrito = {10}, ruc = {11}, "+
+                            "brevete_nro = '{12}', brevete_cat =  '{13}', correo_usuario = '{14}', "+
+                            "clave_usuario = '{15}', tel_fijo = '{16}', tel_celu = {17}, lic_FFAA = '{18}', "+
+                            "discapac = '{19}', idNacionalidad = {20}, fotoRuta = '{21}' "+
+                    "WHERE idCandidato = {22}";
+                                    
+            sql = sql.replace("{0}", idTipoIndentidad);
+            sql = sql.replace("{1}", nroIdentiidad);
+            sql = sql.replace("{2}", ap_paterno);
+            sql = sql.replace("{3}", ap_materno);
+            sql = sql.replace("{4}", nombres);
+            sql = sql.replace("{5}", idEstadoCivil);
+            sql = sql.replace("{6}", sexo);
+            sql = sql.replace("{7}", fe_nacimiento);
+            sql = sql.replace("{8}", direccion_ca);
+            sql = sql.replace("{9}", direccion_nro);
+            sql = sql.replace("{10}", idDistrito);
+            sql = sql.replace("{11}", ruc);
+            sql = sql.replace("{12}", brevete_nro);
+            sql = sql.replace("{13}", brevete_cat);
+            sql = sql.replace("{14}", correo_usuario);
+            sql = sql.replace("{15}", clave_usuario);
+            sql = sql.replace("{16}", tel_fijo);
+            sql = sql.replace("{17}", tel_celu);
+            sql = sql.replace("{18}", lic_FFAA);
+            sql = sql.replace("{19}", discapac);
+            sql = sql.replace("{20}", idNacionalidad);
+            sql = sql.replace("{21}", fotoRuta);
+            sql = sql.replace("{22}", idCandidato);                        
 
-            sql = sql.replace("{0}", idCandidato);
-
-            System.out.println("--------------------------------------------- BUSCAR - SQL: " + sql);        
-            candidatos = gisService.consulta(sql);
-        
-            if(candidatos.size() > 0)
+            System.out.println("----------------------------------------------------- UPDATE sql: " + sql);
+            
+            int rpta = gisService.update(sql);
+                        
+            if(rpta > 0)
             {
-                Map<String,Object> candidato = candidatos.get(0);
-                request.getSession().setAttribute("candidato", candidato);
-
-                candidatos = new ArrayList<Map<String, Object>>();
-                String mensaje = candidato.get("NOMBRES").toString() + ' ' + candidato.get("AP_PATERNO").toString();
                 error.put("error", false);
-                error.put("mensaje", mensaje);
+                error.put("mensaje", "Se actualizó " + rpta + " registro(s).");
                 candidatos.add(error);
             }
             else
             {
-                error.put("error", false);
-                error.put("mensaje", "idCandidato no está registrado");
+                error.put("error", true);
+                error.put("mensaje", "El idCandidato "+ idCandidato +" no existe. No se actualizaron registros.");
                 candidatos.add(error);
-            }
+            }            
         }
-        
+
         return candidatos;
     }
     
@@ -499,7 +576,7 @@ public class HomeController {
             contenido = request.getParameter(x);
             
             if(contenido.trim().isEmpty())
-                mensaje += " Campo " + x + " vacío,";            
+                mensaje += " Campo " + x + " vacío,";
         }
         
         if(!mensaje.isEmpty())
