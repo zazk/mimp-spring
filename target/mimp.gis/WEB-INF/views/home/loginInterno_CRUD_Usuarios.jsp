@@ -1,4 +1,3 @@
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
  
@@ -57,14 +56,7 @@
 
 	<script type="text/javascript" src="<c:url value='/assetsvisor/js/jquery-1.11.1.min.js'/>"></script>
         <script type="text/javascript" src="<c:url value='/assetsvisor/js/jquery-ui.min.js'/>"></script>
-        <script type="text/javascript" src="<c:url value='/assetsvisor/js/perfect-scrollbar.min.js'/>"></script>
 	<script type="text/javascript" src="<c:url value='/assetsvisor/js/bootstrap.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/assetsvisor/js/highcharts.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/assetsvisor/js/modules/exporting.js'/>"></script>
-        <script type="text/javascript" src="<c:url value='/assetsvisor/js/highcharts-3d.js'/>"></script>
-	<script type="text/javascript" src="<c:url value='/assetsvisor/js/core.js'/>"></script>
-        <script type="text/javascript" src="<c:url value='http://highcharts.com/js/testing-exporting.js'/>"></script>
-        <script  src="<c:url value='https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false'/>"></script>
         <script type="text/javascript">
             $(document).ready(function()
             {

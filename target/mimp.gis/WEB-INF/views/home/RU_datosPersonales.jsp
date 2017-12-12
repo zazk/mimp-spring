@@ -37,14 +37,14 @@
         <div class="col-md-3 form-group">
              <div class="input-group">
                 <label class="input-group-addon col-md-5">Documento</label>
-                 <input class="form-control" id="idTipoIndentidad" type="number">
+                 <input class="form-control" id="idTipoIdentidad" type="number">
              </div>
         </div>
             
         <div class="col-md-3 form-group">
              <div class="input-group">
                 <label class="input-group-addon col-md-5">Nro Doc.</label>
-                 <input class="form-control" id="nroIdentiidad" type="number">
+                 <input class="form-control" id="nroIdentidad" type="number">
              </div>
         </div>
 
@@ -92,15 +92,8 @@
         
         <div class="col-md-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-md-5">Dir ca</label>
+                <label class="input-group-addon col-md-5">Direccion</label>
                  <input class="form-control" id="direccion_ca" type="text">
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Dir nro</label>
-                 <input class="form-control" id="direccion_nro" type="number">
              </div>
         </div>
         
@@ -116,21 +109,7 @@
                 <label class="input-group-addon col-md-5">Ruc</label>
                  <input class="form-control" id="ruc" type="number">
              </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Nº Brevete</label>
-                 <input class="form-control" id="brevete_nro" type="number">
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Cat Brevete</label>
-                 <input class="form-control" id="brevete_cat" type="text">
-             </div>
-        </div>      
+        </div>   
             
         <div class="col-md-3 form-group">
              <div class="input-group">
@@ -173,20 +152,6 @@
                  <input class="form-control" id="discapac" type="text">        
              </div>
         </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Nacionalidad</label>
-                 <input class="form-control" id="idNacionalidad" type="number">        
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">fotoRuta</label>
-                 <input class="form-control" id="fotoRuta" type="text">        
-             </div>
-        </div>
     </div>
 </div>
 
@@ -203,8 +168,8 @@
                 var actualizarcandidato = $('#actualizarcandidato');
                 
                 var idCandidato = $('#idCandidato');
-                var idTipoIndentidad = $('#idTipoIndentidad');
-                var nroIdentiidad = $('#nroIdentiidad');
+                var idTipoIdentidad = $('#idTipoIdentidad');
+                var nroIdentidad = $('#nroIdentidad');
                 var ap_paterno = $('#ap_paterno');
                 var ap_materno = $('#ap_materno');
                 var nombres = $('#nombres');
@@ -259,8 +224,8 @@
                    $('#respuesta').html('Cargando...');
                    var data = {
                                 idCandidato: idCandidato.val(),
-                                idTipoIndentidad: idTipoIndentidad.val(),
-                                nroIdentiidad: nroIdentiidad.val(),
+                                idTipoIdentidad: idTipoIdentidad.val(),
+                                nroIdentidad: nroIdentidad.val(),
                                 ap_paterno: ap_paterno.val(),
                                 ap_materno: ap_materno.val(),
                                 nombres: nombres.val(),

@@ -9,7 +9,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Datos Personales</title>
+	<title>Crear Puesto</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 </head>
 <body class="container">
@@ -17,175 +17,245 @@
         <div class="col-md-12">
             <h1>Pruebas GET/POST</h1>
             
-            <h5>Usuarios</h5>
-            <button id="buscar" type="button" class="btn btn-success">Cargar Candidato</button>
-            <button id="actualizarcandidato" type="button" class="btn btn-success">Actualizar Candidato</button>
-
-            <br><br>
-            <p id="respuesta"></p>
+            <h5>Registrar Perfil</h5>
+            <hr>
+            <br>
         </div>    
     </div>
     
-    <div class="row">                    
+    <div class="row">
+        <div class="col-md-12 form-group">
+            <button id="createConocimientOtros" type="button" class="btn btn-success">Create ConocimientOtros</button>
+            <button id="readConocimientOtros" type="button" class="btn btn-success">Read ConocimientOtros</button>
+            <button id="updateConocimientOtros" type="button" class="btn btn-success">Update ConocimientOtros</button>
+            <button id="deleteConocimientOtros" type="button" class="btn btn-success">Delete ConocimientOtros</button>
+            
+            <br><br>
+            <p id="respuestaConocimientOtros"></p>
+        </div>            
+        
+        <div class="col-md-3 form-group">
+            <div class="input-group">
+                <label class="input-group-addon col-md-5">idPerfil</label>
+                <input class="form-control" id="idPerfilPuestoCO" type="number">  
+            </div>            
+        </div>
+        
+        <div class="col-md-3 form-group">
+            <div class="input-group">
+                <label class="input-group-addon col-md-5">idConocOtros</label>
+                <input class="form-control" id="idConocOtros" type="number">  
+            </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+            <div class="input-group">                
+                <label class="input-group-addon col-md-5">idListaCursoso</label>
+                <input class="form-control" id="idListaCursoso" type="number">  
+            </div>
+        </div>
+        
+        <div class="col-md-3 form-group">
+            <div class="input-group">                
+                <label class="input-group-addon col-md-5">idNivelConoc</label>
+                <input class="form-control" id="idNivelConoc" type="number">  
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- 3 -->
+    <div class="row">
+        <div class="col-md-12 form-group">
+            <button id="createFormAcademica" type="button" class="btn btn-success">Create Form Académica</button>
+            <button id="readFormAcademica" type="button" class="btn btn-success">Read Form Académica</button>
+            
+            <br><br>
+            <p id="respuestaFormAcademica"></p>
+        </div>            
+        
         <div class="col-md-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-md-5">ID</label>
-                 <input class="form-control" id="idCandidato" type="number">             
+                <label class="input-group-addon col-md-5">idPerfil</label>
+                <input class="form-control" id="idPerfilPuestoA" type="number">             
+            </div>              
+        </div>
+                
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Lvl Edu.</label>
+                 <input class="form-control" id="idNivelEdu" type="number">             
             </div>              
         </div>
         
         <div class="col-md-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-md-5">Documento</label>
-                 <input class="form-control" id="idTipoIndentidad" type="number">
-             </div>
+                <label class="input-group-addon col-md-5">¿Completo?</label>
+                <input class="form-control" id="nivelCompleto" type="text" maxlength="1">             
+            </div>              
         </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">GradoEstu</label>
+                 <input class="form-control" id="idGradoEstu" type="number">
+            </div>              
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Maestria</label>
+                <input class="form-control" id="idMaestria" type="number">
+            </div>              
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">¿Completo?</label>
+                <input class="form-control" id="nivMaestria" type="text" maxlength="1">
+            </div>              
+        </div>
+        
+                <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Doctorado</label>
+                <input class="form-control" id="idDoctorado" type="number">
+            </div>              
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">¿Completo?</label>
+                <input class="form-control" id="nivDoctorado" type="text" maxlength="1">
+            </div>              
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">¿Colegiatura?</label>
+                <input class="form-control" id="colegiatura" type="text" maxlength="1">
+            </div>              
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">¿Habilitado?</label>
+                <input class="form-control" id="habilitacion" type="text" maxlength="1">
+            </div>              
+        </div>                
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Carreras</label>
+                <input class="form-control" id="idCarreras" type="text" maxlength="30">
+            </div>              
+        </div>
+        
+        
+    </div>
+    
+    <hr><br>
+    <!-- 2 -->
+    <div class="row">
+        <div class="col-md-12 form-group">
+            <button id="createFuncionPuesto" type="button" class="btn btn-success">Create Función Puesto</button>
+            <button id="readFuncionPuesto" type="button" class="btn btn-success">Read Funcion Puesto</button>
+            <button id="updateFuncionPuesto" type="button" class="btn btn-success">Update Función Puesto</button>
+            <button id="deleteFuncionPuesto" type="button" class="btn btn-success">Delete Funcion Puesto</button>
             
+            <br><br>
+            <p id="respuestaFuncionPuesto"></p>
+        </div>
+        
         <div class="col-md-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-md-5">Nro Doc.</label>
-                 <input class="form-control" id="nroIdentiidad" type="number">
-             </div>
+                <label class="input-group-addon col-md-5">idPerfil</label>
+                 <input class="form-control" id="idPerfilPuestoFP" type="text">             
+            </div>              
         </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">idFunPuesto</label>
+                 <input class="form-control" id="idFuncionPuesto" type="text">             
+            </div>              
+        </div>
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">Desc.</label>
+                 <input class="form-control" id="descripcionPuesto" type="text">             
+            </div>              
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">F</label>
+                 <input class="form-control" id="valFrecuencia_F" type="text">             
+            </div>              
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">CE</label>
+                 <input class="form-control" id="valConErrado_CE" type="text">             
+            </div>              
+        </div>
+        
+        <div class="col-md-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-md-5">CM</label>
+                 <input class="form-control" id="valComplejidad_CM" type="text">             
+            </div>              
+        </div>                
+        
 
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-            <label class="input-group-addon col-md-5">Ap. Paterno</label>
-             <input class="form-control" id="ap_paterno" type="text">
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-            <label class="input-group-addon col-md-5">Ap. Materno</label>
-             <input class="form-control" id="ap_materno" type="text">
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Nombres</label>
-                 <input class="form-control" id="nombres" type="text">
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Estado Civil</label>
-                 <input class="form-control" id="idEstadoCivil" type="number">
-             </div>
-        </div> 
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Sexo</label>
-                 <input class="form-control" id="sexo" type="text">
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Fec nac</label>
-                 <input class="form-control" id="fe_nacimiento" type="date">
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Dir ca</label>
-                 <input class="form-control" id="direccion_ca" type="text">
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Dir nro</label>
-                 <input class="form-control" id="direccion_nro" type="number">
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Distrito</label>
-                 <input class="form-control" id="idDistrito" type="number">
-             </div>
-        </div> 
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Ruc</label>
-                 <input class="form-control" id="ruc" type="number">
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Nº Brevete</label>
-                 <input class="form-control" id="brevete_nro" type="number">
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Cat Brevete</label>
-                 <input class="form-control" id="brevete_cat" type="text">
-             </div>
-        </div>      
+    </div>
+    
+        <hr><br>
+    <!-- 1 -->
+    <div class="row">
+        <div class="col-md-12 form-group">
+            <button id="createPuesto" type="button" class="btn btn-success">Create Puesto</button>
+            <button id="readPuesto" type="button" class="btn btn-success">Read Puesto</button>
             
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-            <label class="input-group-addon col-md-5">Correo</label>
-             <input class="form-control" id="correo_usuario" type="email">
-             </div>
+            <br><br>
+            
+            <p id="respuestaPuesto"></p>
         </div>
-
-        <div class="col-md-3 form-group">
+        
+        <div class="col-md-12 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-md-5">Clave</label>
-                 <input class="form-control" id="clave_usuario" type="password">        
-             </div>
+                <label class="input-group-addon col-md-5">idPerfilPuesto</label>
+                 <input class="form-control" id="idPerfilPuesto" type="text">             
+            </div>              
         </div>
         
         <div class="col-md-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-md-5">Tel Fijo</label>
-                 <input class="form-control" id="tel_fijo" type="number">        
-             </div>
+                <label class="input-group-addon col-md-5">NomPuesto</label>
+                 <input class="form-control" id="nomPuesto" type="text">             
+            </div>              
         </div>
         
         <div class="col-md-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-md-5">Tel Celu</label>
-                 <input class="form-control" id="tel_celu" type="number">        
-             </div>
+                <label class="input-group-addon col-md-5">Misión</label>
+                 <input class="form-control" id="misionPuesto" type="text">             
+            </div>              
         </div>
         
         <div class="col-md-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-md-5">Lic. FFAA</label>
-                 <input class="form-control" id="lic_FFAA" type="text">        
-             </div>
+                <label class="input-group-addon col-md-5">C.Externa</label>
+                 <input class="form-control" id="coord_Externa" type="text">             
+            </div>              
         </div>
         
         <div class="col-md-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-md-5">Discapac</label>
-                 <input class="form-control" id="discapac" type="text">        
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">Nacionalidad</label>
-                 <input class="form-control" id="idNacionalidad" type="number">        
-             </div>
-        </div>
-        
-        <div class="col-md-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-md-5">fotoRuta</label>
-                 <input class="form-control" id="fotoRuta" type="text">        
-             </div>
+                <label class="input-group-addon col-md-5">C.Interna</label>
+                 <input class="form-control" id="coord_Interna" type="text">             
+            </div>              <br><br><br><br>
         </div>
     </div>
 </div>
@@ -198,99 +268,78 @@
         <script type="text/javascript">
             $(document).ready(function()
             {
-                $('#respuesta').html('Ready');
-                var buscar = $('#buscar');
-                var actualizarcandidato = $('#actualizarcandidato');
+                $('#respuestaPuesto').html('Ready');
+                $('#respuestaFuncionPuesto').html('Ready');
+                $('#respuestaFormAcademica').html('Ready');
+                $('#respuestaConocimientOtros').html('Ready');                
                 
-                var idCandidato = $('#idCandidato');
-                var idTipoIndentidad = $('#idTipoIndentidad');
-                var nroIdentiidad = $('#nroIdentiidad');
-                var ap_paterno = $('#ap_paterno');
-                var ap_materno = $('#ap_materno');
-                var nombres = $('#nombres');
-                var idEstadoCivil = $('#idEstadoCivil');
-                var sexo = $('#sexo');
-                var fe_nacimiento = $('#fe_nacimiento');
-                var direccion_ca = $('#direccion_ca');
-                var direccion_nro = $('#direccion_nro');
-                var idDistrito = $('#idDistrito');
-                var ruc = $('#ruc');
-                var brevete_nro = $('#brevete_nro');
-                var brevete_cat = $('#brevete_cat');
-                var correo_usuario = $('#correo_usuario');
-                var clave_usuario = $('#clave_usuario');
-                var tel_fijo = $('#tel_fijo');
-                var tel_celu = $('#tel_celu');
-                var lic_FFAA = $('#lic_FFAA');
-                var discapac = $('#discapac');
-                var idNacionalidad = $('#idNacionalidad');
-                var fotoRuta = $('#fotoRuta');              
+                var createPuesto = $('#createPuesto');
+                var readPuesto = $('#readPuesto');                
+                //
+                var createFuncionPuesto = $('#createFuncionPuesto');
+                var readFuncionPuesto = $('#readFuncionPuesto');
+                var updateFuncionPuesto = $('#updateFuncionPuesto');
+                var deleteFuncionPuesto = $('#deleteFuncionPuesto');
+                //
+                var createFormAcademica = $('#createFormAcademica');
+                var readFormAcademica = $('#readFormAcademica');
+                //
+                var createConocimientOtros = $('#createConocimientOtros');
+                var readConocimientOtros = $('#readConocimientOtros');
+                var updateConocimientOtros = $('#updateConocimientOtros');
+                var deleteConocimientOtros = $('#deleteConocimientOtros');
+                
+                
+                var idPerfilPuesto = $('#idPerfilPuesto');
+                var nomPuesto = $('#nomPuesto');
+                var misionPuesto = $('#misionPuesto');
+                var coord_Externa = $('#coord_Externa');
+                var coord_Interna = $('#coord_Interna');
+                
+                
+                var idPerfilPuestoFP = $('#idPerfilPuestoFP');
+                var idFuncionPuesto = $('#idFuncionPuesto');
+                var descripcionPuesto = $('#descripcionPuesto');
+                var valFrecuencia_F = $('#valFrecuencia_F');
+                var valConErrado_CE = $('#valConErrado_CE');
+                var valComplejidad_CM = $('#valComplejidad_CM');
+                
+                var idPerfilPuestoA = $('#idPerfilPuestoA');
+                var idNivelEdu = $('#idNivelEdu');
+                var nivelCompleto = $('#nivelCompleto');
+                var idGradoEstu = $('#idGradoEstu');
+                var idCarreras = $('#idCarreras');
+                var idMaestria = $('#idMaestria');
+                var nivMaestria = $('#nivMaestria');
+                var idDoctorado = $('#idDoctorado');
+                var nivDoctorado = $('#nivDoctorado');
+                var colegiatura = $('#colegiatura');
+                var habilitacion = $('#habilitacion');
+                
+                var idPerfilPuestoCO = $('#idPerfilPuestoCO');
+                var idConocOtros = $('#idConocOtros');
+                var idListaCursoso = $('#idListaCursoso');
+                var idNivelConoc = $('#idNivelConoc');
+                                        
+               createPuesto.click(function()
+               {                                      
+                   $('#respuestaPuesto').html('Cargando...');
 
-               buscar.click(function()
-               {
-                   $('#respuesta').html('Cargando...');
                    var data = {
-                                idCandidato: idCandidato.val()
-                              };
-                   
-                   $.ajax({
-			type: 'GET',			
-			url: 'buscarcandidato',
-                        data: data,
-			success: function(resultado)
-                        {
-                            console.log(resultado);
-                            
-                            $('#respuesta').html(
-                                resultado.map(function(e)
-                                {
-                                    return 'Error: '+ e.error + '<br>Mensaje: ' + e.mensaje;
-                                }).join('<br>')
-                            );
-			},
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
-                        }
-                    });
-               });//Read
-               
-               actualizarcandidato.click(function()
-               {
-                   $('#respuesta').html('Cargando...');
-                   var data = {
-                                idCandidato: idCandidato.val(),
-                                idTipoIndentidad: idTipoIndentidad.val(),
-                                nroIdentiidad: nroIdentiidad.val(),
-                                ap_paterno: ap_paterno.val(),
-                                ap_materno: ap_materno.val(),
-                                nombres: nombres.val(),
-                                idEstadoCivil: idEstadoCivil.val(),
-                                sexo: sexo.val(),
-                                fe_nacimiento: fe_nacimiento.val(),
-                                direccion_ca: direccion_ca.val(),
-                                direccion_nro: direccion_nro.val(),
-                                idDistrito: idDistrito.val(),
-                                ruc: ruc.val(),
-                                brevete_nro: brevete_nro.val(),
-                                brevete_cat: brevete_cat.val(),
-                                correo_usuario: correo_usuario.val(),
-                                clave_usuario: clave_usuario.val(),
-                                tel_fijo: tel_fijo.val(),
-                                tel_celu: tel_celu.val(),
-                                lic_FFAA: lic_FFAA.val(),
-                                discapac: discapac.val(),
-                                idNacionalidad: idNacionalidad.val(),
-                                fotoRuta: fotoRuta.val()
+                                nomPuesto: nomPuesto.val(),
+                                misionPuesto: misionPuesto.val(),
+                                coord_Externa: coord_Externa.val(),
+                                coord_Interna: coord_Interna.val()
                               };
                    
                    console.log('Data: ' + data);
                    $.ajax({
 			type: 'POST',			
-			url: 'actualizarcandidato',
+			url: 'createPuesto',
                         data: data,
 			success: function(resultado)
                         {                                                        
-                            $('#respuesta').html(
+                            $('#respuestaPuesto').html(
                                 'Mensaje: ' + resultado.map(function(e)
                                 {
                                     return e.mensaje;
@@ -302,10 +351,425 @@
 			},
                         error: function (jqXHR, textStatus, errorThrown)
                         {
-                            $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                            $("#respuestaPuesto").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
                         }
                     });
-               });//Actualizar Candidato
+               });//Create Puesto
+               
+               readPuesto.click(function()
+               {
+                   $('#respuestaPuesto').html('Cargando...');
+                   
+                    var data;
+                    var url;
+                                      
+                   if(idPerfilPuesto.val() === "")
+                   {
+                       data={};
+                       url = 'readPuesto';
+                   }                                           
+                   else
+                   {
+                       data={idPerfilPuesto: idPerfilPuesto.val()};
+                       url = 'readPuestoId'
+                   }
+                       
+                   
+                   $.ajax({
+			type: 'GET',			
+			url: url,
+                        data: data,
+			success: function(resultado)
+                        {
+                            console.log(resultado);
+                            
+                            $('#respuestaPuesto').html(
+                                resultado.map(function(e)
+                                {
+                                    if(e.NOMPUESTO)
+                                        return 'Puesto: ' + e.NOMPUESTO + ' - Misión: ' + e.MISIONPUESTO ;
+                                    else
+                                        return 'Error: ' + e.error + ' - Mensaje: ' + e.mensaje ;
+                                }).join('<br>')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            $("#respuestaPuesto").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });//Read Puesto
+ 
+                createFuncionPuesto.click(function()
+               {                                      
+                   $('#respuestaFuncionPuesto').html('Cargando...');
+                   
+                   var data = {
+                                idPerfilPuesto: idPerfilPuesto.val(),
+                                descripcionPuesto: descripcionPuesto.val(),
+                                valFrecuencia_F: valFrecuencia_F.val(),
+                                valConErrado_CE: valConErrado_CE.val(),
+                                valComplejidad_CM: valComplejidad_CM.val()                                
+                              };
+                   
+                   console.log('Data: ' + data);
+                   $.ajax({
+			type: 'POST',			
+			url: 'createFuncionPuesto',
+                        data: data,
+			success: function(resultado)
+                        {                                                        
+                            $('#respuestaFuncionPuesto').html(
+                                'Mensaje: ' + resultado.map(function(e)
+                                {
+                                    return e.mensaje;
+                                }).join(', ') + '<br>Error: ' + resultado.map(function(e)
+                                {
+                                    return e.error;
+                                }).join(', ')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+                            $("#respuestaFuncionPuesto").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });//Create Funcion Puesto
+               
+               readFuncionPuesto.click(function()
+               {                   
+                   $('#respuestaFuncionPuesto').html('Cargando...');
+                   
+                    var data;
+                    var url;
+                                      
+                   if(idPerfilPuestoFP.val() === "")
+                   {
+                       data={};
+                       url = 'readFuncionPuesto';
+                   }                                           
+                   else
+                   {
+                       data={idPerfilPuesto:  idPerfilPuestoFP.val()};
+                       url = 'readFuncionPuestoId';
+                   }   
+                   
+                   $.ajax({
+			type: 'GET',			
+			url: url,
+                        data: data,
+			success: function(resultado)
+                        {
+                            console.log(resultado);
+                            
+                            $('#respuestaFuncionPuesto').html(
+                                resultado.map(function(e)
+                                {
+                                    if(e.DESCRIPCIONPUESTO)
+                                        return 'Descripción: ' + e.DESCRIPCIONPUESTO ;
+                                    else
+                                        return 'Error: ' + e.error + ' - Mensaje: ' + e.mensaje;
+                                }).join('<br>')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            $("#respuestaFuncionPuesto").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });//Read Funcion Puesto
+               
+                updateFuncionPuesto.click(function()
+               {                                      
+                   $('#respuestaFuncionPuesto').html('Cargando...');
+                   
+                   var data = {
+                                idFuncionPuesto: idFuncionPuesto.val(),    
+                                descripcionPuesto: descripcionPuesto.val(),
+                                valFrecuencia_F: valFrecuencia_F.val(),
+                                valConErrado_CE: valConErrado_CE.val(),
+                                valComplejidad_CM: valComplejidad_CM.val()                                
+                              };
+                   
+                   console.log('Data: ' + data);
+                   $.ajax({
+			type: 'POST',			
+			url: 'updateFuncionPuesto',
+                        data: data,
+			success: function(resultado)
+                        {                                                        
+                            $('#respuestaFuncionPuesto').html(
+                                'Mensaje: ' + resultado.map(function(e)
+                                {
+                                    return e.mensaje;
+                                }).join(', ') + '<br>Error: ' + resultado.map(function(e)
+                                {
+                                    return e.error;
+                                }).join(', ')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+                            $("#respuestaFuncionPuesto").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });//Update Funcion Puesto
+
+                deleteFuncionPuesto.click(function()
+               {                                      
+                   $('#respuestaFuncionPuesto').html('Cargando...');
+                   
+                   var data = {
+                                idFuncionPuesto: idFuncionPuesto.val()                           
+                              };
+                   
+                   console.log('Data: ' + data);
+                   $.ajax({
+			type: 'POST',			
+			url: 'deleteFuncionPuesto',
+                        data: data,
+			success: function(resultado)
+                        {                                                        
+                            $('#respuestaFuncionPuesto').html(
+                                'Mensaje: ' + resultado.map(function(e)
+                                {
+                                    return e.mensaje;
+                                }).join(', ') + '<br>Error: ' + resultado.map(function(e)
+                                {
+                                    return e.error;
+                                }).join(', ')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+                            $("#respuestaFuncionPuesto").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });//Update Funcion Puesto
+        
+                createFormAcademica.click(function()
+               {                                      
+                   $('#respuestaFormAcademica').html('Cargando...');
+                   
+                   var data = {
+                                idPerfilPuestoA: idPerfilPuestoA.val(),
+                                idNivelEdu: idNivelEdu.val(),
+                                nivelCompleto: nivelCompleto.val(),
+                                idGradoEstu: idGradoEstu.val(),
+                                idCarreras: idCarreras.val(),
+                                idMaestria: idMaestria.val(),
+                                nivMaestria: nivMaestria.val(),
+                                idDoctorado: idDoctorado.val(),
+                                nivDoctorado: nivDoctorado.val(),
+                                colegiatura: colegiatura.val(),
+                                habilitacion: habilitacion.val()
+                              };
+                   
+                   console.log('Data: ' + data);
+                   $.ajax({
+			type: 'POST',			
+			url: 'createFormAcademica',
+                        data: data,
+			success: function(resultado)
+                        {                                                        
+                            $('#respuestaFormAcademica').html(
+                                'Mensaje: ' + resultado.map(function(e)
+                                {
+                                    return e.mensaje;
+                                }).join(', ') + '<br>Error: ' + resultado.map(function(e)
+                                {
+                                    return e.error;
+                                }).join(', ')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+                            $("#respuestaFormAcademica").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });//Create Formación Académica
+ 
+               readFormAcademica.click(function()
+               {
+                   $('#respuestaFormAcademica').html('Cargando...');
+                   
+                    var data;
+                    var url;
+                                      
+                   if(idPerfilPuestoA.val() === "")
+                   {
+                       data={};
+                       url = 'readFormAcademica';
+                   }                                           
+                   else
+                   {
+                       data={idPerfilPuestoA: idPerfilPuestoA.val()};
+                       url = 'readFormAcademicaId';
+                   }                       
+                   
+                   $.ajax({
+			type: 'GET',			
+			url: url,
+                        data: data,
+			success: function(resultado)
+                        {
+                            console.log(resultado);
+                            
+                            $('#respuestaFormAcademica').html(
+                                resultado.map(function(e)
+                                {
+                                    if(e.NIVELEDUCATIVO && e.GRADOESTUDIOS)
+                                        return 'Nivel Educativo: ' + e.NIVELEDUCATIVO + ' - Grado de Estudios: ' + e.GRADOESTUDIOS ;
+                                    else
+                                        return 'Error: ' + e.error + ' - Mensaje: ' + e.mensaje ;
+                                }).join('<br>')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            $("#respuestaFormAcademica").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });//Read Puesto
+ 
+                createConocimientOtros.click(function()
+               {                                      
+                   $('#respuestaConocimientOtros').html('Cargando...');
+                   
+                   var data = {                       
+                                idListaCursoso: idListaCursoso.val(),
+                                idNivelConoc: idNivelConoc.val()
+                              };
+                   
+                   console.log('Data: ' + data);
+                   $.ajax({
+			type: 'POST',			
+			url: 'createConocimientOtros',
+                        data: data,
+			success: function(resultado)
+                        {                                                        
+                            $('#respuestaConocimientOtros').html(
+                                'Mensaje: ' + resultado.map(function(e)
+                                {
+                                    return e.mensaje;
+                                }).join(', ') + '<br>Error: ' + resultado.map(function(e)
+                                {
+                                    return e.error;
+                                }).join(', ')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+                            $("#respuestaConocimientOtros").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });//Create Conocimiento Otros
+               
+               readConocimientOtros.click(function()
+               {
+                   $('#respuestaConocimientOtros').html('Cargando...');
+                   
+                    var data;
+                    var url;
+                                      
+                   if(idPerfilPuestoCO.val() === "")
+                   {
+                       data={};
+                       url = 'readConocimientOtros';
+                   }                                           
+                   else
+                   {
+                       data={idPerfilPuestoCO: idPerfilPuestoCO.val()};
+                       url = 'readConocimientOtrosId';
+                   }                       
+                   
+                   $.ajax({
+			type: 'GET',			
+			url: url,
+                        data: data,
+			success: function(resultado)
+                        {
+                            console.log(resultado);
+                            
+                            $('#respuestaConocimientOtros').html(
+                                resultado.map(function(e)
+                                {
+                                    if(e.CURSO && e.NIVEL)
+                                        return 'ID: '+ e.IDCONOCOTROS + '- Curso: ' + e.CURSO + ' - Nivel: ' + e.NIVEL ;
+                                    else
+                                        return 'Error: ' + e.error + ' - Mensaje: ' + e.mensaje ;
+                                }).join('<br>')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            $("#respuestaConocimientOtros").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });//Read Conocimiento Otros
+               
+                updateConocimientOtros.click(function()
+               {                                      
+                   $('#respuestaConocimientOtros').html('Cargando...');
+                                            
+                   var data = {
+                                idConocOtros: idConocOtros.val(),
+                                idListaCursoso: idListaCursoso.val(),
+                                idNivelConoc: idNivelConoc.val()                                                                
+                              };
+                   
+                   
+                   $.ajax({
+			type: 'POST',			
+			url: 'updateConocimientOtros',
+                        data: data,
+			success: function(resultado)
+                        {                                                        
+                            $('#respuestaConocimientOtros').html(
+                                'Mensaje: ' + resultado.map(function(e)
+                                {
+                                    return e.mensaje;
+                                }).join(', ') + '<br>Error: ' + resultado.map(function(e)
+                                {
+                                    return e.error;
+                                }).join(', ')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+                            $("#respuestaConocimientOtros").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });//Update Conocimiento Otros
+ 
+                deleteConocimientOtros.click(function()
+               {                                      
+                   $('#respuestaConocimientOtros').html('Cargando...');
+                   
+                   var data = {
+                                idConocOtros: idConocOtros.val()                           
+                              };
+                   
+                   console.log('Data: ' + data);
+                   $.ajax({
+			type: 'POST',			
+			url: 'deleteConocimientOtros',
+                        data: data,
+			success: function(resultado)
+                        {                                                        
+                            $('#respuestaConocimientOtros').html(
+                                'Mensaje: ' + resultado.map(function(e)
+                                {
+                                    return e.mensaje;
+                                }).join(', ') + '<br>Error: ' + resultado.map(function(e)
+                                {
+                                    return e.error;
+                                }).join(', ')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+                            $("#respuestaConocimientOtros").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });//Delete Conocimiento Otros
+ 
             });//Jquery
 
         </script>
