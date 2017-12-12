@@ -1,7 +1,5 @@
 package pe.gob.mimp.gis.controller;
  
-import java.math.BigInteger;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import pe.gob.mimp.gis.entity.Usuario;
@@ -144,8 +142,9 @@ public class HomeController {
         
         List<Map<String,Object>> empleados = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(empleados.get(0).get("error").toString());        
         
-        if(empleados.isEmpty())
+        if(!hayError)
         {
             String sql;
             
@@ -190,9 +189,11 @@ public class HomeController {
         
         List<Map<String,Object>> objects = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(objects.get(0).get("error").toString());        
         
-        if(objects.isEmpty())
+        if(!hayError)
         {
+            objects = new ArrayList<Map<String,Object>>();
             String sql;
             int _idEmpleado = Integer.parseInt(idEmpleado);
             int _idRolUser = Integer.parseInt(idRolUser);
@@ -263,9 +264,11 @@ public class HomeController {
         
         List<Map<String,Object>> objects = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(objects.get(0).get("error").toString());        
         
-        if(objects.isEmpty())
+        if(!hayError)
         {
+            objects = new ArrayList<Map<String,Object>>();
             String sql;
             int _idUsuarios = Integer.parseInt(idUsuarios);
             int _idEmpleado = Integer.parseInt(idEmpleado);
@@ -308,9 +311,11 @@ public class HomeController {
         
         List<Map<String,Object>> objects = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(objects.get(0).get("error").toString());        
         
-        if(objects.isEmpty())
+        if(!hayError)
         {
+            objects = new ArrayList<Map<String,Object>>();
             String sql;
             int _idUsuarios = Integer.parseInt(idUsuarios);
             
@@ -346,8 +351,9 @@ public class HomeController {
         
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
         
-        if(candidatos.isEmpty())
+        if(!hayError)
         {
             String sql;
             
@@ -393,9 +399,11 @@ public class HomeController {
         
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
         
-        if(candidatos.isEmpty())
+        if(!hayError)
         {
+            candidatos = new ArrayList<Map<String,Object>>();
             String sql;
             int _idTipoIdentidad = Integer.parseInt(idTipoIdentidad);
             
@@ -430,8 +438,9 @@ public class HomeController {
         
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
         
-        if(candidatos.isEmpty())
+        if(!hayError)
         {
             String sql =    "SELECT " +
                                 "c.*, " +
@@ -501,9 +510,11 @@ public class HomeController {
         
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
         
-        if(candidatos.isEmpty())
+        if(!hayError)
         {
+            candidatos = new ArrayList<Map<String,Object>>();
             String fecha[] = fe_nacimiento.split("-");
             fe_nacimiento = fecha[2] + "-" + fecha[1] + "-" + fecha[0];
             
@@ -557,8 +568,8 @@ public class HomeController {
     }
     
     //Reg_perfil
-    @RequestMapping(value = "/home/listarOrgano", method = RequestMethod.GET)
-    public @ResponseBody List<Map<String,Object>> listarOrgano()
+    @RequestMapping(value = "/home/readOrgano", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readOrgano()
     {   
         String sql =    "SELECT * FROM ORGANO";
                 
@@ -572,8 +583,8 @@ public class HomeController {
         return objects;        
     }
     
-    @RequestMapping(value = "/home/listarUOrganica", method = RequestMethod.GET)
-    public @ResponseBody List<Map<String,Object>> listarUOrganica()
+    @RequestMapping(value = "/home/readUOrganica", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readUOrganica()
     {   
         String sql =    "SELECT u.*, d.DESCRIPCION " +
                         "FROM uorganica u " +
@@ -589,8 +600,8 @@ public class HomeController {
         return objects;        
     }
     
-    @RequestMapping(value = "/home/crearsolicitud", method = RequestMethod.POST)
-    public @ResponseBody List<Map<String,Object>> crearsolicitud(HttpServletRequest request)
+    @RequestMapping(value = "/home/createRequisionPuesto", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> createRequisionPuesto(HttpServletRequest request)
     {        
         String idUOrganica = request.getParameter("idUOrganica");
         String idperfilPuesto = request.getParameter("idperfilPuesto");
@@ -607,9 +618,11 @@ public class HomeController {
         
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
         
-        if(candidatos.isEmpty())
+        if(!hayError)
         {
+            candidatos = new ArrayList<Map<String,Object>>();
             String sql;
             int _idUOrganica = Integer.parseInt(idUOrganica);
             int _idperfilPuesto = Integer.parseInt(idperfilPuesto);
@@ -647,7 +660,7 @@ public class HomeController {
     }
     
     @RequestMapping(value = "/home/createPuesto", method = RequestMethod.POST)
-    public @ResponseBody List<Map<String,Object>> crearperfil(HttpServletRequest request)
+    public @ResponseBody List<Map<String,Object>> createPuesto(HttpServletRequest request)
     {   
         String nomPuesto = request.getParameter("nomPuesto");
         String misionPuesto = request.getParameter("misionPuesto");
@@ -658,9 +671,11 @@ public class HomeController {
 
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
         
-        if(candidatos.isEmpty())
+        if(!hayError)
         {
+            candidatos = new ArrayList<Map<String,Object>>();
             String sql;
 
             sql = "INSERT INTO PERFILPUESTO VALUES(perfilPuesto_seq.nextval,?,?,?,?,?)";
@@ -708,13 +723,14 @@ public class HomeController {
 
         List<Map<String,Object>> objects = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(objects.get(0).get("error").toString());        
         
-        if(objects.isEmpty())
+        if(!hayError)
         {
             String sql;          
             int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);  
             
-            sql = "SELECT * FROM PERFILPUESTO Where idPerfilPuesto = " + _idPerfilPuesto + " and rownum = 1";
+            sql = "SELECT * FROM PERFILPUESTO Where idPerfilPuesto = " + _idPerfilPuesto;
             
             objects = gisService.consulta(sql);
             
@@ -739,23 +755,23 @@ public class HomeController {
     }
     
     @RequestMapping(value = "/home/createFuncionPuesto", method = RequestMethod.POST)
-    public @ResponseBody List<Map<String,Object>> crearfuncionpuesto(HttpServletRequest request)
+    public @ResponseBody List<Map<String,Object>> createfuncionpuesto(HttpServletRequest request)
     {   
-        //String idPerfilPuesto = request.getParameter("idPerfilPuesto");
-        String idPerfilPuesto = "1";
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
         String descripcionPuesto = request.getParameter("descripcionPuesto");        
         String valFrecuencia_F = request.getParameter("valFrecuencia_F");
         String valConErrado_CE = request.getParameter("valConErrado_CE");
         String valComplejidad_CM = request.getParameter("valComplejidad_CM");
         
-        //String [] campos = {"idPerfilPuesto", "descripcionPuesto","valConErrado_CE","valComplejidad_CM"};     
-        String [] campos = {"descripcionPuesto","valConErrado_CE","valComplejidad_CM"};
+        String [] campos = {"idPerfilPuesto","descripcionPuesto","valConErrado_CE","valComplejidad_CM"};
 
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
         
-        if(candidatos.isEmpty())
+        if(!hayError)
         {
+            candidatos = new ArrayList<Map<String,Object>>();
             String sql;          
             int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);
             int _valFrecuencia_F = Integer.parseInt(valFrecuencia_F);
@@ -802,17 +818,18 @@ public class HomeController {
     public @ResponseBody List<Map<String,Object>> readFuncionPuestoId(HttpServletRequest request)
     {
         String idPerfilPuesto = request.getParameter("idPerfilPuesto");
-
+     
         String [] campos = {"idPerfilPuesto"};
 
         List<Map<String,Object>> objects = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(objects.get(0).get("error").toString());        
         
-        if (objects.isEmpty())
+        if(!hayError)
         {
             int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);  
             
-            String sql = "SELECT * FROM funcionPuesto WHERE idPerfilPuesto = " + _idPerfilPuesto + " and rownum = 1";
+            String sql = "SELECT * FROM funcionPuesto WHERE idPerfilPuesto = " + _idPerfilPuesto;
             
             objects = gisService.consulta(sql);
             
@@ -846,9 +863,11 @@ public class HomeController {
 
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
         
-        if(candidatos.isEmpty())
+        if(!hayError)
         {
+            candidatos = new ArrayList<Map<String,Object>>();
             String sql;          
             int _idFuncionPuesto = Integer.parseInt(idFuncionPuesto);
             int _valFrecuencia_F = Integer.parseInt(valFrecuencia_F);
@@ -869,7 +888,7 @@ public class HomeController {
             else
             {
                 error.put("error", true);
-                error.put("mensaje", "No se actualizaron registros.");
+                error.put("mensaje", "El idFuncionPuesto "+ idFuncionPuesto +" no existe. No se actualizaron registros.");
             }
             
             candidatos.add(error);
@@ -887,9 +906,11 @@ public class HomeController {
 
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
         
-        if(candidatos.isEmpty())
+        if(!hayError)
         {
+            candidatos = new ArrayList<Map<String,Object>>();
             String sql;          
             int _idFuncionPuesto = Integer.parseInt(idFuncionPuesto);     
             
@@ -906,7 +927,7 @@ public class HomeController {
             else
             {
                 error.put("error", true);
-                error.put("mensaje", "No se eliminaron registros.");
+                error.put("mensaje", "El idFuncionPuesto "+ idFuncionPuesto +" no existe. No se eliminaron registros.");
             }
             
             candidatos.add(error);
@@ -915,10 +936,57 @@ public class HomeController {
         return candidatos;
     }
     
+    @RequestMapping(value = "/home/readNivelEducativo", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readNivelEducativo()
+    {   
+        String sql =    "SELECT * FROM M_NIVELEDUCATIVO";
+                
+        List<Map<String, Object>> objects = gisService.consulta(sql);
+        
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        /*
+                */ 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/readGradoEstudios", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readGradoEstudios()
+    {   
+        String sql =    "SELECT * FROM M_GRADOESTUDIOS";
+                
+        List<Map<String, Object>> objects = gisService.consulta(sql);
+        
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        /*
+                */ 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/readCarrera", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readCarrera()
+    {   
+        String sql =    "SELECT c.*, e.descripcion as especialidad " +
+                        "FROM M_CARRERA c " +
+                        "INNER JOIN ESPECIALIDAD e ON c.idEspeciaidad = e.idEspecialidad";
+                
+        List<Map<String, Object>> objects = gisService.consulta(sql);
+        
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        /*
+                */ 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;        
+    }
+    
     @RequestMapping(value = "/home/createFormAcademica", method = RequestMethod.POST)
     public @ResponseBody List<Map<String,Object>> createFormAcademica(HttpServletRequest request)
-    {   
-        String idPerfilPuestoA = "1";
+    {
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
         String idNivelEdu = request.getParameter("idNivelEdu");
         String nivelCompleto = request.getParameter("nivelCompleto");
         String idGradoEstu = request.getParameter("idGradoEstu");
@@ -929,27 +997,26 @@ public class HomeController {
         String nivDoctorado = request.getParameter("nivDoctorado");
         String colegiatura = request.getParameter("colegiatura");
         String habilitacion = request.getParameter("habilitacion");
-        
-        //String [] campos = {"idPerfilPuestoA", "idNivelEdu","nivelCompleto","idGradoEstu", "idCarreras", "idMaestria", "nivMaestria",
-                            //"idDoctorado", "nivDoctorado", "colegiatura", "habilitacion"};
-        
-        String [] campos = {"idNivelEdu","nivelCompleto","idGradoEstu", "idCarreras", "idMaestria", "nivMaestria",
-                            "idDoctorado", "nivDoctorado", "colegiatura", "habilitacion"};
+
+        String [] campos = {"idPerfilPuesto","idNivelEdu","nivelCompleto","idGradoEstu", "idCarreras", "idMaestria",
+                            "nivMaestria","idDoctorado", "nivDoctorado", "colegiatura", "habilitacion"};
 
         List<Map<String,Object>> candidatos = hayCamposVacios(request,campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
         
-        if(candidatos.isEmpty())
+        if(!hayError)
         {
+            candidatos = new ArrayList<Map<String,Object>>();
             String sql;
-            int _idPerfilPuestoA = Integer.parseInt(idPerfilPuestoA);
+            int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);
             int _idNivelEdu = Integer.parseInt(idNivelEdu);
             int _idGradoEstu = Integer.parseInt(idGradoEstu);
             int _idMaestria = Integer.parseInt(idMaestria);
             int _idDoctorado = Integer.parseInt(idDoctorado);
             
             sql = "INSERT INTO form_academica VALUES(form_academica_seq.nextval,?,?,?,?,?,?,?,?,?,?,?, 22)";
-            int rpta = gisService.update(sql, _idPerfilPuestoA, _idNivelEdu, nivelCompleto, _idGradoEstu, idCarreras, _idMaestria, nivMaestria, _idDoctorado, nivDoctorado, colegiatura, habilitacion);
+            int rpta = gisService.update(sql, _idPerfilPuesto, _idNivelEdu, nivelCompleto, _idGradoEstu, idCarreras, _idMaestria, nivMaestria, _idDoctorado, nivDoctorado, colegiatura, habilitacion);
             
             if(rpta > 0)
             {
@@ -989,29 +1056,32 @@ public class HomeController {
     @RequestMapping(value = "/home/readFormAcademicaId", method = RequestMethod.GET)
     public @ResponseBody List<Map<String,Object>> readFormAcademicaId(HttpServletRequest request)
     {
-        String idPerfilPuestoA = request.getParameter("idPerfilPuestoA");
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
 
-        String [] campos = {"idPerfilPuestoA"};
+        String [] campos = {"idPerfilPuesto"};
 
         List<Map<String,Object>> objects = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(objects.get(0).get("error").toString());        
         
-        if (objects.isEmpty())
+        if(!hayError)
         {
-            int _idPerfilPuestoA = Integer.parseInt(idPerfilPuestoA);  
+            int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);  
             
             String sql =    "SELECT a.*, m.descripcion as niveleducativo, g.descripcion as gradoestudios " +
                             "FROM form_academica a " +
                             "INNER JOIN M_NIVELEDUCATIVO m ON a.idNiveledu = m.IDNIVELEDUCATIVO " +
                             "INNER JOIN M_GRADOESTUDIOS g ON a.idGradoEstu = g.IDGRADOESTUDIOS " +
-                            "WHERE a.idPerfilPuestoA = " + _idPerfilPuestoA + " and rownum = 1";
+                            "WHERE a.idPerfilPuestoA = " + _idPerfilPuesto;
+            
+            System.err.println("Consulta PerfilPorId: " + sql);
             
             objects = gisService.consulta(sql);
             
             if(objects.isEmpty())
             {
                 error.put("error", true);
-                error.put("mensaje", "No se encontró registros form_academica con id " + _idPerfilPuestoA);
+                error.put("mensaje", "No se encontró registros form_academica con id " + idPerfilPuesto);
             }
             else
             {
@@ -1024,22 +1094,52 @@ public class HomeController {
         return objects;        
     }
     
+    @RequestMapping(value = "/home/readListaCursos", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readListaCursos()
+    {   
+        String sql =    "SELECT * FROM LISTACURSOS";
+                
+        List<Map<String, Object>> objects = gisService.consulta(sql);
+        
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        /*
+                */ 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/readNivelConoc", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readNivelConoc()
+    {   
+        String sql =    "SELECT * FROM NIVELCONOC";
+                
+        List<Map<String, Object>> objects = gisService.consulta(sql);
+        
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        /*
+                */ 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;        
+    }
+    
     @RequestMapping(value = "/home/createConocimientOtros", method = RequestMethod.POST)
     public @ResponseBody List<Map<String,Object>> createConocimientOtros(HttpServletRequest request)
     {   
-        //String idPerfilPuesto = request.getParameter("idPerfilPuesto");
-        String idPerfilPuesto = "1";
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
         String idListaCursoso = request.getParameter("idListaCursoso");        
         String idNivelConoc = request.getParameter("idNivelConoc");
              
-        //String [] campos = {"idPerfilPuesto","idListaCursoso","idNivelConoc"};
-        String [] campos = {"idListaCursoso","idNivelConoc"};
+        String [] campos = {"idPerfilPuesto","idListaCursoso","idNivelConoc"};
 
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
         
-        if(candidatos.isEmpty())
+        if(!hayError)
         {
+            candidatos = new ArrayList<Map<String,Object>>();
             String sql;          
             int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);
             int _idListaCursoso = Integer.parseInt(idListaCursoso);
@@ -1087,29 +1187,30 @@ public class HomeController {
     @RequestMapping(value = "/home/readConocimientOtrosId", method = RequestMethod.GET)
     public @ResponseBody List<Map<String,Object>> readConocimientOtrosId(HttpServletRequest request)
     {
-        String idPerfilPuestoCO = request.getParameter("idPerfilPuestoCO");
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
 
-        String [] campos = {"idPerfilPuestoCO"};
+        String [] campos = {"idPerfilPuesto"};
 
         List<Map<String,Object>> objects = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(objects.get(0).get("error").toString());        
         
-        if (objects.isEmpty())
+        if(!hayError)
         {
-            int _idPerfilPuestoCO = Integer.parseInt(idPerfilPuestoCO);  
+            int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);  
             
             String sql =    "SELECT c.*, l.descripcion as curso, n.descripcion as nivel " +
                             "FROM conocimientOtros c " +
                             "INNER JOIN listaCursos l ON c.idListaCursoso = l.idListaCursos " +
                             "INNER JOIN nivelConoc n ON c.idNivelConoc = n.idNivelConoc " +
-                            "WHERE c.IDPERFILPUESTOO = " + _idPerfilPuestoCO + " and rownum = 1";
+                            "WHERE c.IDPERFILPUESTOO = " + _idPerfilPuesto;
             
             objects = gisService.consulta(sql);
             
             if(objects.isEmpty())
             {
                 error.put("error", true);
-                error.put("mensaje", "No se encontró registros form_academica con id " + idPerfilPuestoCO);
+                error.put("mensaje", "No se encontró registros conocimientOtros con id " + idPerfilPuesto);
             }
             else
             {
@@ -1133,9 +1234,11 @@ public class HomeController {
 
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
         
-        if(candidatos.isEmpty())
+        if(!hayError)
         {
+            candidatos = new ArrayList<Map<String,Object>>();
             String sql;          
             int _idConocOtros = Integer.parseInt(idConocOtros);
             int _idListaCursoso = Integer.parseInt(idListaCursoso);
@@ -1155,7 +1258,7 @@ public class HomeController {
             else
             {
                 error.put("error", true);
-                error.put("mensaje", "No se actualizaron registros.");
+                error.put("mensaje", "El idConocotros "+ idConocOtros +" no existe. No se actualizaron registros.");
             }
             
             candidatos.add(error);
@@ -1173,9 +1276,11 @@ public class HomeController {
 
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
         
-        if(candidatos.isEmpty())
+        if(!hayError)
         {
+            candidatos = new ArrayList<Map<String,Object>>();
             String sql;          
             int _idConocotros = Integer.parseInt(idConocOtros);     
             
@@ -1183,6 +1288,363 @@ public class HomeController {
                     "WHERE idConocotros = ?";
             
             int rpta = gisService.update(sql, _idConocotros);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se eliminaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "El idConocotros "+ idConocOtros +" no existe. No se eliminaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/createConocimientoTec", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> createConocimientoTec(HttpServletRequest request)
+    {   
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
+        String idListaCursosT = request.getParameter("idListaCursosT");        
+             
+        String [] campos = {"idPerfilPuesto","idListaCursosT"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);
+            int _idListaCursosT = Integer.parseInt(idListaCursosT);
+            
+            sql = "INSERT INTO conocimientotec VALUES(conocimientotec_seq.nextval,?,?, 22, null, null, null, null)";
+            
+            int rpta = gisService.update(sql, _idPerfilPuesto, _idListaCursosT);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se crearon " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se crearon registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/readConocimientoTec", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readConocimientoTec()
+    {   
+        String sql =    "SELECT c.*, l.descripcion AS curso " +
+                        "FROM conocimientotec C " +
+                        "INNER JOIN listaCursos l ON c.idListaCursosT = l.idListaCursos";
+                
+        List<Map<String, Object>> objects = gisService.consulta(sql);
+        
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        /*
+                */ 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/readConocimientoTecId", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readConocimientoTecId(HttpServletRequest request)
+    {
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
+
+        String [] campos = {"idPerfilPuesto"};
+
+        List<Map<String,Object>> objects = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(objects.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);  
+            
+            String sql =    "SELECT c.*, l.descripcion AS curso " +
+                            "FROM conocimientotec C " +
+                            "INNER JOIN listaCursos l ON c.idListaCursosT = l.idListaCursos " +
+                            "WHERE c.IDPERFILPUESTOT = " + _idPerfilPuesto;
+            
+            objects = gisService.consulta(sql);
+            
+            if(objects.isEmpty())
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se encontró registros conocimientotec con id " + idPerfilPuesto);
+            }
+            else
+            {
+                error.put("error", false);
+                error.put("mensaje", "OK");                
+            }            
+        }   
+        
+        objects.add(error);
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/updateConocimientoTec", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> updateConocimientoTec(HttpServletRequest request)
+    {   
+        String idConocTec = request.getParameter("idConocTec");
+        String idListaCursosT = request.getParameter("idListaCursosT");       
+        
+        String [] campos = {"idConocTec", "idListaCursosT"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idConocTec = Integer.parseInt(idConocTec);
+            int _idListaCursosT = Integer.parseInt(idListaCursosT);
+            
+            sql =   "UPDATE conocimientotec " +
+                    "SET idListaCursosT = ? " +
+                    "WHERE IDCONOCTEC = ?";
+            
+            int rpta = gisService.update(sql, _idListaCursosT, _idConocTec);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se actualizaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "El idConocTec "+ idConocTec +" no existe. No se actualizaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/deleteConocimientoTec", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> deleteConocimientoTec(HttpServletRequest request)
+    {   
+        String idConocTec = request.getParameter("idConocTec");       
+             
+        String [] campos = {"idConocTec"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idConocTec = Integer.parseInt(idConocTec);     
+            
+            sql =   "DELETE conocimientotec WHERE IDCONOCTEC = ?";
+            
+            int rpta = gisService.update(sql, _idConocTec);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se eliminaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "El idConocTec "+ idConocTec +" no existe. No se actualizaron registros.");;
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/createConocimientoEspec", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> createConocimientoEspec(HttpServletRequest request)
+    {
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
+        String tipoConocim = request.getParameter("tipoConocim");        
+        String idListaCursose = request.getParameter("idListaCursose");        
+        String nroHoras = request.getParameter("nroHoras");
+        String sustentar = request.getParameter("sustentar");        
+             
+        String [] campos = {"idPerfilPuesto","tipoConocim", "idListaCursose", "nroHoras", "sustentar"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();        
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idListaCursose = Integer.parseInt(idListaCursose);
+            int _nroHoras = Integer.parseInt(nroHoras);
+            int _sustentar = Integer.parseInt(sustentar);
+            
+            sql = "INSERT INTO conocimientoespec VALUES(conocimientoespec_seq.nextval, ?, ?, ?, ?, 22, ?, null, null,null, null)";
+            
+            int rpta = gisService.update(sql, idPerfilPuesto, tipoConocim, _idListaCursose, _nroHoras, _sustentar);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se crearon " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se crearon registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/readConocimientoEspec", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readConocimientoEspec()
+    {   
+        String sql =    "SELECT c.*, l.descripcion as curso " +
+                        "FROM conocimientoespec c " +
+                        "INNER JOIN listaCursos l ON c.idListaCursosE = l.idListaCursos";
+                
+        List<Map<String, Object>> objects = gisService.consulta(sql);
+        
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/readConocimientoEspecId", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readConocimientoEspecId(HttpServletRequest request)
+    {
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
+
+        String [] campos = {"idPerfilPuesto"};
+
+        List<Map<String,Object>> objects = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(objects.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);  
+            
+            String sql =    "SELECT c.*, l.descripcion as curso " +
+                            "FROM conocimientoespec c " +
+                            "INNER JOIN listaCursos l ON c.idListaCursosE = l.idListaCursos " +
+                            "WHERE c.IDPERFILPUESTOE = " + _idPerfilPuesto;
+            
+            objects = gisService.consulta(sql);
+            
+            if(objects.isEmpty())
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se encontró registros conocimientoespec con id " + idPerfilPuesto);
+            }
+            else
+            {
+                error.put("error", false);
+                error.put("mensaje", "OK");                
+            }            
+        }   
+        
+        objects.add(error);
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/updateConocimientoEspec", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> updateConocimientoEspec(HttpServletRequest request)
+    {   
+        String idConocesP = request.getParameter("idConocesP");
+        String tipoConocim = request.getParameter("tipoConocim");
+        String idListaCursose = request.getParameter("idListaCursose");
+        String nroHoras = request.getParameter("nroHoras");
+        String sustentar = request.getParameter("sustentar");         
+        
+        String [] campos = {"idConocesP", "tipoConocim", "idListaCursose", "nroHoras", "sustentar"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idConocesP = Integer.parseInt(idConocesP);
+            int _idListaCursose = Integer.parseInt(idListaCursose);
+            int _nroHoras = Integer.parseInt(nroHoras);
+            int _sustentar = Integer.parseInt(sustentar);
+            
+            sql =   "UPDATE conocimientoespec " +
+                    "SET idListaCursosE = ?, tipoConocim = ?, sustentar = ?, nroHoras = ? " +
+                    "WHERE IDCONOCESP = ?";
+            
+            int rpta = gisService.update(sql, _idListaCursose, tipoConocim, _sustentar, _nroHoras, _idConocesP);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se actualizaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se actualizaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/deleteConocimientoEspec", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> deleteConocimientoEspec(HttpServletRequest request)
+    {   
+        String idConocesP = request.getParameter("idConocesP");       
+             
+        String [] campos = {"idConocesP"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idConocesP = Integer.parseInt(idConocesP);     
+            
+            sql =   "DELETE conocimientoespec WHERE idConocesP = ?";
+            
+            int rpta = gisService.update(sql, _idConocesP);
             
             if(rpta > 0)
             {
@@ -1201,31 +1663,635 @@ public class HomeController {
         return candidatos;
     }
     
-    //Métodos
+    @RequestMapping(value = "/home/createExpeRequerida", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> createExpeRequerida(HttpServletRequest request)
+    {   
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
+        String expeGral = request.getParameter("expeGral");
+        String expesPublico = request.getParameter("expesPublico");
+        String expeEspecifica = request.getParameter("expeEspecifica");
+        String observac = request.getParameter("observac");                
+             
+        String [] campos = {"idPerfilPuesto","expeGral", "expesPublico", "expeEspecifica", "observac"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);
+            int _expeGral = Integer.parseInt(expeGral);
+            int _expesPublico = Integer.parseInt(expesPublico);
+            int _expeEspecifica = Integer.parseInt(expeEspecifica);
+            
+            sql = "INSERT INTO experequerida VALUES(expeRequerida_seq.nextval,?,?,?,?,?, 22, null, null, null, null)";
+            
+            int rpta = gisService.update(sql, _idPerfilPuesto, _expeGral, _expesPublico, _expeEspecifica, observac);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se crearon " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se crearon registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/readExpeRequerida", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readExpeRequerida()
+    {   
+        String sql =    "SELECT * FROM experequerida";
+                
+        List<Map<String, Object>> objects = gisService.consulta(sql);
+        
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        /*
+                */ 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/readExpeRequeridaId", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readExpeRequeridaId(HttpServletRequest request)
+    {
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
+
+        String [] campos = {"idPerfilPuesto"};
+
+        List<Map<String,Object>> objects = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        
+        boolean hayError = Boolean.parseBoolean(objects.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {            
+            int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);  
+            
+            String sql =    "SELECT * FROM experequerida " +
+                            "WHERE idPerfilPuestox = " + _idPerfilPuesto;
+            
+            objects = gisService.consulta(sql);
+            
+            if(objects.isEmpty())
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se encontró registros conocimientotec con id " + idPerfilPuesto);
+            }
+            else
+            {
+                error.put("error", false);
+                error.put("mensaje", "OK");                
+            }            
+        }   
+        
+        objects.add(error);
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/updateExpeRequerida", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> updateExpeRequerida(HttpServletRequest request)
+    {   
+        String idExpeRequerida = request.getParameter("idExpeRequerida");
+        String expeGral = request.getParameter("expeGral");
+        String expesPublico = request.getParameter("expesPublico");
+        String expeEspecifica = request.getParameter("expeEspecifica");
+        String observac = request.getParameter("observac");                
+             
+        String [] campos = {"idExpeRequerida", "expeGral", "expesPublico", "expeEspecifica", "observac"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;
+            
+            int _idExpeRequerida = Integer.parseInt(idExpeRequerida);
+            int _expeGral = Integer.parseInt(expeGral);
+            int _expesPublico = Integer.parseInt(expesPublico);
+            int _expeEspecifica = Integer.parseInt(expeEspecifica);
+            
+            sql =   "UPDATE experequerida " +
+                    "SET expegral = ?, expespublico = ?, expeespecifica = ?, observac = ? " +
+                    "WHERE idexperequerida = ?";
+            
+            int rpta = gisService.update(sql, _expeGral, _expesPublico, _expeEspecifica, observac, _idExpeRequerida);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se actualizaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se actualizaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/deleteExpeRequerida", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> deleteExpeRequerida(HttpServletRequest request)
+    {   
+        String idExpeRequerida = request.getParameter("idExpeRequerida");       
+             
+        String [] campos = {"idExpeRequerida"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idExpeRequerida = Integer.parseInt(idExpeRequerida);     
+            
+            sql =   "DELETE experequerida WHERE idExpeRequerida = ?";
+            
+            int rpta = gisService.update(sql, _idExpeRequerida);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se eliminaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se eliminaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/createExpNivelReq", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> createExpNivelReq(HttpServletRequest request)
+    {   
+        String idExpeRequerida = request.getParameter("idExpeRequerida");
+        String idNivelLaboral = request.getParameter("idNivelLaboral");        
+             
+        String [] campos = {"idExpeRequerida", "idNivelLaboral"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idExpeRequerida = Integer.parseInt(idExpeRequerida);
+            int _idNivelLaboral = Integer.parseInt(idNivelLaboral);
+            
+            sql = "INSERT INTO exp_nivelReq VALUES(exp_nivelReq_seq.nextval, ?, ?, null, null)";
+            
+            int rpta = gisService.update(sql, _idExpeRequerida, _idNivelLaboral);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se crearon " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se crearon registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/readExpNivelReq", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readExpNivelReq()
+    {   
+        String sql =    "SELECT e.*, n.descripcion as nivelLaboral " +
+                        "FROM exp_nivelReq e " +
+                        "INNER JOIN nivellaboral n ON e.idNivelLaboral = n.idNivelLab";
+                
+        List<Map<String, Object>> objects = gisService.consulta(sql);
+        
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        /*
+                */ 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/readExpNivelReqId", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readExpNivelReqId(HttpServletRequest request)
+    {
+        String idExpeRequerida = request.getParameter("idExpeRequerida");
+
+        String [] campos = {"idExpeRequerida"};
+
+        List<Map<String,Object>> objects = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(objects.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            int _idExpeRequerida = Integer.parseInt(idExpeRequerida);  
+            
+            String sql =    "SELECT e.*, n.descripcion as nivelLaboral " +
+                            "FROM exp_nivelReq e " +
+                            "INNER JOIN nivellaboral n ON e.idNivelLaboral = n.idNivelLab " +
+                            "WHERE e.idExpeRequerida = " + _idExpeRequerida;
+            
+            objects = gisService.consulta(sql);
+            
+            if(objects.isEmpty())
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se encontró registros conocimientotec con id " + idExpeRequerida);
+            }
+            else
+            {
+                error.put("error", false);
+                error.put("mensaje", "OK");                
+            }            
+        }   
+        
+        objects.add(error);
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/updateExpNivelReq", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> updateExpNivelReq(HttpServletRequest request)
+    {           
+        String idNivelReque = request.getParameter("idNivelReque");
+        String idNivelLaboral = request.getParameter("idNivelLaboral");        
+             
+        String [] campos = {"idNivelReque", "idNivelLaboral"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idNivelReque = Integer.parseInt(idNivelReque);
+            int _idNivelLaboral = Integer.parseInt(idNivelLaboral);
+            
+            sql =   "UPDATE exp_nivelReq SET idNivelLaboral = ? WHERE idNivelReque = ?";
+            
+            int rpta = gisService.update(sql, _idNivelLaboral, _idNivelReque);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se actualizaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se actualizaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/deleteExpNivelReq", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> deleteExpNivelReq(HttpServletRequest request)
+    {   
+        String idNivelReque = request.getParameter("idNivelReque");
+             
+        String [] campos = {"idNivelReque"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idNivelReque = Integer.parseInt(idNivelReque);     
+            
+            sql =   "DELETE exp_nivelReq WHERE idNivelReque = ?";
+            
+            int rpta = gisService.update(sql, _idNivelReque);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se eliminaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se eliminaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/readDiccompetencias", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readDiccompetencias()
+    {   
+        String sql =    "SELECT * FROM DICCOMPETENCIAS";
+                
+        List<Map<String, Object>> objects = gisService.consulta(sql);
+        
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/createCompetencias", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> createCompetencias(HttpServletRequest request)
+    {   
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
+        String idDiccompetenc = request.getParameter("idDiccompetenc");
+             
+        String [] campos = {"idPerfilPuesto","idDiccompetenc"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);
+            int _idDiccompetenc = Integer.parseInt(idDiccompetenc);
+            
+            sql = "INSERT INTO competencias VALUES(competencias_seq.nextval,?,?, 22)";
+            
+            int rpta = gisService.update(sql, _idPerfilPuesto, _idDiccompetenc);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se crearon " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se crearon registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/readCompetencias", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readCompetencias()
+    {   
+        String sql =    "SELECT c.*, d.descripcion, d.sumario as sumario " +
+                        "FROM competencias c " +
+                        "INNER JOIN DICCOMPETENCIAS d ON c.idDiccompetenc = d.idDicCompetencias";
+                
+        List<Map<String, Object>> objects = gisService.consulta(sql);
+        
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        System.err.println(objects); 
+        System.err.println("+++++++++++++++++++++++++++++++++"); 
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/readCompetenciasId", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readCompetenciasId(HttpServletRequest request)
+    {
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
+
+        String [] campos = {"idPerfilPuesto"};
+
+        List<Map<String,Object>> objects = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(objects.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);  
+            
+            String sql =    "SELECT c.*, d.descripcion, d.sumario as sumario " +
+                            "FROM competencias c " +
+                            "INNER JOIN DICCOMPETENCIAS d ON c.idDiccompetenc = d.idDicCompetencias " +
+                            "WHERE c.idPerfilPuestoC = " + _idPerfilPuesto;
+            
+            objects = gisService.consulta(sql);
+            
+            if(objects.isEmpty())
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se encontró registros conocimientotec con id " + idPerfilPuesto);
+            }
+            else
+            {
+                error.put("error", false);
+                error.put("mensaje", "OK");                
+            }            
+        }   
+        
+        objects.add(error);
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/updateCompetencias", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> updateCompetencias(HttpServletRequest request)
+    {   
+        String idCompetencias = request.getParameter("idCompetencias");
+        String idDiccompetenc = request.getParameter("idDiccompetenc");
+             
+        String [] campos = {"idCompetencias", "idDiccompetenc"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idCompetencias = Integer.parseInt(idCompetencias);
+            int _idDiccompetenc = Integer.parseInt(idDiccompetenc);
+            
+            sql =   "UPDATE competencias SET idDiccompetenc = ? WHERE idCompetencias = ?";
+            
+            int rpta = gisService.update(sql, _idDiccompetenc, _idCompetencias);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se actualizaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se actualizaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/deleteCompetencias", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> deleteCompetencias(HttpServletRequest request)
+    {   
+        String idCompetencias = request.getParameter("idCompetencias");
+             
+        String [] campos = {"idCompetencias"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idCompetencias = Integer.parseInt(idCompetencias);     
+            
+            sql =   "DELETE competencias WHERE idCompetencias = ?";
+            
+            int rpta = gisService.update(sql, _idCompetencias);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se eliminaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se eliminaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    //Aprobaciones    
+    @RequestMapping(value = "/home/readAappRequisicion", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readAappRequisicion()
+    {   
+        String sql =    "SELECT r.*, d.descripcion as dependencia, p.nomPuesto as puesto " +
+                        "FROM REQUISIONPUESTO r " +
+                        "INNER JOIN PERFILPUESTO p ON r.idPerfilPuesto = p.idPerfilPuesto " +
+                        "INNER JOIN UORGANICA u ON r.idUorganica = u.IDUORGANICA " +
+                        "INNER JOIN DEPENDENCIACATALOGO d ON u.UORGANICA_CATALOGO = d.IDCATALOGODEPEND";
+                
+        List<Map<String, Object>> objects = gisService.consulta(sql);        
+        List<Map<String, Object>> aprobaciones;
+        List<Map<String, Object>> resultadoFinal = new ArrayList<Map<String, Object>>();
+        for(Map x:objects)
+        {            
+            int idRequisicionP = Integer.parseInt(x.get("IDREQUISICIONP").toString());
+            
+            sql = "SELECT IDAAPPREQUISICION FROM AAPPREQUISICION WHERE IDREQUISICIONP = " + idRequisicionP;
+            aprobaciones = gisService.consulta(sql);
+            if(aprobaciones.isEmpty())
+            {                
+                x.put("JEFEORGANO", "Pendiente");                
+                x.put("DIRECTOREJECUTIVO", "Pendiente");
+                
+                resultadoFinal.add(x);                
+            }
+            else
+            {
+                //Falta validar aqui
+                //Primero si solo hay 1 aprobado (se va a caer por habrá índice 0 == tamaño 1
+                //Ahora como identificar que el estado es de Jefe Órgano o de Director Ejecutivo?
+                String estado;
+                
+                estado = aprobaciones.get(0).get("estado").toString();                
+                x.put("Jefe Organo", estado);
+                
+                estado = aprobaciones.get(1).get("estado").toString();
+                x.put("Director Ejecutivo", estado);
+                resultadoFinal.add(x);
+            }
+        }
+
+        return resultadoFinal;        
+    }
+    
+    //Validaciones
     ArrayList<Map<String, Object>> hayCamposVacios(HttpServletRequest request, String... parametros)
     {
         ArrayList<Map<String, Object>> camposvacios = new ArrayList<Map<String, Object>>();
         String mensaje = "";
         String contenido;
+        Map campovacio = new HashMap();
         
-        for(String x:parametros)
+        try
         {
-            contenido = request.getParameter(x);
-            
-            if(contenido.trim().isEmpty())
-                mensaje += " Campo " + x + " vacío,";
+            for(String x:parametros)
+            {
+                contenido = request.getParameter(x);
+
+                if(contenido.trim().isEmpty())
+                    mensaje += " Campo " + x + " vacío,";
+            }
+
+            if(!mensaje.isEmpty())
+            {
+                //Se elimina la última coma
+                mensaje = mensaje.substring(0, mensaje.lastIndexOf(','));
+
+                campovacio.put("error", true);
+                campovacio.put("mensaje", mensaje);            
+            }
+            else
+            {
+                campovacio.put("error", false);
+                campovacio.put("mensaje", "OK");
+            }
         }
-        
-        if(!mensaje.isEmpty())
+        catch(NullPointerException e)
         {
-            //Se elimina la última coma
-            mensaje = mensaje.substring(0, mensaje.lastIndexOf(','));
-            
-            Map campovacio = new HashMap();
             campovacio.put("error", true);
-            campovacio.put("mensaje", mensaje);
-            camposvacios.add(campovacio);
-        }                        
+            campovacio.put("mensaje", "Se enviaron valores nulos");
+        }
+        catch(Exception e)
+        {
+            campovacio.put("error", true);
+            campovacio.put("mensaje", e.getMessage());
+        }
+                
+        camposvacios.add(campovacio);
         
         return camposvacios;
     }
