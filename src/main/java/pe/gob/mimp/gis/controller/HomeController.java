@@ -2216,23 +2216,206 @@ public class HomeController {
                         "d.descripcion as dependencia, p.nomPuesto as puesto, " +
                         "case WHEN e1.estadonombre is null THEN 'Pendiente' ELSE e1.estadonombre END as JEFEORGANO, " +
                         "case WHEN e2.estadonombre is null THEN 'Pendiente' ELSE e2.estadonombre END as DIRECTOREJECUTIVO, " +
+                        "case WHEN e3.estadonombre is null THEN 'Pendiente' ELSE e3.estadonombre END as CERTIFICACION, " +
                         "case WHEN a1.estado is null then 6 ELSE a1.estado END as ESTADOJEFEORGANO, " +
                         "case WHEN a2.estado is null then 6 ELSE a1.estado END as ESTADODIRECTOREJECUTIVO, " +
+                        "case WHEN c.estadoProceso is null then 6 ELSE a1.estado END as ESTADOCERTIFICACION, " +
                         "case WHEN a1.FEC_APROBA is null and a2.FEC_APROBA is null THEN NULL WHEN a1.FEC_APROBA >= a2.FEC_APROBA THEN TO_CHAR(a1.FEC_APROBA , 'YYYY-MM-DD') WHEN a1.FEC_APROBA < a2.FEC_APROBA THEN TO_CHAR(a2.FEC_APROBA , 'YYYY-MM-DD') " +
                         "     WHEN a1.FEC_APROBA is null THEN TO_CHAR(a2.FEC_APROBA , 'YYYY-MM-DD') WHEN a2.FEC_APROBA is null THEN TO_CHAR(a1.FEC_APROBA , 'YYYY-MM-DD') ELSE NULL END as FEC_APROBA " +
                         "FROM REQUISIONPUESTO r " +
+                        "LEFT JOIN CERTIFICAPPTO c ON r.IDREQUISICIONP = c.idRequisicion " +
                         "LEFT JOIN AAPPREQUISICION a1 ON r.IDREQUISICIONP = a1.IDREQUISICIONP AND a1.IDAAPPREQUISICION = 1 " +
                         "LEFT JOIN AAPPREQUISICION a2 ON r.IDREQUISICIONP = a2.IDREQUISICIONP AND a2.IDAAPPREQUISICION = 2 " +
                         "LEFT JOIN ESTADO e1 ON a1.estado = e1.idEstado " +
                         "LEFT JOIN ESTADO e2 ON a2.estado = e2.idEstado " +
+                        "LEFT JOIN ESTADO e3 ON c.estadoProceso = e3.idEstado " +
                         "INNER JOIN PERFILPUESTO p ON r.idPerfilPuesto = p.idPerfilPuesto " +
                         "INNER JOIN UORGANICA u ON r.idUorganica = u.IDUORGANICA " +
                         "INNER JOIN DEPENDENCIACATALOGO d ON u.UORGANICA_CATALOGO = d.IDCATALOGODEPEND " +
                         "ORDER BY r.idRequisicionP ASC";
 
-        System.err.println("****************************************************");
-        System.err.println("SQL: " + sql);
-        System.err.println("****************************************************");
+        List<Map<String, Object>> objects = gisService.consulta(sql);        
+
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/updateAappRequisicion", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> updateAappRequisicion(HttpServletRequest request)
+    {
+        String idAappRequisicion = request.getParameter("idAappRequisicion");
+        String idRequisicionP = request.getParameter("idRequisicionP");
+        String estado = request.getParameter("estado");
+        String idUserJefe = request.getParameter("idUserJefe");
+             
+        String [] campos = {"idAappRequisicion", "idRequisicionP", "estado", "idUserJefe"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            
+            int _idAappRequisicion = Integer.parseInt(idAappRequisicion);
+            int _idRequisicionP = Integer.parseInt(idRequisicionP);
+            int _estado = Integer.parseInt(estado);
+            int _idUserJefe = Integer.parseInt(idUserJefe);
+            
+            String sql;          
+              
+            sql =   "MERGE " +
+                    "INTO AAPPREQUISICION a " +
+                    "USING (select ? idAappRequisicion, ? idRequisicionP, ? estado, ? idUserJefe from dual) d " +
+                    "ON (a.idAappRequisicion = d.idAappRequisicion and a.idRequisicionP = d.idRequisicionP) " +
+                    "WHEN MATCHED THEN " +
+                    "UPDATE SET a.estado = d.estado, a.fec_aproba = sysdate " +
+                    "WHEN NOT MATCHED THEN " +
+                    "INSERT VALUES(d.idAappRequisicion, d.idRequisicionP, null, d.estado, d.idUserJefe, sysdate)";
+                        
+            int rpta = gisService.update(sql, _idAappRequisicion, _idRequisicionP, _estado, _idUserJefe);             
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se actualizaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se actualizaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    //Listado Perfiles (Certificación Presupuestal)
+    @RequestMapping(value = "/home/createCertificaPpto", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> createCertificaPpto(HttpServletRequest request)
+    {           
+        String idRequisicion = request.getParameter("idRequisicion");
+        String nroCertificacion = request.getParameter("nroCertificacion");
+        String fteFto = request.getParameter("fteFto");
+        String idMetaPpto = request.getParameter("idMetaPpto");
+        String creditoPptal = request.getParameter("creditoPptal");
+        String observac = request.getParameter("observac");
+        String estadoProceso = request.getParameter("estadoProceso");
+        String usu_crea = request.getParameter("usu_crea");
+             
+        String [] campos = {"idRequisicion", "nroCertificacion", "fteFto", "idMetaPpto",
+                            "creditoPptal", "observac", "estadoProceso", "usu_crea"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idRequisicion = Integer.parseInt(idRequisicion);
+            int _idMetaPpto = Integer.parseInt(idMetaPpto);
+            double _creditoPptal = Double.parseDouble(creditoPptal);
+            int _estadoProceso = Integer.parseInt(estadoProceso);
+            int _usu_crea = Integer.parseInt(usu_crea);
+                                
+            sql = "INSERT INTO CERTIFICAPPTO VALUES(certificappto_seq.nextval, ?, ?, ?, ?, ?, ?, null, null, ?, null, sysdate, ?, null)";
+            
+            int rpta = gisService.update(sql, _idRequisicion, nroCertificacion, fteFto, _idMetaPpto, _creditoPptal, observac, _estadoProceso, _usu_crea);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se crearon " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se crearon registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/readCertificaPpto", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readCertificaPpto()
+    {   
+        String sql =    "SELECT c.IDREQUISICION, d.descripcion as dependencia, p.nomPuesto as puesto, r.NROPUESTOS, r.MONTOMES, c.IDCODPPTO, " +
+                        "        c.NROCERTIFICACION, c.FTEFTO, m.descripcion as META, c.CREDITOPPTAL, c.OBSERVAC, TO_CHAR(c.FE_CREA, 'YYYY-MM-DD') as FE_CREA, " +
+                        "        CASE WHEN e.ESTADONOMBRE is null THEN 'Pendiente' ELSE e.ESTADONOMBRE END as estado, " +
+                        "        CASE WHEN c.ESTADOPROCESO is null THEN 6 ELSE c.ESTADOPROCESO END as ESTADOPROCESO " +
+                        "FROM REQUISIONPUESTO r " +
+                        "LEFT JOIN CERTIFICAPPTO c ON r.IDREQUISICIONP = c.idRequisicion " +
+                        "LEFT JOIN ESTADO e ON c.estadoproceso = e.idEstado " +
+                        "INNER JOIN METAPPTAL m ON c.IDMETAPPTO = m.IDMETAPPTO " +
+                        "INNER JOIN PERFILPUESTO p ON r.idPerfilPuesto = p.idPerfilPuesto " +
+                        "INNER JOIN UORGANICA u ON r.idUorganica = u.IDUORGANICA " +
+                        "INNER JOIN DEPENDENCIACATALOGO d ON u.UORGANICA_CATALOGO = d.IDCATALOGODEPEND " +
+                        "ORDER BY r.idRequisicionP ASC";
+
+        List<Map<String, Object>> objects = gisService.consulta(sql);        
+
+        return objects;        
+    }
+    
+    @RequestMapping(value = "/home/updateCertificaPpto", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> updateCertificaPpto(HttpServletRequest request)
+    {   
+        String idCodPpto = request.getParameter("idCodPpto");
+        String estadoProceso = request.getParameter("estadoProceso");        
+             
+        String [] campos = {"idCodPpto", "estadoProceso"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;          
+            int _idCodPpto = Integer.parseInt(idCodPpto);
+            int _estadoProceso = Integer.parseInt(estadoProceso);
+            
+            sql =   "UPDATE CERTIFICAPPTO SET estadoProceso = ? WHERE idCodPpto = ?";
+            
+            int rpta = gisService.update(sql, _estadoProceso, _idCodPpto);
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se actualizaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se actualizaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    //Cronograma
+    @RequestMapping(value = "/home/readCronograma", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readCronograma()
+    {   
+        String sql =    "SELECT r.*, f.DESCRIPCIONPUESTO puesto, a1.estado estadoJefe1, a2.estado estadoJefe2, c.estadoProceso estadoCertificacion " +
+                        "FROM REQUISIONPUESTO r " +
+                        "INNER JOIN FUNCIONPUESTO f ON r.idRequisicionP = f.idPerfilPuesto " +
+                        "INNER JOIN AAPPREQUISICION a1 ON r.idRequisicionP = a1.idRequisicionP and a1.IDAAPPREQUISICION = 1 and a1.estado = 4 " +
+                        "INNER JOIN AAPPREQUISICION a2 ON r.idRequisicionP = a2.idRequisicionP and a2.IDAAPPREQUISICION = 2 and a2.estado = 4 " +
+                        "INNER JOIN CERTIFICAPPTO c ON r.idRequisicionP = c.idRequisicion and c.estadoProceso = 4 " +
+                        "ORDER BY r.idRequisicionP ASC";
+
         List<Map<String, Object>> objects = gisService.consulta(sql);        
 
         return objects;        

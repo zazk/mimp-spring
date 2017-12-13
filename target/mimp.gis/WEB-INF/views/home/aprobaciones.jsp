@@ -26,18 +26,38 @@
     <div class="row">
         <div class="col-12">
             <button id="readAappRequisicion" type="button" class="btn btn-success">Read AappRequisicion</button>
+            <button id="updateAappRequisicion" type="button" class="btn btn-success">Update AappRequisicion</button>
             <br><br>
             <p id="respuesta"></p>
         </div>
-        
-        <!-- 
+                
         <div class="col-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-5">Nada</label>
-                 <input class="form-control" id="idOrgano" type="number">             
+                <label class="input-group-addon col-5">idAappRequisicion</label>
+                 <input class="form-control" id="idAappRequisicion" type="number">             
             </div>              
         </div>
-        -->
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">idRequisicionP</label>
+                 <input class="form-control" id="idRequisicionP" type="number">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">estado</label>
+                 <input class="form-control" id="estado" type="number">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">idUserJefe</label>
+                 <input class="form-control" id="idUserJefe" type="number">             
+            </div>              
+        </div>
 </div>
 
         <script type="text/javascript" src="<c:url value='/assetsvisor/js/jquery-1.11.1.min.js'/>"></script>
@@ -53,6 +73,12 @@
                 
                 //Botones
                 var readAappRequisicion = $('#readAappRequisicion');
+                var updateAappRequisicion = $('#updateAappRequisicion');
+                //Input
+                var idAappRequisicion = $('#idAappRequisicion');
+                var idRequisicionP = $('#idRequisicionP');
+                var estado = $('#estado');
+                var idUserJefe = $('#idUserJefe');
                
                readAappRequisicion.click(function()
                {
@@ -74,9 +100,9 @@
                                     return '' + e.IDREQUISICIONP + ' - ' + e.DEPENDENCIA +
                                             ' - ' + e.PUESTO + ' - ' + e.NROPUESTOS +
                                             ' - ' + e.MONTOMES + '-  ' + e.JEFEORGANO +
-                                            ' - ' + e.DIRECTOREJECUTIVO +
-                                            ' - FECHA APROBACIÓN: ' + fecha +
-                                            ' - TIPO REQUERIMIENTO: ' + e.TIPOREQUERIMIENTO +
+                                            ' - ' + e.DIRECTOREJECUTIVO + ' - ' + e.CERTIFICACION +
+                                            ' - ' + fecha +
+                                            ' - ' + e.TIPOREQUERIMIENTO +
                                             '<br>****************************************************' +
                                             '********************************************************' +
                                             '**********************************************************';
@@ -88,6 +114,41 @@
                         }
                     });
                });//read AappRequisicion
+               
+               updateAappRequisicion.click(function()
+               {                                      
+                   $('#respuesta').html('Cargando...');
+                                            
+                   var data = {
+                                idAappRequisicion: idAappRequisicion.val(),
+                                idRequisicionP: idRequisicionP.val(),
+                                estado: estado.val(),
+                                idUserJefe: idUserJefe.val()
+                              };
+                   
+                   
+                   $.ajax({
+			type: 'POST',			
+			url: 'updateAappRequisicion',
+                        data: data,
+			success: function(resultado)
+                        {                                                        
+                            $('#respuesta').html(
+                                'Mensaje: ' + resultado.map(function(e)
+                                {
+                                    return e.mensaje;
+                                }).join(', ') + '<br>Error: ' + resultado.map(function(e)
+                                {
+                                    return e.error;
+                                }).join(', ')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+                            $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });//Update AappRequisicion
             });//Jquery
 
         </script>
