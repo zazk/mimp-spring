@@ -604,7 +604,7 @@ public class HomeController {
     public @ResponseBody List<Map<String,Object>> createRequisionPuesto(HttpServletRequest request)
     {        
         String idUOrganica = request.getParameter("idUOrganica");
-        String idperfilPuesto = request.getParameter("idperfilPuesto");
+        String idPerfilPuesto = request.getParameter("idPerfilPuesto");
         String montoMes = request.getParameter("montoMes");
         String nroPuestos = request.getParameter("nroPuestos");
         String fe_inicio = request.getParameter("fe_inicio");
@@ -612,9 +612,10 @@ public class HomeController {
         String nacPeruana = request.getParameter("nacPeruana");
         String sustentoNac = request.getParameter("sustentoNac");
         String usu_crea = request.getParameter("usu_crea");        
-        String idThorarios = request.getParameter("idThorarios");        
+        String idThorarios = request.getParameter("idThorarios");
+        String tipoRequerimiento = request.getParameter("tipoRequerimiento");
              
-        String [] campos = {"idUOrganica","idperfilPuesto","montoMes","nroPuestos","fe_inicio","fe_termino","nacPeruana","usu_crea","idThorarios"};
+        String [] campos = {"idUOrganica","idPerfilPuesto","montoMes","nroPuestos","fe_inicio","fe_termino","nacPeruana","usu_crea","idThorarios", "tipoRequerimiento"};
         
         List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
         Map error = new HashMap();
@@ -625,7 +626,7 @@ public class HomeController {
             candidatos = new ArrayList<Map<String,Object>>();
             String sql;
             int _idUOrganica = Integer.parseInt(idUOrganica);
-            int _idperfilPuesto = Integer.parseInt(idperfilPuesto);
+            int _idPerfilPuesto = Integer.parseInt(idPerfilPuesto);
             double _montoMes = Double.parseDouble(montoMes);
             int _nroPuestos = Integer.parseInt(nroPuestos);
             int _usu_crea = Integer.parseInt(usu_crea);
@@ -638,9 +639,9 @@ public class HomeController {
             fecha = fe_termino.split("-");
             fe_termino = fecha[2] + "-" + fecha[1] + "-" + fecha[0];
             
-            sql = "INSERT INTO REQUISIONPUESTO VALUES(requisionPuesto_seq.nextval, ?, ?, ?, ?, 6, ?, ?, ?, ?, sysdate, ?, ?)";
+            sql = "INSERT INTO REQUISIONPUESTO VALUES(requisionPuesto_seq.nextval, ?, ?, ?, ?, 6, ?, ?, ?, ?, sysdate, ?, ?, ?)";
             
-            int rpta = gisService.update(sql, _idUOrganica, _idperfilPuesto, _montoMes, _nroPuestos, fe_inicio, fe_termino, nacPeruana, sustentoNac, _usu_crea, _idThorarios);
+            int rpta = gisService.update(sql, _idUOrganica, _idPerfilPuesto, _montoMes, _nroPuestos, fe_inicio, fe_termino, nacPeruana, sustentoNac, _usu_crea, _idThorarios, tipoRequerimiento);
                         
             if(rpta > 0)
             {
@@ -2207,45 +2208,34 @@ public class HomeController {
     @RequestMapping(value = "/home/readAappRequisicion", method = RequestMethod.GET)
     public @ResponseBody List<Map<String,Object>> readAappRequisicion()
     {   
-        String sql =    "SELECT r.*, d.descripcion as dependencia, p.nomPuesto as puesto " +
+        String sql =    "SELECT r.IDREQUISICIONP, r.IDUORGANICA, r.IDPERFILPUESTO, r.MONTOMES, r.NROPUESTOS, r.ESTADO, r.FE_INICIO, r.FE_TERMINO, " +
+                        "case WHEN r.NACPERUANA is null THEN 'N' WHEN r.NACPERUANA = 'S' THEN 'S' ELSE 'N' END as NACPERUANA, " +
+                        "case WHEN r.SUSTENTONAC is null THEN 'Ninguno' ELSE r.SUSTENTONAC END as SUSTENTONAC, " +
+                        "r.FE_CREA, r.USU_CREA, r.IDTHORARIOS, " +
+                        "case WHEN r.TIPOREQUERIMIENTO = 'N' THEN 'NUEVO' ELSE 'REEMPLAZO' END as TIPOREQUERIMIENTO, " +
+                        "d.descripcion as dependencia, p.nomPuesto as puesto, " +
+                        "case WHEN e1.estadonombre is null THEN 'Pendiente' ELSE e1.estadonombre END as JEFEORGANO, " +
+                        "case WHEN e2.estadonombre is null THEN 'Pendiente' ELSE e2.estadonombre END as DIRECTOREJECUTIVO, " +
+                        "case WHEN a1.estado is null then 6 ELSE a1.estado END as ESTADOJEFEORGANO, " +
+                        "case WHEN a2.estado is null then 6 ELSE a1.estado END as ESTADODIRECTOREJECUTIVO, " +
+                        "case WHEN a1.FEC_APROBA is null and a2.FEC_APROBA is null THEN NULL WHEN a1.FEC_APROBA >= a2.FEC_APROBA THEN TO_CHAR(a1.FEC_APROBA , 'YYYY-MM-DD') WHEN a1.FEC_APROBA < a2.FEC_APROBA THEN TO_CHAR(a2.FEC_APROBA , 'YYYY-MM-DD') " +
+                        "     WHEN a1.FEC_APROBA is null THEN TO_CHAR(a2.FEC_APROBA , 'YYYY-MM-DD') WHEN a2.FEC_APROBA is null THEN TO_CHAR(a1.FEC_APROBA , 'YYYY-MM-DD') ELSE NULL END as FEC_APROBA " +
                         "FROM REQUISIONPUESTO r " +
+                        "LEFT JOIN AAPPREQUISICION a1 ON r.IDREQUISICIONP = a1.IDREQUISICIONP AND a1.IDAAPPREQUISICION = 1 " +
+                        "LEFT JOIN AAPPREQUISICION a2 ON r.IDREQUISICIONP = a2.IDREQUISICIONP AND a2.IDAAPPREQUISICION = 2 " +
+                        "LEFT JOIN ESTADO e1 ON a1.estado = e1.idEstado " +
+                        "LEFT JOIN ESTADO e2 ON a2.estado = e2.idEstado " +
                         "INNER JOIN PERFILPUESTO p ON r.idPerfilPuesto = p.idPerfilPuesto " +
                         "INNER JOIN UORGANICA u ON r.idUorganica = u.IDUORGANICA " +
-                        "INNER JOIN DEPENDENCIACATALOGO d ON u.UORGANICA_CATALOGO = d.IDCATALOGODEPEND";
-                
-        List<Map<String, Object>> objects = gisService.consulta(sql);        
-        List<Map<String, Object>> aprobaciones;
-        List<Map<String, Object>> resultadoFinal = new ArrayList<Map<String, Object>>();
-        for(Map x:objects)
-        {            
-            int idRequisicionP = Integer.parseInt(x.get("IDREQUISICIONP").toString());
-            
-            sql = "SELECT IDAAPPREQUISICION FROM AAPPREQUISICION WHERE IDREQUISICIONP = " + idRequisicionP;
-            aprobaciones = gisService.consulta(sql);
-            if(aprobaciones.isEmpty())
-            {                
-                x.put("JEFEORGANO", "Pendiente");                
-                x.put("DIRECTOREJECUTIVO", "Pendiente");
-                
-                resultadoFinal.add(x);                
-            }
-            else
-            {
-                //Falta validar aqui
-                //Primero si solo hay 1 aprobado (se va a caer por habrá índice 0 == tamaño 1
-                //Ahora como identificar que el estado es de Jefe Órgano o de Director Ejecutivo?
-                String estado;
-                
-                estado = aprobaciones.get(0).get("estado").toString();                
-                x.put("Jefe Organo", estado);
-                
-                estado = aprobaciones.get(1).get("estado").toString();
-                x.put("Director Ejecutivo", estado);
-                resultadoFinal.add(x);
-            }
-        }
+                        "INNER JOIN DEPENDENCIACATALOGO d ON u.UORGANICA_CATALOGO = d.IDCATALOGODEPEND " +
+                        "ORDER BY r.idRequisicionP ASC";
 
-        return resultadoFinal;        
+        System.err.println("****************************************************");
+        System.err.println("SQL: " + sql);
+        System.err.println("****************************************************");
+        List<Map<String, Object>> objects = gisService.consulta(sql);        
+
+        return objects;        
     }
     
     //Validaciones

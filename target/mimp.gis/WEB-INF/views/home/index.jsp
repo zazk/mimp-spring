@@ -66,17 +66,20 @@
 			success: function(resultado)
                         {
                             console.log(resultado);
-                            
+                            var fecha;
                             $('#respuesta').html(
                                 resultado.map(function(e)
                                 {
-                                    return 'ID: ' + e.IDREQUISICIONP + ' - DEPENDENCIA: ' + e.DEPENDENCIA +
-                                            ' - PUESTO: ' + e.PUESTO + ' - NROPUESTOS: ' + e.NROPUESTOS +
-                                            ' - MONTOMES: ' + e.MONTOMES +
-                                            '<br>JEFE ÓRGANO: ' + e.JEFEORGANO +
-                                            ' - DIRECTOR EJECUTIVO: ' + e.DIRECTOREJECUTIVO +
-                                            '<br>FECHA APROBACIÓN: ' + 'NO ESTÁ EN LA TABLA REQUISION' + ' - TIPO REQUERIMIENTO: ' + 'NO ESTÁ EN LA TABLA REQUISION'
-                                            '<br>******************************************************';
+                                    fecha =(e.FEC_APROBA === null)?'AUN NO SE APRUEBA':e.FEC_APROBA;
+                                    return '' + e.IDREQUISICIONP + ' - ' + e.DEPENDENCIA +
+                                            ' - ' + e.PUESTO + ' - ' + e.NROPUESTOS +
+                                            ' - ' + e.MONTOMES + '-  ' + e.JEFEORGANO +
+                                            ' - ' + e.DIRECTOREJECUTIVO +
+                                            ' - FECHA APROBACIÓN: ' + fecha +
+                                            ' - TIPO REQUERIMIENTO: ' + e.TIPOREQUERIMIENTO +
+                                            '<br>****************************************************' +
+                                            '********************************************************' +
+                                            '**********************************************************';
                                 }).join('<br>')
                             );
 			},

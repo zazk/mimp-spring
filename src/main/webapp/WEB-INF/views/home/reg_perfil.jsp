@@ -107,12 +107,12 @@
                 <label class="input-group-addon col-5">Usu_Crea</label>
                  <input class="form-control" id="usu_crea" type="number">
              </div>
-        </div>
+        </div>        
         
         <div class="col-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-5">Puesto</label>
-                 <input class="form-control" id="idperfilPuesto" type="number" value="1">
+                <label class="input-group-addon col-5">Tipo Requerimiento</label>
+                <input class="form-control" id="tipoRequerimiento" type="text" value="N" maxlength="1">
              </div>
         </div>
     </div>
@@ -607,7 +607,6 @@
                 
                 //Inputs
                 var idUOrganica = $('#idUOrganica');
-                var idperfilPuesto = $('#idperfilPuesto');
                 var montoMes = $('#montoMes');
                 var nroPuestos = $('#nroPuestos');
                 var fe_inicio = $('#fe_inicio');
@@ -616,6 +615,7 @@
                 var sustentoNac = $('#sustentoNac');
                 var usu_crea = $('#usu_crea');
                 var idThorarios = $('#idThorarios');
+                var tipoRequerimiento = $('#tipoRequerimiento');
                 //
                 var idPerfilPuesto = $('#idPerfilPuesto');
                 var nomPuesto = $('#nomPuesto');
@@ -671,7 +671,7 @@
                    $('#respuesta').html('Cargando...');
                    var data = {
                                 idUOrganica: idUOrganica.val(),
-                                idperfilPuesto: idperfilPuesto.val(),
+                                idPerfilPuesto:  idPerfilPuesto.val(),
                                 montoMes: montoMes.val(),
                                 nroPuestos: nroPuestos.val(),
                                 fe_inicio: fe_inicio.val(),
@@ -679,7 +679,8 @@
                                 nacPeruana: nacPeruana.val(),
                                 sustentoNac: sustentoNac.val(),
                                 usu_crea: usu_crea.val(),
-                                idThorarios: idThorarios.val()
+                                idThorarios: idThorarios.val(),
+                                tipoRequerimiento: tipoRequerimiento.val()
                               };
                    
                    console.log('Data: ' + data);
