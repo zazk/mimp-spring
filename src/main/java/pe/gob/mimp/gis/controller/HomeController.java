@@ -2405,20 +2405,176 @@ public class HomeController {
     }
     
     //Cronograma
-    @RequestMapping(value = "/home/readCronograma", method = RequestMethod.GET)
-    public @ResponseBody List<Map<String,Object>> readCronograma()
+    @RequestMapping(value = "/home/updateCronogramaP", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> createCronogramaP(HttpServletRequest request)
+    {           
+        String idRequisicionP[] = request.getParameterValues("idRequisicionP");
+        String fInicio_mtpe = request.getParameter("fInicio_mtpe");
+        String fTermino_mtpe = request.getParameter("fTermino_mtpe");
+        String fInicio_portal = request.getParameter("fInicio_portal");
+        String fTermino_portal = request.getParameter("fTermino_portal");
+        String fInicio_evaCurr = request.getParameter("fInicio_evaCurr");
+        String fTerm_evaCurr = request.getParameter("fTerm_evaCurr");
+        String fInicio_evaTec = request.getParameter("fInicio_evaTec");
+        String fTerm_evaTec = request.getParameter("fTerm_evaTec");
+        String fInicio_evaPsico = request.getParameter("fInicio_evaPsico");
+        String fTerm_evaPsico = request.getParameter("fTerm_evaPsico");
+        String fInicio_entrev = request.getParameter("fInicio_entrev");
+        String fTerm_entrev = request.getParameter("fTerm_entrev");
+        String fInicio_suscr = request.getParameter("fInicio_suscr");
+        String fTerm_suscr = request.getParameter("fTerm_suscr");
+        String fPubl_apto1 = request.getParameter("fPubl_apto1");
+        String fpubl_apto2 = request.getParameter("fpubl_apto2");
+        String fpubli_apto3 = request.getParameter("fpubli_apto3");
+        String fpublic_apto4 = request.getParameter("fpublic_apto4");
+        String fpublic_apto5 = request.getParameter("fpublic_apto5");
+        String observa = request.getParameter("observa");
+        String estadoProceso = request.getParameter("estadoProceso");
+        String usu_crea = request.getParameter("usu_crea");                            
+        
+        String [] campos = {"fInicio_mtpe", "fTermino_mtpe",
+                            "fInicio_portal", "fTermino_portal", "fInicio_evaCurr", "fTerm_evaCurr",
+                            "fInicio_evaTec", "fTerm_evaTec", "fInicio_evaPsico", "fTerm_evaPsico",
+                            "fInicio_entrev", "fTerm_entrev", "fInicio_suscr", "fTerm_suscr",
+                            "fPubl_apto1", "fpubl_apto2", "fpubli_apto3", "fpublic_apto4", "fpublic_apto5",
+                            "observa", "estadoProceso", "usu_crea"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        
+        if(idRequisicionP.length == 0)
+        {
+                candidatos = new ArrayList<Map<String,Object>>();
+                error.put("error", true);
+                error.put("mensaje", "idRequisionP vacío(s)");
+                candidatos.add(error);
+            return candidatos;
+        }                
+        
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;                      
+            int _estadoProceso = Integer.parseInt(estadoProceso);
+            int _usu_crea = Integer.parseInt(usu_crea);
+                               
+            String fechas[] = convertirFecha(fInicio_mtpe, fTermino_mtpe, fInicio_portal, fTermino_portal, 
+                                fInicio_evaCurr, fTerm_evaCurr, fInicio_evaTec, fTerm_evaTec, fInicio_evaPsico, 
+                                fTerm_evaPsico, fInicio_entrev, fTerm_entrev, fInicio_suscr, 
+                                fTerm_suscr, fPubl_apto1, fpubl_apto2, fpubli_apto3, fpublic_apto4, fpublic_apto5);
+            
+            int rpta = 0;
+            for(String x:idRequisicionP)
+            {
+                int _idRequisicionP = Integer.parseInt(x);
+                
+                sql =   "MERGE " +
+                        "INTO CRONOGRAMAP c " +
+                        "USING " +
+                        "( " +
+                        "    SELECT  " +
+                        "            ? idRequisicionP, ? fInicio_mtpe, ? fTermino_mtpe, ? fInicio_portal,  " +
+                        "            ? fTermino_portal, ? fInicio_evaCurr, ? fTerm_evaCurr, ? fInicio_evaTec,  " +
+                        "            ? fTerm_evaTec, ? fInicio_evaPsico, ? fTerm_evaPsico, ? fInicio_entrev,  " +
+                        "            ? fTerm_entrev, ? fInicio_suscr, ? fTerm_suscr, ? fPubl_apto1,  " +
+                        "            ? fpubl_apto2, ? fpubli_apto3, ? fpublic_apto4, ? fpublic_apto5,  " +
+                        "            ? observa, ? estadoProceso, ? usu_crea  " +
+                        "    FROM DUAL " +
+                        ") d " +
+                        "ON (c.idRequisicionP = d.idRequisicionP) " +
+                        "WHEN MATCHED THEN " +
+                        "    UPDATE SET " +
+                        "        c.fInicio_mtpe = d.fInicio_mtpe, c.fTermino_mtpe = d.fTermino_mtpe, c.fInicio_portal = d.fInicio_portal, " +
+                        "        c.fTermino_portal = d.fTermino_portal, c.fInicio_evaCurr = d.fInicio_evaCurr, c.fTerm_evaCurr = d.fTerm_evaCurr, " +
+                        "        c.fInicio_evaTec = d.fInicio_evaTec, c.fTerm_evaTec = d.fTerm_evaTec, c.fInicio_evaPsico = d.fInicio_evaPsico, " +
+                        "        c.fTerm_evaPsico = d.fTerm_evaPsico, c.fInicio_entrev = d.fInicio_entrev, c.fTerm_entrev = d.fTerm_entrev, " +
+                        "        c.fInicio_suscr = d.fInicio_suscr, c.fTerm_suscr = d.fTerm_suscr, c.fPubl_apto1 = d.fPubl_apto1, " +
+                        "        c.fpubl_apto2 = d.fpubl_apto2, c.fpubli_apto3 = d.fpubli_apto3, c.fpublic_apto4 = d.fpublic_apto4, " +
+                        "        c.fpublic_apto5 = d.fpublic_apto5, c.observa = d.observa, c.estadoProceso = d.estadoProceso " +
+                        "WHEN NOT MATCHED THEN " +
+                        "    INSERT VALUES " +
+                        "        (cronogramap_seq.nextval, d.idRequisicionP, d.fInicio_mtpe, d.fTermino_mtpe, d.fInicio_portal, d.fTermino_portal, " +
+                        "        d.fInicio_evaCurr, d.fTerm_evaCurr, d.fInicio_evaTec, d.fTerm_evaTec, d.fInicio_evaPsico, d.fTerm_evaPsico, " +
+                        "        d.fInicio_entrev, d.fTerm_entrev, d.fInicio_suscr, d.fTerm_suscr, d.fPubl_apto1, d.fpubl_apto2, d.fpubli_apto3, " +
+                        "        d.fpublic_apto4, d.fpublic_apto5, d.observa, d.estadoProceso, null, sysdate, d.usu_crea)";
+
+                //Tamaño: 19, Índice: 18
+                int contador = gisService.update(sql, _idRequisicionP, fechas[0], fechas[1], fechas[2], fechas[3], fechas[4], 
+                            fechas[5], fechas[6], fechas[7], fechas[8], fechas[9], fechas[10], fechas[11], fechas[12], 
+                            fechas[13], fechas[14], fechas[15], fechas[16], fechas[17], fechas[18], observa, _estadoProceso, _usu_crea);
+                
+                rpta+= contador;
+            }
+            
+
+            
+            
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se actualizaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se actualizaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/readCronogramaP", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readCronogramaP()
     {   
-        String sql =    "SELECT r.*, f.DESCRIPCIONPUESTO puesto, a1.estado estadoJefe1, a2.estado estadoJefe2, c.estadoProceso estadoCertificacion " +
-                        "FROM REQUISIONPUESTO r " +
+        String sql =    "SELECT " +
+                        "c.IDCRONOGRAMAP ,c.IDREQUISICIONP, f.DESCRIPCIONPUESTO puesto, " +
+                        "TO_CHAR(c.FINICIO_MTPE, 'YYYY-MM-DD') FINICIO_MTPE, TO_CHAR(c.FTERMINO_MTPE, 'YYYY-MM-DD') FTERMINO_MTPE, " +
+                        "TO_CHAR(c.FINICIO_PORTAL, 'YYYY-MM-DD') FINICIO_PORTAL, TO_CHAR(c.FTERMINO_PORTAL, 'YYYY-MM-DD') FTERMINO_PORTAL, " +
+                        "TO_CHAR(c.FINICIO_EVACURR, 'YYYY-MM-DD') FINICIO_EVACURR, TO_CHAR(c.FTERM_EVACURR, 'YYYY-MM-DD') FTERM_EVACURR, " +
+                        "TO_CHAR(c.FINICIO_EVATEC, 'YYYY-MM-DD') FINICIO_EVATEC, TO_CHAR(c.FTERM_EVATEC, 'YYYY-MM-DD') FTERM_EVATEC, " +
+                        "TO_CHAR(c.FINICIO_ENTREV, 'YYYY-MM-DD') FINICIO_ENTREV, TO_CHAR(c.FTERM_ENTREV, 'YYYY-MM-DD') FTERM_ENTREV, " +
+                        "TO_CHAR(c.FINICIO_EVAPSICO, 'YYYY-MM-DD') FINICIO_EVAPSICO, TO_CHAR(c.FTERM_EVAPSICO, 'YYYY-MM-DD') FTERM_EVAPSICO, " +
+                        "TO_CHAR(c.FINICIO_SUSCR, 'YYYY-MM-DD') FINICIO_SUSCR, TO_CHAR(c.FTERM_SUSCR, 'YYYY-MM-DD') FTERM_SUSCR, " +
+                        "e.ESTADONOMBRE as ESTADO , C.ESTADOPROCESO " +
+                        "FROM CRONOGRAMAP c " +
+                        "INNER JOIN ESTADO e ON c.estadoProceso = e.IDESTADO " +
+                        "RIGHT JOIN REQUISIONPUESTO r ON c.idRequisicionP = r.idRequisicionP " +
                         "INNER JOIN FUNCIONPUESTO f ON r.idRequisicionP = f.idPerfilPuesto " +
                         "INNER JOIN AAPPREQUISICION a1 ON r.idRequisicionP = a1.idRequisicionP and a1.IDAAPPREQUISICION = 1 and a1.estado = 4 " +
                         "INNER JOIN AAPPREQUISICION a2 ON r.idRequisicionP = a2.idRequisicionP and a2.IDAAPPREQUISICION = 2 and a2.estado = 4 " +
-                        "INNER JOIN CERTIFICAPPTO c ON r.idRequisicionP = c.idRequisicion and c.estadoProceso = 4 " +
+                        "INNER JOIN CERTIFICAPPTO cp ON r.idRequisicionP = cp.idRequisicion and cp.estadoProceso = 4 " +
                         "ORDER BY r.idRequisicionP ASC";
 
         List<Map<String, Object>> objects = gisService.consulta(sql);        
 
         return objects;        
+    }
+    
+    //Método
+    String[] convertirFecha(String... fechas)
+    {
+        int tamano = fechas.length;
+        String misFechas[] = new String[tamano];
+        int cont = 0;
+        
+        for(String x:fechas)
+        {   
+            String fecha[] = x.split("-");            
+            misFechas[cont] = fecha[2] + "-" + fecha[1] + "-" + fecha[0];
+            cont++;
+        }   
+        
+        for(String x:misFechas)
+            System.err.println("Verificando Fecha formateada: " + x);
+        
+        System.err.println("*********************************************************************************************");
+        
+        return misFechas;
     }
     
     //Validaciones

@@ -25,62 +25,162 @@
     <!-- 1 -->
     <div class="row">
         <div class="col-12">
-            <button id="createCertificaPpto" type="button" class="btn btn-success">Create CertificaPpto</button>
-            <button id="readCertificaPpto" type="button" class="btn btn-success">Read CertificaPpto</button>
-            <button id="updateCertificaPpto" type="button" class="btn btn-success">Update CertificaPpto</button>
+            <button id="updateCronogramaP" type="button" class="btn btn-success">Create/Update CronogramaP</button>
+            <button id="readCronogramaP" type="button" class="btn btn-success">Read CronogramaP</button>
             <br><br>
             <p id="respuesta"></p>
         </div>
-                        
+
         <div class="col-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-5">idCodPpto</label>
-                 <input class="form-control" id="idCodPpto" type="number">             
+                <label class="input-group-addon col-5">idRequisicionP</label>
+                 <input class="form-control" id="idRequisicionP" type="number">             
+            </div>              
+        </div>
+        
+        <!-- Inicia las fechas -->  
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fInicio_mtpe</label>
+                 <input class="form-control" id="fInicio_mtpe" type="date">             
             </div>              
         </div>
         
         <div class="col-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-5">idRequisicion</label>
-                 <input class="form-control" id="idRequisicion" type="number">             
+                <label class="input-group-addon col-5">fTermino_mtpe</label>
+                 <input class="form-control" id="fTermino_mtpe" type="date">             
             </div>              
         </div>
         
         <div class="col-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-5">nroCertificacion</label>
-                 <input class="form-control" id="nroCertificacion" type="number">             
+                <label class="input-group-addon col-5">fInicio_portal</label>
+                 <input class="form-control" id="fInicio_portal" type="date">             
             </div>              
         </div>
         
         <div class="col-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-5">fteFto</label>
-                 <input class="form-control" id="fteFto" type="number">             
-            </div>              
-        </div>        
-        
-        <div class="col-3 form-group">
-             <div class="input-group">
-                <label class="input-group-addon col-5">idMetaPpto</label>
-                 <input class="form-control" id="idMetaPpto" type="number">             
+                <label class="input-group-addon col-5">fTermino_portal</label>
+                 <input class="form-control" id="fTermino_portal" type="date">             
             </div>              
         </div>
         
         <div class="col-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-5">creditoPptal</label>
-                 <input class="form-control" id="creditoPptal" type="number">             
+                <label class="input-group-addon col-5">fInicio_evaCurr</label>
+                 <input class="form-control" id="fInicio_evaCurr" type="date">             
             </div>              
         </div>
         
         <div class="col-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-5">observac</label>
-                 <input class="form-control" id="observac" type="text">             
+                <label class="input-group-addon col-5">fTerm_evaCurr</label>
+                 <input class="form-control" id="fTerm_evaCurr" type="date">             
             </div>              
         </div>
-               
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fInicio_evaTec</label>
+                 <input class="form-control" id="fInicio_evaTec" type="date">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fTerm_evaTec</label>
+                 <input class="form-control" id="fTerm_evaTec" type="date">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fInicio_evaPsico</label>
+                 <input class="form-control" id="fInicio_evaPsico" type="date">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fTerm_evaPsico</label>
+                 <input class="form-control" id="fTerm_evaPsico" type="date">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fInicio_entrev</label>
+                 <input class="form-control" id="fInicio_entrev" type="date">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fTerm_entrev</label>
+                 <input class="form-control" id="fTerm_entrev" type="date">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fInicio_suscr</label>
+                 <input class="form-control" id="fInicio_suscr" type="date">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fTerm_suscr</label>
+                 <input class="form-control" id="fTerm_suscr" type="date">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fPubl_apto1</label>
+                 <input class="form-control" id="fPubl_apto1" type="date">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fpubl_apto2</label>
+                 <input class="form-control" id="fpubl_apto2" type="date">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fpubli_apto3</label>
+                 <input class="form-control" id="fpubli_apto3" type="date">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fpublic_apto4</label>
+                 <input class="form-control" id="fpublic_apto4" type="date">             
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">fpublic_apto5</label>
+                 <input class="form-control" id="fpublic_apto5" type="date">             
+            </div>              
+        </div>
+        
+        <!-- Finaliza las fechas -->       
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">observa</label>
+                 <input class="form-control" id="observa" type="text">             
+            </div>              
+        </div>
+        
         <div class="col-3 form-group">
              <div class="input-group">
                 <label class="input-group-addon col-5">estadoProceso</label>
@@ -108,39 +208,69 @@
                 $('#respuesta').html('Ready');
                 
                 //Botones
-                var createCertificaPpto = $('#createCertificaPpto');
-                var readCertificaPpto = $('#readCertificaPpto');
-                var updateCertificaPpto = $('#updateCertificaPpto');
+                var updateCronogramaP = $('#updateCronogramaP');
+                var readCronogramaP = $('#readCronogramaP');
 
                 //Input
-                var idCodPpto = $('#idCodPpto');
-                var idRequisicion = $('#idRequisicion');
-                var nroCertificacion = $('#nroCertificacion');
-                var fteFto = $('#fteFto');
-                var idMetaPpto = $('#idMetaPpto');
-                var creditoPptal = $('#creditoPptal');
-                var observac = $('#observac');
+                var idRequisicionP = $('#idRequisicionP');
+                var fInicio_mtpe = $('#fInicio_mtpe');
+                var fTermino_mtpe = $('#fTermino_mtpe');
+                var fInicio_portal = $('#fInicio_portal');
+                var fTermino_portal = $('#fTermino_portal');
+                var fInicio_evaCurr = $('#fInicio_evaCurr');
+                var fTerm_evaCurr = $('#fTerm_evaCurr');
+                var fInicio_evaTec = $('#fInicio_evaTec');
+                var fTerm_evaTec = $('#fTerm_evaTec');
+                var fInicio_evaPsico = $('#fInicio_evaPsico');
+                var fTerm_evaPsico = $('#fTerm_evaPsico');
+                var fInicio_entrev = $('#fInicio_entrev');
+                var fTerm_entrev = $('#fTerm_entrev');
+                var fInicio_suscr = $('#fInicio_suscr');
+                var fTerm_suscr = $('#fTerm_suscr');
+                var fPubl_apto1 = $('#fPubl_apto1');
+                var fpubl_apto2 = $('#fpubl_apto2');
+                var fpubli_apto3 = $('#fpubli_apto3');
+                var fpublic_apto4 = $('#fpublic_apto4');
+                var fpublic_apto5 = $('#fpublic_apto5');
+                var observa = $('#observa');
                 var estadoProceso = $('#estadoProceso');
                 var usu_crea = $('#usu_crea');
                
-               createCertificaPpto.click(function()
+               updateCronogramaP.click(function()
                {                                      
                    $('#respuesta').html('Cargando...');
                                             
                    var data = {
-                                idRequisicion: idRequisicion.val(),
-                                nroCertificacion: nroCertificacion.val(),
-                                fteFto: fteFto.val(),
-                                idMetaPpto: idMetaPpto.val(),
-                                creditoPptal: creditoPptal.val(),
-                                observac: observac.val(),
+                                idRequisicionP: idRequisicionP.val(),
+                                fInicio_mtpe: fInicio_mtpe.val(),
+                                fTermino_mtpe: fTermino_mtpe.val(),
+                                fInicio_portal: fInicio_portal.val(),
+                                fTermino_portal: fTermino_portal.val(),
+                                fInicio_evaCurr: fInicio_evaCurr.val(),
+                                fTerm_evaCurr: fTerm_evaCurr.val(),
+                                fInicio_evaTec: fInicio_evaTec.val(),
+                                fTerm_evaTec: fTerm_evaTec.val(),
+                                fInicio_evaPsico: fInicio_evaPsico.val(),
+                                fTerm_evaPsico: fTerm_evaPsico.val(),
+                                fInicio_entrev: fInicio_entrev.val(),
+                                fTerm_entrev: fTerm_entrev.val(),
+                                fInicio_suscr: fInicio_suscr.val(),
+                                fTerm_suscr: fTerm_suscr.val(),
+                                fPubl_apto1: fPubl_apto1.val(),
+                                fpubl_apto2: fpubl_apto2.val(),
+                                fpubli_apto3: fpubli_apto3.val(),
+                                fpublic_apto4: fpublic_apto4.val(),
+                                fpublic_apto5: fpublic_apto5.val(),
+                                observa: observa.val(),
                                 estadoProceso: estadoProceso.val(),
                                 usu_crea: usu_crea.val()
                               };                   
                    
+                   console.log(data);
+                   
                    $.ajax({
 			type: 'POST',			
-			url: 'createCertificaPpto',
+			url: 'updateCronogramaP',
                         data: data,
 			success: function(resultado)
                         {                                                        
@@ -159,34 +289,26 @@
                             $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
                         }
                     });
-               });//Create CertificaPpto
+               });//Create CronogramaP
                
-               readCertificaPpto.click(function()
+               readCronogramaP.click(function()
                {
                    $('#respuesta').html('Cargando...');
                    var data={};
                    
                    $.ajax({
 			type: 'GET',			
-			url: 'readCertificaPpto',
+			url: 'readCronogramaP',
                         data: data,
 			success: function(resultado)
                         {
                             console.log(resultado);
-                            var fecha;
                             $('#respuesta').html(
                                 resultado.map(function(e)
                                 {
-                                    fecha =(e.FEC_APROBA === null)?'AUN NO SE APRUEBA':e.FEC_APROBA;
-                                    return '' + e.IDCODPPTO + ' - ' + e.DEPENDENCIA +
-                                            ' - ' + e.PUESTO + ' - ' + e.NROPUESTOS +
-                                            ' - ' + e.MONTOMES + '-  ' + e.NROCERTIFICACION +
-                                            ' - ' + e.FTEFTO + ' - ' + e.META + ' - ' + e.CREDITOPPTAL +
-                                            ' - ' + e.OBSERVAC + ' - ' + e.FE_CREA +
-                                            ' - ' + e.ESTADO +
-                                            '<br>****************************************************' +
-                                            '********************************************************' +
-                                            '**********************************************************';
+                                    var crono = (e.IDCRONOGRAMAP)?e.IDCRONOGRAMAP:'Aún no se crea cronograma';
+                                    
+                                    return 'IDCRONOGRAMAP: ' + crono + '- IDREQUISICIONP: '+ e.IDREQUISICIONP;
                                 }).join('<br>')
                             );
 			},
@@ -194,41 +316,7 @@
                             $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
                         }
                     });
-               });//read CertificaPpto
-               
-               updateCertificaPpto.click(function()
-               {                                      
-                   $('#respuesta').html('Cargando...');
-                                            
-                   var data = {
-                                idCodPpto: idCodPpto.val(),
-                                estadoProceso: estadoProceso.val()
-                              };
-                   
-                   console.log(data);
-                   
-                   $.ajax({
-			type: 'POST',			
-			url: 'updateCertificaPpto',
-                        data: data,
-			success: function(resultado)
-                        {                                                        
-                            $('#respuesta').html(
-                                'Mensaje: ' + resultado.map(function(e)
-                                {
-                                    return e.mensaje;
-                                }).join(', ') + '<br>Error: ' + resultado.map(function(e)
-                                {
-                                    return e.error;
-                                }).join(', ')
-                            );
-			},
-                        error: function (jqXHR, textStatus, errorThrown)
-                        {
-                            $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
-                        }
-                    });
-               });//Update CertificaPpto
+               });//read CronogramaP               
             });//Jquery
 
         </script>
