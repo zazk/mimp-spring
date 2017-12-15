@@ -212,7 +212,7 @@
                 var readCronogramaP = $('#readCronogramaP');
 
                 //Input
-                var idRequisicionP = $('#idRequisicionP');
+                //var idRequisicionP = $('#idRequisicionP');
                 var fInicio_mtpe = $('#fInicio_mtpe');
                 var fTermino_mtpe = $('#fTermino_mtpe');
                 var fInicio_portal = $('#fInicio_portal');
@@ -241,7 +241,7 @@
                    $('#respuesta').html('Cargando...');
                                             
                    var data = {
-                                idRequisicionP: idRequisicionP.val(),
+                                idRequisicionP: [{ID: "1"}, {ID: "1"}, {ID:"1"}],
                                 fInicio_mtpe: fInicio_mtpe.val(),
                                 fTermino_mtpe: fTermino_mtpe.val(),
                                 fInicio_portal: fInicio_portal.val(),

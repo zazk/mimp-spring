@@ -1,6 +1,7 @@
 package pe.gob.mimp.gis.controller;
  
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import pe.gob.mimp.gis.entity.Usuario;
 import pe.gob.mimp.gis.entity.Entidad;
@@ -2406,9 +2407,10 @@ public class HomeController {
     
     //Cronograma
     @RequestMapping(value = "/home/updateCronogramaP", method = RequestMethod.POST)
-    public @ResponseBody List<Map<String,Object>> createCronogramaP(HttpServletRequest request)
-    {           
-        String idRequisicionP[] = request.getParameterValues("idRequisicionP");
+    public @ResponseBody List<Map<String,Object>> updateCronogramaP(HttpServletRequest request)
+    {
+        //Refactorizar
+        String idRequisicionP[];
         String fInicio_mtpe = request.getParameter("fInicio_mtpe");
         String fTermino_mtpe = request.getParameter("fTermino_mtpe");
         String fInicio_portal = request.getParameter("fInicio_portal");
@@ -2439,18 +2441,20 @@ public class HomeController {
                             "fPubl_apto1", "fpubl_apto2", "fpubli_apto3", "fpublic_apto4", "fpublic_apto5",
                             "observa", "estadoProceso", "usu_crea"};
 
-        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        List<Map<String,Object>> candidatos = new ArrayList<Map<String,Object>>();
         Map error = new HashMap();
+                               
+        idRequisicionP = convertirEnArreglo(request, "idRequisicionP");
         
-        if(idRequisicionP.length == 0)
+        if(idRequisicionP == null)
         {
-                candidatos = new ArrayList<Map<String,Object>>();
-                error.put("error", true);
-                error.put("mensaje", "idRequisionP vacío(s)");
-                candidatos.add(error);
+            error.put("error", true);
+            error.put("mensaje", "idRequisionP está vacío");
+            candidatos.add(error);
             return candidatos;
-        }                
-        
+        }
+ 
+        candidatos = hayCamposVacios(request, campos);
         boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());
         
         if(!hayError)
@@ -2507,10 +2511,7 @@ public class HomeController {
                 
                 rpta+= contador;
             }
-            
 
-            
-            
             if(rpta > 0)
             {
                 error.put("error", false);
@@ -2555,7 +2556,7 @@ public class HomeController {
         return objects;        
     }
     
-    //Método
+    //Métodos
     String[] convertirFecha(String... fechas)
     {
         int tamano = fechas.length;
@@ -2569,12 +2570,27 @@ public class HomeController {
             cont++;
         }   
         
-        for(String x:misFechas)
-            System.err.println("Verificando Fecha formateada: " + x);
-        
-        System.err.println("*********************************************************************************************");
-        
         return misFechas;
+    }
+    
+    String[] convertirEnArreglo(HttpServletRequest request, String nombre)
+    {
+        Map<String, String[]> map = request.getParameterMap();
+        String aux = "";
+        
+        for(String x:map.keySet())
+        {
+            if(x.startsWith(nombre))                
+                aux+= map.get(x)[0] +",";
+        }
+        
+        if(!aux.isEmpty())
+        {
+            aux = aux.substring(0, aux.lastIndexOf(","));
+            return aux.split(",");
+        }
+
+        return null;
     }
     
     //Validaciones
