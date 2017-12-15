@@ -1,7 +1,15 @@
 package pe.gob.mimp.gis.controller;
  
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import pe.gob.mimp.gis.entity.Usuario;
 import pe.gob.mimp.gis.entity.Entidad;
@@ -13,13 +21,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired; 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod; 
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView; 
+import pe.gob.mimp.gis.commons.Constantes;
+import pe.gob.mimp.gis.commons.Locations;
+import pe.gob.mimp.gis.entity.FileUploadForm;
 import pe.gob.mimp.gis.service.GisService;
 
 /**
@@ -34,6 +47,8 @@ public class HomeController {
     private EntidadService entidadService;
     @Autowired
     private GisService gisService;
+    @Autowired
+    private Locations locations;
     
     private static Logger log = LoggerFactory.getLogger(UsuarioController.class);
 
@@ -430,6 +445,7 @@ public class HomeController {
         return candidatos;
     }
     
+    //Datos Personales
     @RequestMapping(value = "/home/buscarcandidato", method = RequestMethod.GET)
     public @ResponseBody List<Map<String,Object>> buscarcandidato(HttpServletRequest request)
     {   
@@ -2405,130 +2421,7 @@ public class HomeController {
         return candidatos;
     }
     
-    //Cronograma
-    @RequestMapping(value = "/home/updateCronogramaP", method = RequestMethod.POST)
-    public @ResponseBody List<Map<String,Object>> updateCronogramaP(HttpServletRequest request)
-    {
-        //Refactorizar
-        String idRequisicionP[];
-        String fInicio_mtpe = request.getParameter("fInicio_mtpe");
-        String fTermino_mtpe = request.getParameter("fTermino_mtpe");
-        String fInicio_portal = request.getParameter("fInicio_portal");
-        String fTermino_portal = request.getParameter("fTermino_portal");
-        String fInicio_evaCurr = request.getParameter("fInicio_evaCurr");
-        String fTerm_evaCurr = request.getParameter("fTerm_evaCurr");
-        String fInicio_evaTec = request.getParameter("fInicio_evaTec");
-        String fTerm_evaTec = request.getParameter("fTerm_evaTec");
-        String fInicio_evaPsico = request.getParameter("fInicio_evaPsico");
-        String fTerm_evaPsico = request.getParameter("fTerm_evaPsico");
-        String fInicio_entrev = request.getParameter("fInicio_entrev");
-        String fTerm_entrev = request.getParameter("fTerm_entrev");
-        String fInicio_suscr = request.getParameter("fInicio_suscr");
-        String fTerm_suscr = request.getParameter("fTerm_suscr");
-        String fPubl_apto1 = request.getParameter("fPubl_apto1");
-        String fpubl_apto2 = request.getParameter("fpubl_apto2");
-        String fpubli_apto3 = request.getParameter("fpubli_apto3");
-        String fpublic_apto4 = request.getParameter("fpublic_apto4");
-        String fpublic_apto5 = request.getParameter("fpublic_apto5");
-        String observa = request.getParameter("observa");
-        String estadoProceso = request.getParameter("estadoProceso");
-        String usu_crea = request.getParameter("usu_crea");                            
-        
-        String [] campos = {"fInicio_mtpe", "fTermino_mtpe",
-                            "fInicio_portal", "fTermino_portal", "fInicio_evaCurr", "fTerm_evaCurr",
-                            "fInicio_evaTec", "fTerm_evaTec", "fInicio_evaPsico", "fTerm_evaPsico",
-                            "fInicio_entrev", "fTerm_entrev", "fInicio_suscr", "fTerm_suscr",
-                            "fPubl_apto1", "fpubl_apto2", "fpubli_apto3", "fpublic_apto4", "fpublic_apto5",
-                            "observa", "estadoProceso", "usu_crea"};
-
-        List<Map<String,Object>> candidatos = new ArrayList<Map<String,Object>>();
-        Map error = new HashMap();
-                               
-        idRequisicionP = convertirEnArreglo(request, "idRequisicionP");
-        
-        if(idRequisicionP == null)
-        {
-            error.put("error", true);
-            error.put("mensaje", "idRequisionP está vacío");
-            candidatos.add(error);
-            return candidatos;
-        }
- 
-        candidatos = hayCamposVacios(request, campos);
-        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());
-        
-        if(!hayError)
-        {
-            candidatos = new ArrayList<Map<String,Object>>();
-            String sql;                      
-            int _estadoProceso = Integer.parseInt(estadoProceso);
-            int _usu_crea = Integer.parseInt(usu_crea);
-                               
-            String fechas[] = convertirFecha(fInicio_mtpe, fTermino_mtpe, fInicio_portal, fTermino_portal, 
-                                fInicio_evaCurr, fTerm_evaCurr, fInicio_evaTec, fTerm_evaTec, fInicio_evaPsico, 
-                                fTerm_evaPsico, fInicio_entrev, fTerm_entrev, fInicio_suscr, 
-                                fTerm_suscr, fPubl_apto1, fpubl_apto2, fpubli_apto3, fpublic_apto4, fpublic_apto5);
-            
-            int rpta = 0;
-            for(String x:idRequisicionP)
-            {
-                int _idRequisicionP = Integer.parseInt(x);
-                
-                sql =   "MERGE " +
-                        "INTO CRONOGRAMAP c " +
-                        "USING " +
-                        "( " +
-                        "    SELECT  " +
-                        "            ? idRequisicionP, ? fInicio_mtpe, ? fTermino_mtpe, ? fInicio_portal,  " +
-                        "            ? fTermino_portal, ? fInicio_evaCurr, ? fTerm_evaCurr, ? fInicio_evaTec,  " +
-                        "            ? fTerm_evaTec, ? fInicio_evaPsico, ? fTerm_evaPsico, ? fInicio_entrev,  " +
-                        "            ? fTerm_entrev, ? fInicio_suscr, ? fTerm_suscr, ? fPubl_apto1,  " +
-                        "            ? fpubl_apto2, ? fpubli_apto3, ? fpublic_apto4, ? fpublic_apto5,  " +
-                        "            ? observa, ? estadoProceso, ? usu_crea  " +
-                        "    FROM DUAL " +
-                        ") d " +
-                        "ON (c.idRequisicionP = d.idRequisicionP) " +
-                        "WHEN MATCHED THEN " +
-                        "    UPDATE SET " +
-                        "        c.fInicio_mtpe = d.fInicio_mtpe, c.fTermino_mtpe = d.fTermino_mtpe, c.fInicio_portal = d.fInicio_portal, " +
-                        "        c.fTermino_portal = d.fTermino_portal, c.fInicio_evaCurr = d.fInicio_evaCurr, c.fTerm_evaCurr = d.fTerm_evaCurr, " +
-                        "        c.fInicio_evaTec = d.fInicio_evaTec, c.fTerm_evaTec = d.fTerm_evaTec, c.fInicio_evaPsico = d.fInicio_evaPsico, " +
-                        "        c.fTerm_evaPsico = d.fTerm_evaPsico, c.fInicio_entrev = d.fInicio_entrev, c.fTerm_entrev = d.fTerm_entrev, " +
-                        "        c.fInicio_suscr = d.fInicio_suscr, c.fTerm_suscr = d.fTerm_suscr, c.fPubl_apto1 = d.fPubl_apto1, " +
-                        "        c.fpubl_apto2 = d.fpubl_apto2, c.fpubli_apto3 = d.fpubli_apto3, c.fpublic_apto4 = d.fpublic_apto4, " +
-                        "        c.fpublic_apto5 = d.fpublic_apto5, c.observa = d.observa, c.estadoProceso = d.estadoProceso " +
-                        "WHEN NOT MATCHED THEN " +
-                        "    INSERT VALUES " +
-                        "        (cronogramap_seq.nextval, d.idRequisicionP, d.fInicio_mtpe, d.fTermino_mtpe, d.fInicio_portal, d.fTermino_portal, " +
-                        "        d.fInicio_evaCurr, d.fTerm_evaCurr, d.fInicio_evaTec, d.fTerm_evaTec, d.fInicio_evaPsico, d.fTerm_evaPsico, " +
-                        "        d.fInicio_entrev, d.fTerm_entrev, d.fInicio_suscr, d.fTerm_suscr, d.fPubl_apto1, d.fpubl_apto2, d.fpubli_apto3, " +
-                        "        d.fpublic_apto4, d.fpublic_apto5, d.observa, d.estadoProceso, null, sysdate, d.usu_crea)";
-
-                //Tamaño: 19, Índice: 18
-                int contador = gisService.update(sql, _idRequisicionP, fechas[0], fechas[1], fechas[2], fechas[3], fechas[4], 
-                            fechas[5], fechas[6], fechas[7], fechas[8], fechas[9], fechas[10], fechas[11], fechas[12], 
-                            fechas[13], fechas[14], fechas[15], fechas[16], fechas[17], fechas[18], observa, _estadoProceso, _usu_crea);
-                
-                rpta+= contador;
-            }
-
-            if(rpta > 0)
-            {
-                error.put("error", false);
-                error.put("mensaje", "Se actualizaron " + rpta + " registro(s).");
-            }
-            else
-            {
-                error.put("error", true);
-                error.put("mensaje", "No se actualizaron registros.");
-            }
-            
-            candidatos.add(error);
-        }
-
-        return candidatos;
-    }
-    
+    //Cronograma        
     @RequestMapping(value = "/home/readCronogramaP", method = RequestMethod.GET)
     public @ResponseBody List<Map<String,Object>> readCronogramaP()
     {   
@@ -2556,6 +2449,459 @@ public class HomeController {
         return objects;        
     }
     
+    @RequestMapping(value = "/home/updateCronogramaP", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> updateCronogramaP(HttpServletRequest request)
+    {
+        //Refactorizar
+        String idRequisicionP[];
+        String fInicio_mtpe = request.getParameter("fInicio_mtpe");
+        String fTermino_mtpe = request.getParameter("fTermino_mtpe");
+        String fInicio_portal = request.getParameter("fInicio_portal");
+        String fTermino_portal = request.getParameter("fTermino_portal");
+        String fInicio_evaCurr = request.getParameter("fInicio_evaCurr");
+        String fTerm_evaCurr = request.getParameter("fTerm_evaCurr");
+        String fInicio_evaTec = request.getParameter("fInicio_evaTec");
+        String fTerm_evaTec = request.getParameter("fTerm_evaTec");
+        String fInicio_evaPsico = request.getParameter("fInicio_evaPsico");
+        String fTerm_evaPsico = request.getParameter("fTerm_evaPsico");
+        String fInicio_entrev = request.getParameter("fInicio_entrev");
+        String fTerm_entrev = request.getParameter("fTerm_entrev");
+        String fInicio_suscr = request.getParameter("fInicio_suscr");
+        String fTerm_suscr = request.getParameter("fTerm_suscr");
+        String fPubl_apto1 = request.getParameter("fPubl_apto1");
+        String fpubl_apto2 = request.getParameter("fpubl_apto2");
+        String fpubli_apto3 = request.getParameter("fpubli_apto3");
+        String fpublic_apto4 = request.getParameter("fpublic_apto4");
+        String fpublic_apto5 = request.getParameter("fpublic_apto5");
+        String observa = request.getParameter("observa");
+        String usu_crea = request.getParameter("usu_crea");                            
+        
+        String [] campos = {"fInicio_mtpe", "fTermino_mtpe",
+                            "fInicio_portal", "fTermino_portal", "fInicio_evaCurr", "fTerm_evaCurr",
+                            "fInicio_evaTec", "fTerm_evaTec", "fInicio_evaPsico", "fTerm_evaPsico",
+                            "fInicio_entrev", "fTerm_entrev", "fInicio_suscr", "fTerm_suscr",
+                            "fPubl_apto1", "fpubl_apto2", "fpubli_apto3", "fpublic_apto4", "fpublic_apto5",
+                            "observa", "usu_crea"};
+
+        List<Map<String,Object>> candidatos = new ArrayList<Map<String,Object>>();
+        Map error = new HashMap();
+                               
+        idRequisicionP = convertirEnArreglo(request, "idRequisicionP");
+        
+        if(idRequisicionP == null)
+        {
+            error.put("error", true);
+            error.put("mensaje", "idRequisionP está vacío");
+            candidatos.add(error);
+            return candidatos;
+        }
+ 
+        candidatos = hayCamposVacios(request, campos);
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;                      
+            int _usu_crea = Integer.parseInt(usu_crea);
+                               
+            String fechas[] = convertirFecha(fInicio_mtpe, fTermino_mtpe, fInicio_portal, fTermino_portal, 
+                                fInicio_evaCurr, fTerm_evaCurr, fInicio_evaTec, fTerm_evaTec, fInicio_evaPsico, 
+                                fTerm_evaPsico, fInicio_entrev, fTerm_entrev, fInicio_suscr, 
+                                fTerm_suscr, fPubl_apto1, fpubl_apto2, fpubli_apto3, fpublic_apto4, fpublic_apto5);
+            
+            int rpta = 0;
+            for(String x:idRequisicionP)
+            {
+                int _idRequisicionP = Integer.parseInt(x);
+                
+                sql =   "MERGE " +
+                        "INTO CRONOGRAMAP c " +
+                        "USING " +
+                        "( " +
+                        "    SELECT  " +
+                        "            ? idRequisicionP, ? fInicio_mtpe, ? fTermino_mtpe, ? fInicio_portal,  " +
+                        "            ? fTermino_portal, ? fInicio_evaCurr, ? fTerm_evaCurr, ? fInicio_evaTec,  " +
+                        "            ? fTerm_evaTec, ? fInicio_evaPsico, ? fTerm_evaPsico, ? fInicio_entrev,  " +
+                        "            ? fTerm_entrev, ? fInicio_suscr, ? fTerm_suscr, ? fPubl_apto1,  " +
+                        "            ? fpubl_apto2, ? fpubli_apto3, ? fpublic_apto4, ? fpublic_apto5,  " +
+                        "            ? observa, ? usu_crea  " +
+                        "    FROM DUAL " +
+                        ") d " +
+                        "ON (c.idRequisicionP = d.idRequisicionP) " +
+                        "WHEN MATCHED THEN " +
+                        "    UPDATE SET " +
+                        "        c.fInicio_mtpe = d.fInicio_mtpe, c.fTermino_mtpe = d.fTermino_mtpe, c.fInicio_portal = d.fInicio_portal, " +
+                        "        c.fTermino_portal = d.fTermino_portal, c.fInicio_evaCurr = d.fInicio_evaCurr, c.fTerm_evaCurr = d.fTerm_evaCurr, " +
+                        "        c.fInicio_evaTec = d.fInicio_evaTec, c.fTerm_evaTec = d.fTerm_evaTec, c.fInicio_evaPsico = d.fInicio_evaPsico, " +
+                        "        c.fTerm_evaPsico = d.fTerm_evaPsico, c.fInicio_entrev = d.fInicio_entrev, c.fTerm_entrev = d.fTerm_entrev, " +
+                        "        c.fInicio_suscr = d.fInicio_suscr, c.fTerm_suscr = d.fTerm_suscr, c.fPubl_apto1 = d.fPubl_apto1, " +
+                        "        c.fpubl_apto2 = d.fpubl_apto2, c.fpubli_apto3 = d.fpubli_apto3, c.fpublic_apto4 = d.fpublic_apto4, " +
+                        "        c.fpublic_apto5 = d.fpublic_apto5, c.observa = d.observa" +
+                        "WHEN NOT MATCHED THEN " +
+                        "    INSERT VALUES " +
+                        "        (cronogramap_seq.nextval, d.idRequisicionP, d.fInicio_mtpe, d.fTermino_mtpe, d.fInicio_portal, d.fTermino_portal, " +
+                        "        d.fInicio_evaCurr, d.fTerm_evaCurr, d.fInicio_evaTec, d.fTerm_evaTec, d.fInicio_evaPsico, d.fTerm_evaPsico, " +
+                        "        d.fInicio_entrev, d.fTerm_entrev, d.fInicio_suscr, d.fTerm_suscr, d.fPubl_apto1, d.fpubl_apto2, d.fpubli_apto3, " +
+                        "        d.fpublic_apto4, d.fpublic_apto5, d.observa, null, null, sysdate, d.usu_crea)";
+
+                //Tamaño: 19, Índice: 18
+                int contador = gisService.update(sql, _idRequisicionP, fechas[0], fechas[1], fechas[2], fechas[3], fechas[4], 
+                            fechas[5], fechas[6], fechas[7], fechas[8], fechas[9], fechas[10], fechas[11], fechas[12], 
+                            fechas[13], fechas[14], fechas[15], fechas[16], fechas[17], fechas[18], observa, _usu_crea);
+                
+                rpta+= contador;
+            }
+
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", "Se actualizaron " + rpta + " registro(s).");
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se actualizaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "/home/enviarCronogramP", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> enviarCronogramP(HttpServletRequest request)
+    {   
+        String idCronogramaP[];
+        String estadoProceso = request.getParameter("estadoProceso");        
+        String idUsuarioModi = request.getParameter("idUsuarioModi");        
+             
+        String [] campos = {"estadoProceso", "idUsuarioModi"};
+
+        List<Map<String,Object>> candidatos = new ArrayList<Map<String,Object>>();
+        Map error = new HashMap();
+                               
+        idCronogramaP = convertirEnArreglo(request, "idCronogramaP");
+        
+        if(idCronogramaP == null)
+        {
+            error.put("error", true);
+            error.put("mensaje", "idCronogramaP está vacío");
+            candidatos.add(error);
+            return candidatos;
+        }
+        
+        candidatos = hayCamposVacios(request, campos);
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            candidatos = new ArrayList<Map<String,Object>>();
+            String sql;
+            
+            String mensaje = "";
+            int rpta = 0, aux = 0;
+            int contador;
+            int _estadoProceso = Integer.parseInt(estadoProceso);
+            int _idUsuarioModi = Integer.parseInt(idUsuarioModi);
+            int _idCronogramaP;
+            
+            for(String x:idCronogramaP)
+            {
+                _idCronogramaP = Integer.parseInt(x);
+                
+                sql = "UPDATE CRONOGRAMAP SET estadoProceso = ? WHERE idCronogramaP = ?";
+                contador = gisService.update(sql, _estadoProceso, _idCronogramaP);
+                
+                rpta+= contador;
+            }
+            
+            mensaje = "Se actualizó " + rpta + " cronogramas (s). ";
+            
+            if(_estadoProceso == 4)
+            {
+                aux = rpta;
+                rpta = 0;
+                for(String x:idCronogramaP)
+                {
+                    _idCronogramaP = Integer.parseInt(x);
+
+                    sql =   "MERGE " +
+                            "INTO CONVOCATORIA c " +
+                            "USING (SELECT ? idCronogramaP, ? estadoProceso, ? idUsuarioModi FROM DUAL) d " +
+                            "ON (c.idCronogramaP = d.idCronogramaP) " +
+                            "WHEN NOT MATCHED THEN " +
+                            "    INSERT VALUES(convocatoria_seq.nextval, d.idCronogramaP, 6, d.idUsuarioModi, null, sysdate, null)";
+
+                    contador = gisService.update(sql, _idCronogramaP, _estadoProceso, _idUsuarioModi);
+                    rpta+= contador;
+                }
+                
+                if(rpta > 0)
+                    mensaje+= "Se creó " + rpta + " convocatoria(s) en estado pendiente.";
+                
+                rpta+= aux;
+            }
+                                    
+            if(rpta > 0)
+            {
+                error.put("error", false);
+                error.put("mensaje", mensaje);
+            }
+            else
+            {
+                error.put("error", true);
+                error.put("mensaje", "No se actualizaron registros.");
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
+    //PreConvocatoria
+    @RequestMapping(value = "/home/readPreConvocatoria", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readPreConvocatoria()
+    {   
+        String sql =    "SELECT " +
+                        "conv.IDCONVOCATORIA ,c.IDCRONOGRAMAP ,c.IDREQUISICIONP, f.DESCRIPCIONPUESTO puesto, " +
+                        "TO_CHAR(c.FINICIO_MTPE, 'YYYY-MM-DD') FINICIO_MTPE, TO_CHAR(c.FTERMINO_MTPE, 'YYYY-MM-DD') FTERMINO_MTPE, " +
+                        "TO_CHAR(c.FINICIO_PORTAL, 'YYYY-MM-DD') FINICIO_PORTAL, TO_CHAR(c.FTERMINO_PORTAL, 'YYYY-MM-DD') FTERMINO_PORTAL, " +
+                        "TO_CHAR(c.FINICIO_EVACURR, 'YYYY-MM-DD') FINICIO_EVACURR, TO_CHAR(c.FTERM_EVACURR, 'YYYY-MM-DD') FTERM_EVACURR, " +
+                        "TO_CHAR(c.FINICIO_EVATEC, 'YYYY-MM-DD') FINICIO_EVATEC, TO_CHAR(c.FTERM_EVATEC, 'YYYY-MM-DD') FTERM_EVATEC, " +
+                        "TO_CHAR(c.FINICIO_ENTREV, 'YYYY-MM-DD') FINICIO_ENTREV, TO_CHAR(c.FTERM_ENTREV, 'YYYY-MM-DD') FTERM_ENTREV, " +
+                        "TO_CHAR(c.FINICIO_EVAPSICO, 'YYYY-MM-DD') FINICIO_EVAPSICO, TO_CHAR(c.FTERM_EVAPSICO, 'YYYY-MM-DD') FTERM_EVAPSICO, " +
+                        "TO_CHAR(c.FINICIO_SUSCR, 'YYYY-MM-DD') FINICIO_SUSCR, TO_CHAR(c.FTERM_SUSCR, 'YYYY-MM-DD') FTERM_SUSCR, " +
+                        "e.ESTADONOMBRE as ESTADO , conv.ESTADOPROCESO " +
+                        "FROM CONVOCATORIA conv " +
+                        "INNER JOIN CRONOGRAMAP c ON conv.idCronogramaP = c.idCronogramaP and c.ESTADOPROCESO = 4 " +
+                        "INNER JOIN ESTADO e ON conv.estadoProceso = e.IDESTADO " +
+                        "INNER JOIN REQUISIONPUESTO r ON c.idRequisicionP = r.idRequisicionP " +
+                        "INNER JOIN FUNCIONPUESTO f ON r.idRequisicionP = f.idPerfilPuesto " +
+                        "ORDER BY r.idRequisicionP ASC";
+
+        List<Map<String, Object>> objects = gisService.consulta(sql);        
+
+        return objects;        
+    }            
+    
+    @RequestMapping(value = "/home/anularConvocatoria", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> anularConvocatoria(HttpServletRequest request)
+    {
+        String idConvocatoria[];
+        String idUsuarioModi = request.getParameter("idUsuarioModi");
+                
+        String [] campos = {"idUsuarioModi"};
+
+        List<Map<String,Object>> candidatos = new ArrayList<Map<String,Object>>();
+        Map error = new HashMap();                               
+        
+        idConvocatoria = convertirEnArreglo(request, "idConvocatoria");
+        
+        if(idConvocatoria == null)
+        {
+            error.put("error", true);
+            error.put("mensaje", "idConvocatoria está vacío");
+            candidatos.add(error);
+            return candidatos;
+        }
+        
+        candidatos = hayCamposVacios(request, campos);
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());
+
+         if(!hayError)
+         {
+             candidatos = new ArrayList<Map<String,Object>>();
+             String sql;
+
+             int rpta = 0;            
+             for(String x:idConvocatoria)
+             {
+                 int _idCronogramaP = Integer.parseInt(x);
+                 int _idUsuarioModi = Integer.parseInt(idUsuarioModi);               
+
+                 sql =   "UPDATE CONVOCATORIA SET ESTADOPROCESO = 17, IDUSUARIOMODI = ? WHERE IDCRONOGRAMAP = ?";
+
+                 int contador = gisService.update(sql, _idUsuarioModi, _idCronogramaP);
+                 rpta+= contador;
+             }
+
+             if(rpta > 0)
+             {
+                 error.put("error", false);
+                 error.put("mensaje", "Se anularon " + rpta + " registro(s).");
+             }
+             else
+             {
+                 error.put("error", true);
+                 error.put("mensaje", "No se anularon registros.");
+             }
+
+             candidatos.add(error);
+         }
+
+         return candidatos;
+    }
+    
+    //Convocatoria
+    @RequestMapping(value = "/home/readConvocatoria", method = RequestMethod.GET)
+    public @ResponseBody List<Map<String,Object>> readConvocatoria()
+    {
+        //FALTA SABER BIEN LA LÓGICA
+        return null;
+    }
+    
+    /* *********************************************************** */
+    //REVISAR MÉTODO
+    @RequestMapping(value = "home/miedicion", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String, Object>> createBasesP(@ModelAttribute("ruta") FileUploadForm uploadForm, Model map, HttpServletRequest request)
+    {
+        Map<String, String[]> mapita = request.getParameterMap();
+        
+        for(String x:mapita.keySet())
+        {
+            String mensaje = "Todas las variables: " + x;
+            System.err.println();
+            if(!mapita.get(x)[0].isEmpty())
+                mensaje+= " - Valor: " + mapita.get(x)[0];
+                    
+            System.err.println(mensaje);
+        }
+        
+        try {
+            request.getHeader("content-range");//Content-Range:bytes 737280-819199/845769
+            request.getHeader("content-length"); //845769
+            request.getHeader("content-disposition"); // Content-Disposition:attachment; filename="Screenshot%20from%202012-12-19%2017:28:01.png"
+            InputStream is = request.getInputStream(); //actual content.
+            System.err.println("Input Stream:" +is);
+        } catch (Exception e) {
+        }                   
+
+        List<Map<String,Object>> candidatos = new ArrayList<Map<String,Object>>();
+        Map x = new HashMap();
+        x.put("error", "true");
+        x.put("mensaje", "probando..");
+        
+        candidatos.add(x);
+        return candidatos;
+    }
+    
+    @RequestMapping(value = "home/createBasesP", method = RequestMethod.POST)
+    public String procesar(@ModelAttribute("ruta") FileUploadForm uploadForm, Model map, HttpServletRequest request)
+    {
+        List<MultipartFile> files = uploadForm.getFiles();
+ 
+        List<String> fileNames = new ArrayList<String>();
+        
+        // Creating the directory to store file
+        File dir = new File(locations.getUploads() + File.separator + "reportes");
+        
+        System.out.println("Files: " + files);
+        if(null != files && files.size() > 0) {
+            for (MultipartFile multipartFile : files)
+            {
+                String fileName = multipartFile.getOriginalFilename();
+                try
+                {
+                    byte[] bytes = multipartFile.getBytes();
+                    //Proceso de los archivos
+                    // Create the file on server
+                    DateFormat dfi = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                    DateFormat dfa = new SimpleDateFormat("yyyyMMddHHmmss");
+
+                    Date today = Calendar.getInstance().getTime(); 
+                    
+                    String extension = fileName.substring(fileName.lastIndexOf("."));
+
+                    File serverFile = new File(dir.getAbsolutePath() + File.separator + dfa.format(today) + extension);
+                    System.out.println("Ruta en Servidor: " + serverFile.getAbsolutePath() );
+                    BufferedOutputStream stream = new BufferedOutputStream( new FileOutputStream(serverFile));
+                    stream.write(bytes);
+                    stream.close();
+
+                    fileNames.add(fileName);
+                    
+                    String cod_estado = Constantes.estadoPendiente;
+                    // Using DateFormat format method we can create a string
+                    String periodo_1 = uploadForm.getNom_periodo_1();
+                    String periodo_2 = uploadForm.getNom_periodo_2();
+                    String anio = uploadForm.getAnio();
+                    String nom_periodo = "";
+                    
+                    SimpleDateFormat dfCompleto = new SimpleDateFormat("dd-MM-yyyy");
+                    SimpleDateFormat dfAnio = new SimpleDateFormat("yyyy");
+                    SimpleDateFormat dfMes = new SimpleDateFormat("MM");
+                    Calendar calendario = Calendar.getInstance();
+                    
+                    String sPeriodo1 = "01-" + periodo_1 + "-" + anio;
+                    Date dPeriodo1 = dfCompleto.parse(sPeriodo1);
+
+                    String sPeriodo2 = "01-" + periodo_2 + "-" + anio;
+                    Date dPeriodo2 = dfCompleto.parse(sPeriodo2);
+                    
+                    if(dPeriodo1.before(dPeriodo2) || dPeriodo1.equals(dPeriodo2)){
+                        //Mismo periodo, solo comparo si hoy han pasado disez dias desde el ultimo dia del periodo se�alado
+                        String sPeriodo = "01-" + periodo_2 + "-" + anio;
+                        Date dPeriodo = dfCompleto.parse(sPeriodo);
+                        
+                        //Buscamos el limite para el periodo seleccionado
+                        calendario.setTime(dPeriodo);
+                        calendario.add(calendario.MONTH, 1);
+                        calendario.add(calendario.DATE, 10);
+                        //Comparamos si la fecha actual es mayor que la fecha limite
+                        if(today.after(calendario.getTime())){
+                            cod_estado = Constantes.estadoRetrasado;
+                        }
+                        System.out.println("------------------------------------------------------");
+                        System.out.println("---" + periodo_1 + " - " + periodo_2 + "----");
+                        System.out.println("------------------------------------------------------");
+                        if( periodo_1.equals( periodo_2 ) ){
+                            nom_periodo = Constantes.meses.get( dfMes.format(dPeriodo1) ).substring(0, 3).toUpperCase();
+                        } else {
+                            nom_periodo = Constantes.meses.get(dfMes.format(dPeriodo1)).substring(0, 3).toUpperCase() + " - " 
+                                    + Constantes.meses.get(dfMes.format(dPeriodo2)).substring(0, 3).toUpperCase() ;
+                        }
+                    }else if(dPeriodo1.after(dPeriodo2)){
+                        //Retornamos al formulario de envio con el error de fecha
+                        request.getSession().setAttribute("error_fechas", true);
+                        return "redirect:/pages/usuarios/enviar";
+                    }
+                    
+                    
+                    // representation of a date with the defined format.
+                    String nom_archivo = dfa.format(today) + extension;
+                    
+                    String observ_his = uploadForm.getObserv_his();
+                   
+                    System.err.println("******************************************************************");
+                    System.err.println("******************************************************************");
+                    System.err.println("Nombre archivo: " + nom_archivo);
+                    System.err.println("observ_his: " + observ_his);
+                    System.err.println("******************************************************************");
+                    System.err.println("******************************************************************");
+                    
+                    /*
+                    gisService.update("INSERT INTO GEO_HISTORICO "
+                    + "( nom_archivo, nom_periodo, observ_his, idusuario, fec_his, cod_estado, cod_entidad, ano ) VALUES (?,?,?,?,TO_DATE(?, 'yyyy/mm/dd hh24:mi:ss'), ?, ?, ?)", 
+                        nom_archivo, nom_periodo, observ_his, cod_estado, anio);                    
+                    */
+
+                }catch (Exception e) {
+                     System.out.println("You failed to upload " + fileName + " => " + e.getMessage());
+
+                }
+            }
+        }
+         
+        map.addAttribute("files", fileNames);
+        
+        
+        System.out.println("Redireccion ");
+        return "redirect:/pages/usuarios/historico";
+    }
+    
     //Métodos
     String[] convertirFecha(String... fechas)
     {
@@ -2573,16 +2919,16 @@ public class HomeController {
         return misFechas;
     }
     
-    String[] convertirEnArreglo(HttpServletRequest request, String nombre)
+    //Refactorizar
+    String[] convertirEnArreglo(HttpServletRequest request, String parametro)
     {
         Map<String, String[]> map = request.getParameterMap();
         String aux = "";
         
         for(String x:map.keySet())
-        {
-            if(x.startsWith(nombre))                
-                aux+= map.get(x)[0] +",";
-        }
+            if(x.startsWith(parametro))
+                if(!map.get(x)[0].isEmpty())
+                    aux+= map.get(x)[0] +",";
         
         if(!aux.isEmpty())
         {
