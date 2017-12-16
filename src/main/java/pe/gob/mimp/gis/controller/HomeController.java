@@ -3,6 +3,7 @@ package pe.gob.mimp.gis.controller;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -2745,162 +2746,211 @@ public class HomeController {
          return candidatos;
     }
     
+    @RequestMapping(value = "home/createBasesP", method = RequestMethod.POST)
+    public @ResponseBody Map<String, Object> createBasesP(@ModelAttribute("uploadForm") FileUploadForm uploadForm, Model map, HttpServletRequest request)
+    {
+        String idConvocatoria = request.getParameter("idConvocatoria");
+        String dTipoDoc = request.getParameter("dTipoDoc");
+        String usu_crea = request.getParameter("usu_crea");
+        String tipo = request.getParameter("tipo");
+        
+        String [] campos = {"idConvocatoria", "dTipoDoc", "usu_crea", "tipo"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        Map objMap = new HashMap();
+        
+        if(!hayError)
+        {
+            String sql;
+            int rpta;
+            int _idConvocatoria = Integer.parseInt(idConvocatoria);
+            int _dTipoDoc = Integer.parseInt(dTipoDoc);
+            int _usu_crea = Integer.parseInt(usu_crea);
+            int _tipo = Integer.parseInt(tipo);
+            
+            sql = "SELECT * FROM CONVOCATORIA WHERE ESTADOPROCESO = 17 AND IDCONVOCATORIA = {0}";
+            sql = sql.replace("{0}", idConvocatoria);
+            
+            candidatos = gisService.consulta(sql);
+                        
+            if(!candidatos.isEmpty())
+            {
+                objMap.put("error", "true");
+                objMap.put("mensaje", "Convocatoria está anulada. No se subió base.");
+            }
+            else
+            {
+                List<MultipartFile> files = uploadForm.getFiles(); 
+                List<String> fileNames = new ArrayList<String>();
+
+                // Creating the directory to store file
+                File dir = new File(locations.getUploads());
+
+
+                System.out.println("Files: " + files);
+                if(null != files && files.size() > 0)
+                {
+                    for (MultipartFile multipartFile : files)
+                    {
+                        String fileName = multipartFile.getOriginalFilename();
+                        try
+                        {
+                            byte[] bytes = multipartFile.getBytes();
+                            //Proceso de los archivos
+                            // Create the file on server
+                            DateFormat dfi = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+                            DateFormat dfa = new SimpleDateFormat("yyyyMMddHHmmss");
+
+                            Date today = Calendar.getInstance().getTime(); 
+
+                            String extension = fileName.substring(fileName.lastIndexOf("."));
+
+                            File serverFile = new File(dir.getAbsolutePath() + File.separator + dfa.format(today) + extension);
+                            System.out.println("Ruta en Servidor: " + serverFile.getAbsolutePath() );
+                            BufferedOutputStream stream = new BufferedOutputStream( new FileOutputStream(serverFile));
+                            stream.write(bytes);
+                            stream.close();
+
+                            fileNames.add(fileName);
+
+                            String nom_archivo = dfa.format(today) + extension;                                            
+                            map.addAttribute("files", fileNames);
+
+                            sql = "INSERT INTO BASESP VALUES(basesp_seq.nextval, ?, ?, ?, sysdate, 4, sysdate, null, null, ?, ?)";
+                            rpta = gisService.update(sql, _idConvocatoria, _dTipoDoc, nom_archivo, _usu_crea, _tipo);
+                            if(rpta > 0)
+                            {                                                       
+                                sql = "SELECT * FROM BASESP WHERE RUTA = '{0}'";
+                                sql = sql.replace("{0}", nom_archivo);                                        
+                                candidatos = gisService.consulta(sql);
+
+                                objMap = candidatos.get(0);
+
+                                sql = "UPDATE CONVOCATORIA SET ESTADOPROCESO = 4 WHERE IDCONVOCATORIA = ? AND ESTADOPROCESO = 6";
+                                rpta = gisService.update(sql, _idConvocatoria);
+
+                                if(rpta > 0)
+                                    objMap.put("mensaje", "Se registró base exitósamente. Se aperturó convocatoria.");
+                                else
+                                    objMap.put("mensaje", "Se registró base exitósamente. Convocatoria ya está aperturada.");
+
+                                objMap.put("error", "false");
+
+                            }
+                            else
+                            {
+                                objMap.put("error", "true");
+                                objMap.put("mensaje", "No se guardó base");
+                            }
+                        }
+                        catch (IOException e)
+                        {
+                            objMap.put("error", "true");
+                            objMap.put("mensaje", "Falló al carga el archivo: " + fileName + " => " + e.getMessage());
+                        }
+                        catch (NumberFormatException e)
+                        {
+                            objMap.put("error", "true");
+                            objMap.put("mensaje", "Falló formato: " + e.getMessage());
+                        }
+                    }            
+                }
+                else
+                {        
+                    objMap.put("error", "true");
+                    objMap.put("mensaje", "Archivo vacío o nulo");
+                }
+            }            
+        }
+        else
+        {
+            objMap.put("error", true);
+            objMap.put("mensaje", "Campos vacíos");
+        }
+
+        return objMap;
+    }
+    
+    @RequestMapping(value = "/home/deleteBasesP", method = RequestMethod.POST)
+    public @ResponseBody List<Map<String,Object>> deleteBasesP(HttpServletRequest request)
+    {   
+        String idBasesP = request.getParameter("idBasesP");
+             
+        String [] campos = {"idBasesP"};
+
+        List<Map<String,Object>> candidatos = hayCamposVacios(request, campos);
+        Map error = new HashMap();
+        boolean hayError = Boolean.parseBoolean(candidatos.get(0).get("error").toString());        
+        
+        if(!hayError)
+        {
+            String sql;          
+            int _idBasesP = Integer.parseInt(idBasesP);     
+            
+            sql = "SELECT * FROM BASESP WHERE idBasesP = " + _idBasesP;
+            candidatos = gisService.consulta(sql);
+            
+            if(candidatos.isEmpty())
+            {
+                candidatos = new ArrayList<Map<String, Object>>();
+                error.put("error", true);
+                error.put("mensaje", "No existe base con id: " + idBasesP +".");
+            }
+            else
+            {
+                
+                try
+                {
+                    String ruta;
+                    ruta = locations.getUploads() + File.separator + candidatos.get(0).get("RUTA").toString();                    
+                    System.err.println("Ruta a eliminar: " + ruta);
+                    candidatos = new ArrayList<Map<String, Object>>();
+                    
+                    File file = new File(ruta);
+                    if(file.delete())
+                    { 
+                        sql =   "DELETE BASESP WHERE idBasesP = ?";
+
+                        int rpta = gisService.update(sql, _idBasesP);
+
+                        if(rpta > 0)
+                        {
+                            error.put("error", false);
+                            error.put("mensaje", "Se eliminó base.");
+                        }
+                        else
+                        {
+                            error.put("error", true);
+                            error.put("mensaje", "Se eliminó archivo del servidor pero no de la base de datos.");
+                        }
+                    }
+                    else
+                    {
+                        error.put("error", true);
+                        error.put("mensaje", "No se eliminó base.");
+                    }
+                }
+                catch(Exception e)
+                {
+                    error.put("error", true);
+                    error.put("mensaje", "Ocurrió un error al eliminar la base. Error: " + e.getMessage());
+                }                
+            }
+            
+            candidatos.add(error);
+        }
+
+        return candidatos;
+    }
+    
     //Convocatoria
     @RequestMapping(value = "/home/readConvocatoria", method = RequestMethod.GET)
     public @ResponseBody List<Map<String,Object>> readConvocatoria()
     {
         //FALTA SABER BIEN LA LÓGICA
         return null;
-    }
-    
-    /* *********************************************************** */
-    //REVISAR MÉTODO
-    @RequestMapping(value = "home/miedicion", method = RequestMethod.POST)
-    public @ResponseBody List<Map<String, Object>> createBasesP(@ModelAttribute("ruta") FileUploadForm uploadForm, Model map, HttpServletRequest request)
-    {
-        Map<String, String[]> mapita = request.getParameterMap();
-        
-        for(String x:mapita.keySet())
-        {
-            String mensaje = "Todas las variables: " + x;
-            System.err.println();
-            if(!mapita.get(x)[0].isEmpty())
-                mensaje+= " - Valor: " + mapita.get(x)[0];
-                    
-            System.err.println(mensaje);
-        }
-        
-        try {
-            request.getHeader("content-range");//Content-Range:bytes 737280-819199/845769
-            request.getHeader("content-length"); //845769
-            request.getHeader("content-disposition"); // Content-Disposition:attachment; filename="Screenshot%20from%202012-12-19%2017:28:01.png"
-            InputStream is = request.getInputStream(); //actual content.
-            System.err.println("Input Stream:" +is);
-        } catch (Exception e) {
-        }                   
-
-        List<Map<String,Object>> candidatos = new ArrayList<Map<String,Object>>();
-        Map x = new HashMap();
-        x.put("error", "true");
-        x.put("mensaje", "probando..");
-        
-        candidatos.add(x);
-        return candidatos;
-    }
-    
-    @RequestMapping(value = "home/createBasesP", method = RequestMethod.POST)
-    public String procesar(@ModelAttribute("ruta") FileUploadForm uploadForm, Model map, HttpServletRequest request)
-    {
-        List<MultipartFile> files = uploadForm.getFiles();
- 
-        List<String> fileNames = new ArrayList<String>();
-        
-        // Creating the directory to store file
-        File dir = new File(locations.getUploads() + File.separator + "reportes");
-        
-        System.out.println("Files: " + files);
-        if(null != files && files.size() > 0) {
-            for (MultipartFile multipartFile : files)
-            {
-                String fileName = multipartFile.getOriginalFilename();
-                try
-                {
-                    byte[] bytes = multipartFile.getBytes();
-                    //Proceso de los archivos
-                    // Create the file on server
-                    DateFormat dfi = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-                    DateFormat dfa = new SimpleDateFormat("yyyyMMddHHmmss");
-
-                    Date today = Calendar.getInstance().getTime(); 
-                    
-                    String extension = fileName.substring(fileName.lastIndexOf("."));
-
-                    File serverFile = new File(dir.getAbsolutePath() + File.separator + dfa.format(today) + extension);
-                    System.out.println("Ruta en Servidor: " + serverFile.getAbsolutePath() );
-                    BufferedOutputStream stream = new BufferedOutputStream( new FileOutputStream(serverFile));
-                    stream.write(bytes);
-                    stream.close();
-
-                    fileNames.add(fileName);
-                    
-                    String cod_estado = Constantes.estadoPendiente;
-                    // Using DateFormat format method we can create a string
-                    String periodo_1 = uploadForm.getNom_periodo_1();
-                    String periodo_2 = uploadForm.getNom_periodo_2();
-                    String anio = uploadForm.getAnio();
-                    String nom_periodo = "";
-                    
-                    SimpleDateFormat dfCompleto = new SimpleDateFormat("dd-MM-yyyy");
-                    SimpleDateFormat dfAnio = new SimpleDateFormat("yyyy");
-                    SimpleDateFormat dfMes = new SimpleDateFormat("MM");
-                    Calendar calendario = Calendar.getInstance();
-                    
-                    String sPeriodo1 = "01-" + periodo_1 + "-" + anio;
-                    Date dPeriodo1 = dfCompleto.parse(sPeriodo1);
-
-                    String sPeriodo2 = "01-" + periodo_2 + "-" + anio;
-                    Date dPeriodo2 = dfCompleto.parse(sPeriodo2);
-                    
-                    if(dPeriodo1.before(dPeriodo2) || dPeriodo1.equals(dPeriodo2)){
-                        //Mismo periodo, solo comparo si hoy han pasado disez dias desde el ultimo dia del periodo se�alado
-                        String sPeriodo = "01-" + periodo_2 + "-" + anio;
-                        Date dPeriodo = dfCompleto.parse(sPeriodo);
-                        
-                        //Buscamos el limite para el periodo seleccionado
-                        calendario.setTime(dPeriodo);
-                        calendario.add(calendario.MONTH, 1);
-                        calendario.add(calendario.DATE, 10);
-                        //Comparamos si la fecha actual es mayor que la fecha limite
-                        if(today.after(calendario.getTime())){
-                            cod_estado = Constantes.estadoRetrasado;
-                        }
-                        System.out.println("------------------------------------------------------");
-                        System.out.println("---" + periodo_1 + " - " + periodo_2 + "----");
-                        System.out.println("------------------------------------------------------");
-                        if( periodo_1.equals( periodo_2 ) ){
-                            nom_periodo = Constantes.meses.get( dfMes.format(dPeriodo1) ).substring(0, 3).toUpperCase();
-                        } else {
-                            nom_periodo = Constantes.meses.get(dfMes.format(dPeriodo1)).substring(0, 3).toUpperCase() + " - " 
-                                    + Constantes.meses.get(dfMes.format(dPeriodo2)).substring(0, 3).toUpperCase() ;
-                        }
-                    }else if(dPeriodo1.after(dPeriodo2)){
-                        //Retornamos al formulario de envio con el error de fecha
-                        request.getSession().setAttribute("error_fechas", true);
-                        return "redirect:/pages/usuarios/enviar";
-                    }
-                    
-                    
-                    // representation of a date with the defined format.
-                    String nom_archivo = dfa.format(today) + extension;
-                    
-                    String observ_his = uploadForm.getObserv_his();
-                   
-                    System.err.println("******************************************************************");
-                    System.err.println("******************************************************************");
-                    System.err.println("Nombre archivo: " + nom_archivo);
-                    System.err.println("observ_his: " + observ_his);
-                    System.err.println("******************************************************************");
-                    System.err.println("******************************************************************");
-                    
-                    /*
-                    gisService.update("INSERT INTO GEO_HISTORICO "
-                    + "( nom_archivo, nom_periodo, observ_his, idusuario, fec_his, cod_estado, cod_entidad, ano ) VALUES (?,?,?,?,TO_DATE(?, 'yyyy/mm/dd hh24:mi:ss'), ?, ?, ?)", 
-                        nom_archivo, nom_periodo, observ_his, cod_estado, anio);                    
-                    */
-
-                }catch (Exception e) {
-                     System.out.println("You failed to upload " + fileName + " => " + e.getMessage());
-
-                }
-            }
-        }
-         
-        map.addAttribute("files", fileNames);
-        
-        
-        System.out.println("Redireccion ");
-        return "redirect:/pages/usuarios/historico";
-    }
+    }   
     
     //Métodos
     String[] convertirFecha(String... fechas)

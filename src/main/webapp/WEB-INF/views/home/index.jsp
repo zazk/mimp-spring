@@ -26,7 +26,8 @@
     <div class="row">
         <div class="col-12 form-group">
             <button id="readPreConvocatoria" type="button" class="btn btn-success">Read PreConvocatoria</button>
-            <button id="anularConvocatoria" type="button" class="btn btn-success">Anular Convocatoria</button>            
+            <button id="anularConvocatoria" type="button" class="btn btn-success">Anular Convocatoria</button>                        
+            
             <br><br>
             <p id="respuesta"></p>
         </div>
@@ -49,32 +50,55 @@
     
     <hr><br>
     
-    <form id="formulario" method="post" action="createBasesP" enctype="multipart/form-data">
+    <form id="formulario" modelAttribute="uploadForm" method="post" action="createBasesP" enctype="multipart/form-data">
     <div class="row">
         <div class="col-12 form-group">
             <button id="createBasesP" type="submit" class="btn btn-success">Create BasesP</button>
+            <button id="deleteBasesP" type="button" class="btn btn-success">Delete BasesP</button>                        
         </div>        
 
-        <div class="col-6 form-group">
+        <div class="col-12 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">idBasesP</label>
+                 <input class="form-control" id="idBasesP" type="number">             
+            </div>              
+        </div>                 
+        
+        <div class="col-3 form-group">
              <div class="input-group">
                 <label class="input-group-addon col-5">idConvocatoria</label>
-                 <input class="form-control" name="idConvocatoria" type="number">             
+                 <input class="form-control" name="idConvocatoria" type="number" required>             
             </div>              
         </div> 
         
-        <div class="col-6 form-group">
+        <div class="col-3 form-group">
              <div class="input-group">
-                <label class="input-group-addon col-5">idTipoDoc</label>
-                <input class="form-control" name="idTipoDoc" type="number" maxlength="2">
+                <label class="input-group-addon col-5">dTipoDoc</label>
+                <input class="form-control" name="dTipoDoc" type="number" maxlength="2" required>
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">Usu_crea</label>
+                <input class="form-control" name="usu_crea" type="number" required>
+            </div>              
+        </div>
+        
+        <div class="col-3 form-group">
+             <div class="input-group">
+                <label class="input-group-addon col-5">Tipo</label>
+                <input class="form-control" name="tipo" type="number" required>
             </div>              
         </div>
         
         <div class="col-12 form-group">
              <div class="input-group">
                 <label class="input-group-addon col-2">Ruta</label>
-                <input class="form-control" name="ruta" type="file" required>
+                <input class="form-control" name="files[0]" type="file" required>
             </div>              
-        </div>
+        </div>               
+        
     </div></form>
 
         <script type="text/javascript" src="<c:url value='/assetsvisor/js/jquery-1.11.1.min.js'/>"></script>
@@ -91,11 +115,11 @@
                 //Botones                
                 var readPreConvocatoria = $('#readPreConvocatoria');
                 var anularConvocatoria = $('#anularConvocatoria');
-                var createBasesP = $('#createBasesP');
+                var deleteBasesP = $('#deleteBasesP');
 
                 //Input
-                var idConvocatoria = $('#idConvocatoria');
                 var idUsuarioModi = $('#idUsuarioModi');
+                var idBasesP = $('#idBasesP');
                
                readPreConvocatoria.click(function()
                {
@@ -157,7 +181,40 @@
                             $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
                         }
                     });
-               });//Anular Convocatoria            
+               });//Anular Convocatoria
+               
+               deleteBasesP.click(function()
+               {                                      
+                   $('#respuesta').html('Cargando...');
+                                            
+                   var data = {
+                                idBasesP: idBasesP.val()
+                              };                   
+                   
+                   console.log(data);
+                   
+                   $.ajax({
+			type: 'POST',			
+			url: 'deleteBasesP',
+                        data: data,
+			success: function(resultado)
+                        {                                                        
+                            $('#respuesta').html(
+                                'Mensaje: ' + resultado.map(function(e)
+                                {
+                                    return e.mensaje;
+                                }).join(', ') + '<br>Error: ' + resultado.map(function(e)
+                                {
+                                    return e.error;
+                                }).join(', ')
+                            );
+			},
+                        error: function (jqXHR, textStatus, errorThrown)
+                        {
+                            $("#respuesta").html("jqXHR: " + jqXHR + "<br>textStatus: " + textStatus + "<br>errorThrown: " + errorThrown);
+                        }
+                    });
+               });//Delete BasesP
             });//Jquery
 
         </script>
